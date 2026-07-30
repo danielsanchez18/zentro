@@ -51,8 +51,8 @@ export function LoginForm() {
     return (
       <form onSubmit={handlePasswordSubmit} className="w-full max-w-sm space-y-5 px-5">
         <div className="px-5 py-2.5 flex items-center gap-x-3 bg-muted p-2 rounded-full border border-border">
-          <Mail className="size-4.5 text-muted-foreground shrink-0" />
-          <span className="truncate text-foreground text-sm">{emailParam}</span>
+          <Mail className="size-4.5 text-muted-foreground" />
+          <span className="truncate text-foreground text-base">{emailParam}</span>
         </div>
 
         <div className="relative">
@@ -64,7 +64,7 @@ export function LoginForm() {
             placeholder="Ingrese su contraseña"
             required
             autoFocus
-            className="text-sm pl-13 pr-6 rounded-full h-fit py-2"
+            className="text-base pl-13 pr-5 rounded-full h-fit py-2.5"
           />
           <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
@@ -98,7 +98,7 @@ export function LoginForm() {
             placeholder="Ingrese su correo electrónico"
             required
             autoFocus
-            className={`md:text-base pl-14 pr-6 rounded-full h-fit py-2 ${
+            className={`md:text-base pl-13 pr-6 rounded-full h-fit py-2 ${
               emailError
                 ? "border-destructive focus-visible:ring-destructive"
                 : ""

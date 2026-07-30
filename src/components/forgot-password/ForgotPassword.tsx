@@ -31,7 +31,7 @@ export function ForgotPassword() {
     <div className="flex flex-col items-center gap-y-10 w-full max-w-sm">
       <form onSubmit={handleConfirm} className="w-full space-y-5 px-5">
         <div className="space-y-2 text-center mb-8">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Ingresa el código de seguridad que enviamos a <br />
             <span className="font-semibold text-foreground">{email}</span>
           </p>
@@ -52,10 +52,10 @@ export function ForgotPassword() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-2">
-          <Button type="button" variant="outline" onClick={handleResend} className="w-full py-2 rounded-full h-fit text-sm">
+          <Button type="button" variant="outline" onClick={handleResend} className="w-full py-2 rounded-full h-fit text-base">
             Reenviar código
           </Button>
-          <Button type="submit" className="w-full py-2 rounded-full h-fit text-sm">
+          <Button type="submit" className="w-full py-2 rounded-full h-fit text-base">
             Confirmar
           </Button>
         </div>

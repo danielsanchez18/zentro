@@ -47,9 +47,9 @@ export function ResetPasswordForm() {
             placeholder="Nueva contraseña" 
             required
             autoFocus
-            className="text-sm rounded-full h-fit py-2 pl-12 pr-6"
+            className="text-base pl-13 pr-5 rounded-full h-fit py-2.5"
           />
-          <Lock className="absolute left-5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
 
         <div className="relative">
@@ -60,12 +60,12 @@ export function ResetPasswordForm() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirmar contraseña" 
             required
-            className="text-sm rounded-full h-fit py-2 pl-12 pr-6"
+            className="text-base pl-13 pr-5 rounded-full h-fit py-2.5"
           />
-          <Lock className="absolute left-5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
 
-        <Button type="submit" className="w-full py-2 rounded-full h-fit text-sm mt-2">
+        <Button type="submit" className="w-full py-2 rounded-full h-fit text-base mt-2">
           Actualizar contraseña
         </Button>
         
