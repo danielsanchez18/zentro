@@ -23,7 +23,7 @@ export default async function RegistrarPage({
                 description={hasEmail ? "Ya casi terminamos, solo necesitamos tus datos." : "Empieza hoy y empieza a gestionar tu negocio ahora."}
             />
     
-            <Suspense fallback={<div className="h-[120px]"></div>}>
+            <Suspense fallback={<div className="h-30"></div>}>
                 <RegisterForm />
             </Suspense>
     

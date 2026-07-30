@@ -64,7 +64,7 @@ export function LoginForm() {
             placeholder="Ingrese su contraseña"
             required
             autoFocus
-            className="text-base pl-13 pr-5 rounded-full h-fit py-2.5"
+            className="text-base! pl-13 pr-5 rounded-full h-fit py-2.5"
           />
           <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>

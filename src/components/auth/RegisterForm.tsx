@@ -50,13 +50,13 @@ export function RegisterForm() {
 
   if (emailParam) {
     return (
-      <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5 px-5">
-        <div className="px-4 py-2.5 flex items-center gap-x-3 bg-muted rounded-lg border border-border">
-          <Mail className="size-5 text-muted-foreground shrink-0" />
-          <span className="truncate text-foreground text-sm">{emailParam}</span>
+      <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5">
+        <div className="px-4 py-2.5 flex items-center gap-x-3 bg-muted rounded-full border border-border">
+          <Mail className="size-4.5 text-muted-foreground shrink-0" />
+          <span className="truncate text-foreground">{emailParam}</span>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid sm:grid-cols-2 gap-2 gap-y-3">
           <div className="relative">
             <Input
               type="text"
@@ -66,9 +66,9 @@ export function RegisterForm() {
               placeholder="Nombres"
               required
               autoFocus
-              className="md:text-base pl-10 pr-3"
+              className="text-base! pl-11 pr-3 h-fit py-2 rounded-full"
             />
-            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
           </div>
 
           <div className="relative">
@@ -79,9 +79,9 @@ export function RegisterForm() {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Apellidos"
               required
-              className="md:text-base pl-10 pr-3"
+              className="text-base! pl-11 pr-3 h-fit py-2 rounded-full"
             />
-            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
           </div>
         </div>
 
@@ -93,12 +93,12 @@ export function RegisterForm() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Crea una contraseña"
             required
-            className="md:text-base pl-12 pr-6"
+            className="text-base! pl-11 pr-5 h-fit py-2 rounded-full"
           />
-          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none" />
+          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
 
-        <Button type="submit" className="w-full py-2.5 text-base" disabled={isLoading}>
+        <Button type="submit" className="w-full py-2 rounded-full h-fit text-base" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Crear cuenta
         </Button>
@@ -107,7 +107,7 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="flex flex-col gap-y-10 max-w-sm w-full">
+    <div className="flex flex-col gap-y-10 max-w-md w-full">
       <form onSubmit={handleEmailSubmit} className="w-full space-y-2 px-5">
         <div className="relative">
           <Input
@@ -121,12 +121,12 @@ export function RegisterForm() {
             placeholder="Ingresa tu correo electrónico"
             required
             autoFocus
-            className={`md:text-base pl-12 pr-6 ${
+            className={`text-base! pl-13 pr-5 rounded-full h-fit py-2.5 ${
               emailError ? "border-destructive focus-visible:ring-destructive" : ""
             }`}
           />
           <Mail
-            className={`absolute left-4 top-1/2 -translate-y-1/2 size-5 pointer-events-none ${
+            className={`absolute left-5 top-1/2 -translate-y-1/2 size-4.5 pointer-events-none ${
               emailError ? "text-destructive" : "text-muted-foreground"
             }`}
           />
@@ -136,7 +136,7 @@ export function RegisterForm() {
           <p className="text-sm text-destructive">{emailError}</p>
         )}
 
-        <Button type="submit" className="w-full py-2.5 mt-5 text-base" disabled={isLoading}>
+        <Button type="submit" className="w-full py-2 h-fit mt-5 rounded-full text-base" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Continuar con correo electrónico
         </Button>
