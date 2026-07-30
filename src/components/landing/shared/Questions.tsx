@@ -40,7 +40,7 @@ const questionsList = [
 
 export function Questions() {
   return (
-    <section className="py-20 space-y-15 w-full max-w-2xl mx-auto px-5">
+    <section className="py-20 space-y-15 w-full max-w-2xl mx-auto">
       <div className="text-center space-y-2">
         <h3 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-neutral-100 tracking-tight">Tus preguntas, las respondemos</h3>
         <p className="text-gray-800 dark:text-neutral-400 text-sm">Respuestas a las preguntas más frecuentes.</p>

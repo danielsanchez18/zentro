@@ -144,7 +144,7 @@ export function Plans() {
                 <div className="flex items-center gap-x-3">
                   <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
                   {plan.highlighted && (
-                    <p className="text-xs font-medium text-white rounded-full bg-primary px-2 py-1">
+                    <p className="text-xs font-medium text-white dark:text-black rounded-full bg-primary px-2 py-1">
                       Más popular
                     </p>
                   )}
