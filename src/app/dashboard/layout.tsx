@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useRequireAuth } from '@/hooks/use-require-auth';
 import { Header } from '@/components/dashboard/shared/Header';
 import { Navlink } from '@/components/dashboard/shared/Navlink';
+import { Footer } from '@/components/dashboard/shared/Footer';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { checking } = useRequireAuth();
@@ -24,6 +25,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="flex-1">
         {children}
       </main>
+
+      <Footer />
     </div>
   );
 }

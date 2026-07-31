@@ -49,7 +49,7 @@ export const SupportForm = () => {
             id="support-category"
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            className="px-3 py-2 w-full rounded-lg border border-input bg-transparent text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           >
             {CATEGORIES.map((item) => (
               <option key={item} value={item}>
@@ -68,7 +68,7 @@ export const SupportForm = () => {
             value={subject}
             onChange={(event) => setSubject(event.target.value)}
             placeholder="Ej: No puedo cambiar de plan"
-            className="h-fit px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            className="h-fit px-4 py-2 w-full rounded-lg border border-input bg-transparent text-base! outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />
         </div>
 
@@ -82,7 +82,7 @@ export const SupportForm = () => {
             onChange={(event) => setMessage(event.target.value)}
             rows={4}
             placeholder="Cuéntanos qué te sucede…"
-            className="h-fit px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            className="resize-none h-fit px-4 py-2 w-full rounded-lg border border-input bg-transparent text-base! outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />
         </div>
 

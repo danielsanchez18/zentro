@@ -111,15 +111,15 @@ export const InvitationsPage = () => {
                 key={invitation.id}
                 className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                <div className="flex gap-3">
+                  <div className="flex mt-0.5 size-9 min-w-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                     <Building2 className="size-4" />
                   </div>
                   <div>
                     <p className="text-base font-medium">{invitation.orgName}</p>
                     <p className="text-sm text-muted-foreground">
                       {invitation.invitedBy} te invitó como {invitation.role} ·
-                      recibida {invitation.receivedAt}
+                      Recibida {invitation.receivedAt}
                     </p>
                   </div>
                 </div>
