@@ -1,5 +1,5 @@
 import { authApi } from '@/lib/api/auth';
-import { MOCK_CREDENTIALS, MOCK_USER } from '@/lib/mock/data';
+import { MOCK_CREDENTIALS, MOCK_RESET_CODE, MOCK_USER } from '@/lib/mock/data';
 import { useAppStore } from '@/stores/app-store';
 import { checkHealth } from '@/lib/api/health-check';
 import { isMockForced } from '@/lib/api/api-config';
@@ -90,4 +90,60 @@ export async function registerService(input: RegisterInput): Promise<{ data: Aut
 
   const data = await authApi.register(input);
   return { data, isMock: false };
+}
+
+/**
+ * Solicita un código de recuperación de contraseña.
+ * En modo mock devuelve el código fijo (MOCK_RESET_CODE) solo si el correo
+ * existe; si no, devuelve la misma respuesta genérica (anti-enumeración).
+ */
+export async function forgotPasswordService(email: string): Promise<{ devCode?: string; isMock: boolean }> {
+  const isMock = await resolveMockMode();
+
+  if (isMock) {
+    await delay(400);
+    if (email.toLowerCase() === MOCK_CREDENTIALS.email) {
+      return { devCode: MOCK_RESET_CODE, isMock: true };
+    }
+    return { devCode: undefined, isMock: true };
+  }
+
+  const data = await authApi.forgotPassword(email);
+  return { devCode: data.devCode, isMock: false };
+}
+
+/** Valida el código de recuperación (pantalla OTP antes de la nueva contraseña). */
+export async function verifyCodeService(email: string, code: string): Promise<{ valid: boolean; isMock: boolean }> {
+  const isMock = await resolveMockMode();
+
+  if (isMock) {
+    await delay(400);
+    if (email.toLowerCase() !== MOCK_CREDENTIALS.email || code !== MOCK_RESET_CODE) {
+      throw { statusCode: 400, message: 'El código es incorrecto.', error: 'Bad Request' };
+    }
+    return { valid: true, isMock: true };
+  }
+
+  await authApi.verifyCode(email, code);
+  return { valid: true, isMock: false };
+}
+
+/** Aplica la nueva contraseña usando el código de recuperación. */
+export async function resetPasswordService(
+  email: string,
+  code: string,
+  newPassword: string,
+): Promise<{ isMock: boolean }> {
+  const isMock = await resolveMockMode();
+
+  if (isMock) {
+    await delay(600);
+    if (email.toLowerCase() !== MOCK_CREDENTIALS.email || code !== MOCK_RESET_CODE) {
+      throw { statusCode: 400, message: 'El código es incorrecto.', error: 'Bad Request' };
+    }
+    return { isMock: true };
+  }
+
+  await authApi.resetPassword(email, code, newPassword);
+  return { isMock: false };
 }

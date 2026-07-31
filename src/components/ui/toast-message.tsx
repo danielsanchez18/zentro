@@ -60,7 +60,7 @@ export function AppToast({ type, title, description }: AppToastProps) {
   const { icon: Icon, iconClassName } = TOAST_VARIANTS[type];
 
   return (
-    <div className="flex items-start gap-3 px-4 py-3 border border-border rounded-lg font-sans min-w-0 w-xs max-w-md">
+    <div className="flex items-start gap-3 px-4 py-3 border border-border rounded-lg font-sans min-w-0 sm:min-w-xs w-full">
       <span
         className={`mt-0.5 shrink-0 ${iconClassName}`}
         aria-hidden="true"

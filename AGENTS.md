@@ -15,7 +15,12 @@
 | **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/layout.tsx`, `src/app/(dashboard)/*` |
 | **Catálogo / Productos** | Notion 04 + docs | `src/app/(dashboard)/catalog/*` |
 | **UI / Componentes globales** | — | `src/components/ui/*`, `src/app/layout.tsx` |
+| **Modo Mock / Datos de prueba** | `docs/mock-mode.md` | `src/lib/mock/data.ts`, `src/components/ui/mock-help-button.tsx`, `src/components/ui/mock-badge.tsx` |
 | **Arquitectura general** | `docs/02-ARCHITECTURE.md`, Notion 06 | — |
+
+> **Modo Mock:** la app puede correr con datos de prueba sin backend. Fuente de datos:
+> `src/lib/mock/data.ts`. Botón "?" flotante (solo mock): `src/components/ui/mock-help-button.tsx`.
+> Para QUITAR el mock cuando el backend esté listo, sigue `docs/mock-mode.md`.
 
 ## 🚫 Reglas
 

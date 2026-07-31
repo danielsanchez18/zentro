@@ -23,6 +23,7 @@ export function RegisterForm() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [checkingEmail, setCheckingEmail] = useState(false);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -63,6 +64,12 @@ export function RegisterForm() {
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailParam || !firstName || !lastName || !password) return;
+
+    setPasswordError("");
+    if (password.length < 8) {
+      setPasswordError("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
 
     try {
       await register(emailParam, password, `${firstName} ${lastName}`);
@@ -121,14 +128,20 @@ export function RegisterForm() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); clearError(); }}
+            onChange={(e) => { setPassword(e.target.value); setPasswordError(""); clearError(); }}
             placeholder="Crea una contraseña"
             required
             aria-label="Contraseña"
-            className="text-base! pl-11 pr-5 h-fit py-2 rounded-full"
+            className={`text-base! pl-11 pr-5 h-fit py-2 rounded-full ${
+              passwordError ? "border-destructive focus-visible:ring-destructive" : ""
+            }`}
           />
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
+
+        {passwordError && (
+          <p className="text-sm text-destructive">{passwordError}</p>
+        )}
 
         <Button type="submit" className="w-full py-2 rounded-full h-fit text-base" disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
