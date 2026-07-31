@@ -6,6 +6,7 @@ import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
 import { Navbar } from "@/components/landing/shared/Nabar";
 import { Questions } from "@/components/landing/shared/Questions";
+import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
   title: "Planes y precios",
@@ -34,6 +35,7 @@ export default function PlanesPage() {
         </div>
       </div>
       <Footer />
+      <UpArrowButton />
     </>
   )
 }

@@ -7,6 +7,7 @@ import { Modules } from "@/components/landing/services/Modules";
 import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
 import { Navbar } from "@/components/landing/shared/Nabar";
+import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
   title: "Servicios",
@@ -34,6 +35,7 @@ export default function ServiciosPage() {
         <CTA />
       </div>
       <Footer />
+      <UpArrowButton />
     </>
   );
 }

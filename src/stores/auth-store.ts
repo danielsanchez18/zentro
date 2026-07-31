@@ -1,43 +1,69 @@
-// Store de autenticación con Zustand
-// Pendiente de implementar cuando el backend Auth esté listo
-
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { User } from '@/types/auth';
+import { loginService, registerService } from '@/lib/services/auth.service';
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  error: string | null;
 
-  // Acciones (se implementarán después)
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
-  setUser: (user: User) => void;
+  clearError: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  isLoading: false,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
 
-  login: async (_email, _password) => {
-    // TODO: Implementar cuando backend Auth esté listo
-    throw new Error('Auth no implementado');
-  },
+      login: async (email, password) => {
+        set({ isLoading: true, error: null });
+        try {
+          const { data } = await loginService({ email, password });
+          set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
+        } catch (err: unknown) {
+          const message =
+            err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: string }).message)
+              : 'Error al iniciar sesión';
+          set({ isLoading: false, error: message });
+          throw err;
+        }
+      },
 
-  register: async (_email, _password, _name) => {
-    // TODO: Implementar cuando backend Auth esté listo
-    throw new Error('Auth no implementado');
-  },
+      register: async (email, password, name) => {
+        set({ isLoading: true, error: null });
+        try {
+          const { data } = await registerService({ email, password, name });
+          set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
+        } catch (err: unknown) {
+          const message =
+            err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: string }).message)
+              : 'Error al registrarse';
+          set({ isLoading: false, error: message });
+          throw err;
+        }
+      },
 
-  logout: () => {
-    set({ user: null, token: null, isAuthenticated: false });
-  },
+      logout: () => {
+        set({ user: null, token: null, isAuthenticated: false, error: null });
+      },
 
-  setUser: (user) => {
-    set({ user, isAuthenticated: true });
-  },
-}));
+      clearError: () => set({ error: null }),
+    }),
+    {
+      name: 'zentro-auth',
+      partialize: (state) => ({ user: state.user, token: state.token, isAuthenticated: state.isAuthenticated }),
+    },
+  ),
+);

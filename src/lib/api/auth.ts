@@ -11,6 +11,9 @@ export const authApi = {
   register: (data: RegisterInput) =>
     api.post<AuthResponse>('/auth/register', data),
 
+  checkEmail: (email: string) =>
+    api.post<{ exists: boolean }>('/auth/check-email', { email }),
+
   me: (token: string) =>
     api.get<{ user: AuthResponse['user'] }>('/auth/me', token),
 };

@@ -20,6 +20,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  organization?: string;
+  branch?: string;
   createdAt: string;
   updatedAt: string;
 }

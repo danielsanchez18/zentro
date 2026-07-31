@@ -7,18 +7,21 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SocialLogin } from "./SocialLogin";
 import Link from "next/link";
+import { useAuthStore } from "@/stores/auth-store";
+import { showError } from "@/components/ui/toast-message";
 
 export function RegisterForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const emailParam = searchParams.get("email");
 
+  const { register, isLoading, clearError } = useAuthStore();
+
   const [email, setEmail] = useState(emailParam || "");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,10 +33,7 @@ export function RegisterForm() {
       return;
     }
 
-    setIsLoading(true);
-    // Simula verificación de email disponible
-    await new Promise((r) => setTimeout(r, 400));
-    setIsLoading(false);
+    clearError();
     router.push(`?email=${encodeURIComponent(email)}`);
   };
 
@@ -41,11 +41,16 @@ export function RegisterForm() {
     e.preventDefault();
     if (!emailParam || !firstName || !lastName || !password) return;
 
-    setIsLoading(true);
-    // Simula creación de cuenta
-    await new Promise((r) => setTimeout(r, 600));
-    setIsLoading(false);
-    router.push("/dashboard");
+    try {
+      await register(emailParam, password, `${firstName} ${lastName}`);
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message: string }).message)
+          : "No pudimos crear tu cuenta. Inténtalo de nuevo.";
+      showError(message);
+    }
   };
 
   if (emailParam) {
@@ -92,7 +97,7 @@ export function RegisterForm() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => { setPassword(e.target.value); clearError(); }}
             placeholder="Crea una contraseña"
             required
             aria-label="Contraseña"

@@ -11,6 +11,7 @@ import { Clients } from "@/components/landing/shared/Clients";
 import { Questions } from "@/components/landing/shared/Questions";
 import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
+import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
   title: "Zentro — Centraliza y multiplica tu negocio",
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col font-sans">
+    <div className="flex flex-col font-sans relative">
         <Navbar />
         <section className="w-full py-10 max-sm:pb-20 bg-cover bg-center">
             <div className="w-full max-w-300 mx-auto px-5 sm:px-7 xl:px-10">
@@ -46,9 +47,9 @@ export default function Home() {
                 </div>
                 <CTA />
             </div>
-
         </section>
         <Footer />
+        <UpArrowButton />
     </div>
   );
 }

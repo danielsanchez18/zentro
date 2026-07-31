@@ -2,22 +2,27 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SocialLogin } from "./SocialLogin";
 import Link from "next/link";
 import { SendCodeDialog } from "../forgot-password/SendCodeDialog";
+import { useAuthStore } from "@/stores/auth-store";
+import { checkEmailService } from "@/lib/services/auth.service";
+import { showError } from "@/components/ui/toast-message";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const emailParam = searchParams.get("email");
 
+  const { login, isLoading, clearError } = useAuthStore();
+
   const [email, setEmail] = useState(emailParam || "");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,22 +34,45 @@ export function LoginForm() {
       return;
     }
 
-    setIsLoading(true);
-    // Simulación: pasa al paso de contraseña
-    await new Promise((r) => setTimeout(r, 400));
-    setIsLoading(false);
-    router.push(`?email=${encodeURIComponent(email)}`);
+    setCheckingEmail(true);
+    clearError();
+
+    try {
+      const { exists } = await checkEmailService(email);
+
+      if (!exists) {
+        setEmailError("");
+        showError(
+          "Este correo no está registrado",
+          "Revisa que esté bien escrito o crea una cuenta nueva."
+        );
+        return;
+      }
+
+      router.push(`?email=${encodeURIComponent(email)}`);
+    } catch {
+      // Si el check falla (backend caído entre medio), dejamos pasar al
+      // siguiente paso y el login real mostrará el error si es necesario.
+      router.push(`?email=${encodeURIComponent(email)}`);
+    } finally {
+      setCheckingEmail(false);
+    }
   };
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailParam || !password) return;
 
-    setIsLoading(true);
-    // Simulación: valida que no esté vacío y redirige
-    await new Promise((r) => setTimeout(r, 600));
-    setIsLoading(false);
-    router.push("/dashboard");
+    try {
+      await login(emailParam, password);
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const message =
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message: string }).message)
+          : "No pudimos iniciar sesión. Inténtalo de nuevo.";
+      showError(message, "Verifica tus credenciales e inténtalo de nuevo.");
+    }
   };
 
   if (emailParam) {
@@ -60,7 +88,7 @@ export function LoginForm() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => { setPassword(e.target.value); clearError(); }}
             placeholder="Ingrese su contraseña"
             required
             autoFocus
@@ -71,6 +99,7 @@ export function LoginForm() {
         </div>
 
         <Button type="submit" className="w-full h-fit rounded-full py-2 text-base" disabled={isLoading}>
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isLoading ? "Verificando…" : "Iniciar sesión"}
         </Button>
 
@@ -117,8 +146,17 @@ export function LoginForm() {
           <p className="text-sm text-destructive">{emailError}</p>
         )}
 
-        <Button type="submit" className="w-full h-fit rounded-full py-2 mt-5 text-base" disabled={isLoading}>
-          {isLoading ? "Verificando…" : "Continuar con correo electrónico"}
+        <Button type="submit" className="w-full h-fit rounded-full py-2 mt-5 text-base" disabled={isLoading || checkingEmail}>
+          {checkingEmail ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Verificando…
+            </>
+          ) : isLoading ? (
+            "Verificando…"
+          ) : (
+            "Continuar con correo electrónico"
+          )}
         </Button>
       </form>
 

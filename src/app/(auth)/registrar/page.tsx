@@ -1,5 +1,6 @@
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { MockBadge } from "@/components/ui/mock-badge";
 import { Suspense } from "react";
 import { Metadata } from "next";
 
@@ -19,7 +20,10 @@ export default async function RegistrarPage({
 
     return(
         <main className="min-h-dvh py-20 flex flex-col items-center w-full max-w-sm mx-auto justify-center gap-y-10">
-              
+            <div className="absolute top-4 right-4">
+                <MockBadge />
+            </div>
+
             <AuthHeader
                 title={hasEmail ? "Completa tus datos" : "Crea tu cuenta en segundos"}
                 description={hasEmail ? "Ya casi terminamos, solo necesitamos tus datos." : "Empieza hoy y empieza a gestionar tu negocio ahora."}

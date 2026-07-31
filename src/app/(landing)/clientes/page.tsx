@@ -4,6 +4,7 @@ import { List } from "@/components/landing/clients/List";
 import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
 import { Navbar } from "@/components/landing/shared/Nabar";
+import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
   title: "Clientes",
@@ -28,6 +29,7 @@ export default function ClientesPage() {
           </div>
         </div>
       <Footer />
+      <UpArrowButton />
     </>
   )
 }
