@@ -18,13 +18,13 @@ const questionsList = [
   },
   {
     id: "item-3",
-    question: "¿Cómo funciona el sistema de precios de Escapify?",
+    question: "¿Cómo funciona el sistema de precios de Zentro?",
     answer: "Nuestras suscripciones son por niveles. Es fundamental comprender la tarea que hay que realizar y resolver los problemas que puedan surgir.",
   },
   {
     id: "item-4",
-    question: "¿Qué grado de seguridad ofrece Escapify?",
-    answer: "Proteger los datos que usted confía a Escapify es nuestra máxima prioridad. Esta parte es realmente crucial para mantener el proyecto en marcha hasta su finalización.",
+    question: "¿Qué grado de seguridad ofrece Zentro?",
+    answer: "Proteger los datos que usted confía a Zentro es nuestra máxima prioridad. Implementamos cifrado de extremo a extremo, autenticación multifactor y auditorías de seguridad periódicas.",
   },
   {
     id: "item-5",

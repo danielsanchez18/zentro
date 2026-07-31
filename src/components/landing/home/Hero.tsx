@@ -32,7 +32,7 @@ export function Hero() {
         <button className="flex items-center justify-between px-5 py-3.5 border border-b-transparent border-gray-200 hover:border-gray-300 dark:border-neutral-600 dark:hover:border-neutral-500 transition rounded-t-xl w-full">
 
           <div className="flex items-center gap-x-2">
-            <Image src="/logos/Logo_AppStore.png" alt="Logo App Store" width={20} height={20} className="object-contain" />
+            <Image src="/logos/Logo_AppStore.png" alt="Logo App Store" width={20} height={20} className="object-contain" priority />
             <p className="text-sm font-semibold text-nowrap">App Store</p>
           </div>
 

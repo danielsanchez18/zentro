@@ -47,6 +47,7 @@ export function ResetPasswordForm() {
             placeholder="Nueva contraseña" 
             required
             autoFocus
+            aria-label="Nueva contraseña"
             className="text-base! pl-13 pr-5 rounded-full h-fit py-2.5"
           />
           <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
@@ -60,6 +61,7 @@ export function ResetPasswordForm() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirmar contraseña" 
             required
+            aria-label="Confirmar contraseña"
             className="text-base! pl-13 pr-5 rounded-full h-fit py-2.5"
           />
           <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />

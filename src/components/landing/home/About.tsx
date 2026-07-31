@@ -5,7 +5,7 @@ export function About() {
             {/* Title & Description */}
             <div className="sm:col-span-2 lg:col-span-3 max-w-3xl mx-auto text-center space-y-3 mb-10">
                 <p className="text-muted-foreground">
-                ¿Qué es Escapify?
+                ¿Qué es Zentro?
                 </p>
                 <h2 className="text-balance text-3xl lg:text-4xl font-semibold tracking-tight">Una plataforma diseñada para empresas que quieren <span className="text-primary">escalar</span></h2>
             </div>

@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { ResetPasswordForm } from "@/components/forgot-password/ResetPasswordForm";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Nueva contraseña",
+  description:
+    "Establece una nueva contraseña segura para tu cuenta de Zentro.",
+  robots: { index: false, follow: false },
+};
 
 export default function ResetPasswordPage() {
   return (

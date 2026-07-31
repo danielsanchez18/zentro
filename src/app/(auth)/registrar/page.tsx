@@ -4,7 +4,9 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Escapify - Registrarse",
+  title: "Crear cuenta",
+  description:
+    "Regístrate en Zentro gratis y empieza a centralizar la gestión de tu negocio en minutos.",
 };
 
 export default async function RegistrarPage({
@@ -16,7 +18,7 @@ export default async function RegistrarPage({
     const hasEmail = !!params?.email;
 
     return(
-        <main className="min-h-dvh py-20 flex flex-col items-center max-w-sm mx-auto justify-center gap-y-10">
+        <main className="min-h-dvh py-20 flex flex-col items-center w-full max-w-sm mx-auto justify-center gap-y-10">
               
             <AuthHeader
                 title={hasEmail ? "Completa tus datos" : "Crea tu cuenta en segundos"}

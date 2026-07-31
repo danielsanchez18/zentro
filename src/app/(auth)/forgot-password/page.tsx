@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { ForgotPassword } from "@/components/forgot-password/ForgotPassword";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Recuperar contraseña",
+  description:
+    "Recibe un código en tu correo para restablecer tu contraseña de Zentro de forma segura.",
+};
 
 export default function ForgotPasswordPage() {
   return (

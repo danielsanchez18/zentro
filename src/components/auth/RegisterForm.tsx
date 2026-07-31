@@ -50,7 +50,7 @@ export function RegisterForm() {
 
   if (emailParam) {
     return (
-      <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5">
+      <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5 px-5">
         <div className="px-4 py-2.5 flex items-center gap-x-3 bg-muted rounded-full border border-border">
           <Mail className="size-4.5 text-muted-foreground shrink-0" />
           <span className="truncate text-foreground">{emailParam}</span>
@@ -66,6 +66,7 @@ export function RegisterForm() {
               placeholder="Nombres"
               required
               autoFocus
+              aria-label="Nombres"
               className="text-base! pl-11 pr-3 h-fit py-2 rounded-full"
             />
             <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
@@ -79,6 +80,7 @@ export function RegisterForm() {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Apellidos"
               required
+              aria-label="Apellidos"
               className="text-base! pl-11 pr-3 h-fit py-2 rounded-full"
             />
             <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
@@ -93,6 +95,7 @@ export function RegisterForm() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Crea una contraseña"
             required
+            aria-label="Contraseña"
             className="text-base! pl-11 pr-5 h-fit py-2 rounded-full"
           />
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
@@ -121,6 +124,7 @@ export function RegisterForm() {
             placeholder="Ingresa tu correo electrónico"
             required
             autoFocus
+            aria-label="Correo electrónico"
             className={`text-base! pl-13 pr-5 rounded-full h-fit py-2.5 ${
               emailError ? "border-destructive focus-visible:ring-destructive" : ""
             }`}

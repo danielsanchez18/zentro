@@ -13,7 +13,7 @@ export function Navbar() {
           <span className="font-semibold leading-none uppercase">Zentro</span>
         </Link>
 
-        <nav className="hidden md:flex gap-5 text-sm font-medium">
+        <nav aria-label="Navegación principal" className="hidden md:flex gap-5 text-sm font-medium">
           <Link href="/" className="leading-none hover:underline">Inicio</Link>
           <Link href="/servicios" className="leading-none hover:underline">Servicios</Link>
           <Link href="/planes" className="leading-none hover:underline">Planes</Link>
@@ -34,8 +34,8 @@ export function Navbar() {
             </Button>
           </Link>
 
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <TextAlignEnd />
+          <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menú de navegación">
+            <TextAlignEnd aria-hidden="true" />
           </Button>
         </div>
 

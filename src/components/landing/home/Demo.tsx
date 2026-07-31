@@ -43,8 +43,9 @@ export function Demo() {
 
                 <div className="w-full h-full flex items-center justify-center rounded-lg mt-2 sm:mt-3 bg-white overflow-hidden">
                     <img src="https://preline.co/assets/img/pro/startup/img1.webp"
-                        alt=""
-                        className="w-full min-h-100 object-cover" />
+                        alt="Vista previa de la aplicación Zentro"
+                        className="w-full min-h-100 object-cover"
+                        loading="lazy" />
                 </div>
             </div>
         </section>   

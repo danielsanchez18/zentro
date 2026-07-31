@@ -14,13 +14,13 @@ export function Hero() {
             <path
               d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
           </svg>
-          Aprovecha Escapify
+          Aprovecha Zentro
         </p>
         <h3 className="text-5xl md:text-6xl font-bold">
-          Haz más con <br /> <span className="text-primary">Escapify</span> en la App Web
+          Haz más con <br /> <span className="text-primary">Zentro</span> en la App Web
         </h3>
         <p className="text-gray-900 dark:text-neutral-200 text-balance">
-          Puedes usar Escapify para mucho más que solo la aplicación web.
+          Puedes usar Zentro para mucho más que solo la aplicación web.
         </p>
       </div>
 

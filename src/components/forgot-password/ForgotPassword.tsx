@@ -39,7 +39,7 @@ export function ForgotPassword() {
 
         {/* Input Code */}
         <div className="flex items-center justify-center gap-x-3 w-full">
-          <InputOTP maxLength={6} value={code} onChange={setCode} autoFocus>
+          <InputOTP maxLength={6} value={code} onChange={setCode} autoFocus aria-label="Código de verificación">
             <InputOTPGroup className="gap-2">
               <InputOTPSlot index={0} className="w-12 h-12 text-lg rounded-md border" />
               <InputOTPSlot index={1} className="w-12 h-12 text-lg rounded-md border" />

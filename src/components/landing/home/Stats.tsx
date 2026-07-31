@@ -13,10 +13,11 @@ export function Stats() {
             width={720}
             height={960}
             className="object-cover"
+            loading="lazy"
           />
         </div>
         <div className="bg-muted sm:px-7 p-6 -mt-20 rounded-xl ml-20 space-y-5">
-          <p className="text-gray-800 dark:text-neutral-400 text-sm">El equipo de Escapify es revolucionario. Nos proporcionan asesoramiento estratégico para optimizar nuestro sitio web y realmente se sienten parte de nuestro equipo.</p>
+          <blockquote className="text-gray-800 dark:text-neutral-400 text-sm">"El equipo de Zentro es revolucionario. Nos proporcionan asesoramiento estratégico para optimizar nuestro sitio web y realmente se sienten parte de nuestro equipo."</blockquote>
           <div>
             <p className="font-semibold dark:text-neutral-100 text-sm">Aroa Gil Bo</p>
             <p className="text-gray-800 dark:text-neutral-400 text-sm">Directora de Éxito del Cliente de Framer</p>
@@ -27,7 +28,7 @@ export function Stats() {
       {/* Stats */}
       <article className="w-full order-1 md:order-2 space-y-10 md:space-y-5">
         <div className="space-y-3 max-md:text-center">
-          <h3 className="text-3xl font-semibold mb-4 tracking-tight">Escapify que convierte</h3>
+          <h3 className="text-3xl font-semibold mb-4 tracking-tight">Zentro que convierte</h3>
           <p className="text-muted-foreground text-sm">Ya sea que desee hlt95 a su equipo, impulsar sus esfuerzos de marketing o gestionar el inventario para éxitos de ventas inesperados, Preline está listo para ayudarle.</p>
         </div>
 

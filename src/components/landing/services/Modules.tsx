@@ -14,7 +14,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-muted rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">
@@ -26,7 +26,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-white rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">
@@ -38,7 +38,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-white rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">
@@ -50,7 +50,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-white rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">
@@ -62,7 +62,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-white rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">
@@ -74,7 +74,7 @@ export function Modules() {
             <article className="grid grid-cols-2 items-center gap-x-5">
                 <div className="bg-muted h-60 max-w-60 relative rounded-xl contain-content">
                     <div className="absolute top-4 left-4 size-60 bg-white rounded-lg overflow-hidden">
-                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" />
+                        <Image src="/images/module-services.png" alt="" width={100} height={100} className="w-full object-cover" loading="lazy" />
                     </div>
                 </div>
                 <div className="space-y-3">

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/landing/shared/Nabar";
 import { Demo } from "@/components/landing/home/Demo";
 import { Hero } from "@/components/landing/home/Hero";
@@ -10,6 +11,17 @@ import { Clients } from "@/components/landing/shared/Clients";
 import { Questions } from "@/components/landing/shared/Questions";
 import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
+
+export const metadata: Metadata = {
+  title: "Zentro — Centraliza y multiplica tu negocio",
+  description:
+    "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma. Prueba Zentro gratis.",
+  openGraph: {
+    title: "Zentro — Centraliza y multiplica tu negocio",
+    description:
+      "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma.",
+  },
+};
 
 export default function Home() {
   return (

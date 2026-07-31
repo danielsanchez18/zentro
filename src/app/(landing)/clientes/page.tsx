@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/landing/clients/Hero";
 import { List } from "@/components/landing/clients/List";
 import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
 import { Navbar } from "@/components/landing/shared/Nabar";
+
+export const metadata: Metadata = {
+  title: "Clientes",
+  description:
+    "Empresas que confían en Zentro para centralizar su gestión, optimizar su inventario y multiplicar sus ventas.",
+  openGraph: {
+    title: "Clientes | Zentro",
+    description:
+      "Empresas que confían en Zentro para centralizar su gestión, optimizar su inventario y multiplicar sus ventas.",
+  },
+};
 
 export default function ClientesPage() {
   return (

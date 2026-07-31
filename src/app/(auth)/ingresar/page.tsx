@@ -4,7 +4,9 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Zentro — Iniciar sesión",
+  title: "Iniciar sesión",
+  description:
+    "Accede a tu cuenta de Zentro con tu correo electrónico y contraseña.",
 };
 
 export default async function IngresarPage({

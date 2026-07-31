@@ -7,7 +7,7 @@ export function Clients() {
                 <div className="relative overflow-hidden">
                     <div className="whitespace-nowrap flex gap-x-20 animate-marquee">
                         {Array.from({ length: 8 }).map((_, i) => (
-                            <svg key={i} className="min-w-34" viewBox="0 0 390 87" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg key={i} className="min-w-34" viewBox="0 0 390 87" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path d="M0.219906 32.4982L35.886 32.5053L57.5733 32.509V11.0235L0.219906 32.4982Z" fill="currentColor" opacity=".8"></path>
                                 <path d="M57.5733 11.0235V86.8781L84.6603 0.878133L57.5733 11.0235Z" fill="currentColor" opacity=".6"></path>
                                 <path d="M57.5733 32.509L35.886 32.5053L57.5733 86.8781V32.509Z" fill="currentColor"></path>

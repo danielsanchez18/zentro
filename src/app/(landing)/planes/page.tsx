@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Features } from "@/components/landing/prices/Features";
 import { Plans } from "@/components/landing/prices/Plans";
 import { Clients } from "@/components/landing/shared/Clients";
@@ -5,6 +6,17 @@ import { CTA } from "@/components/landing/shared/CTA";
 import { Footer } from "@/components/landing/shared/Footer";
 import { Navbar } from "@/components/landing/shared/Nabar";
 import { Questions } from "@/components/landing/shared/Questions";
+
+export const metadata: Metadata = {
+  title: "Planes y precios",
+  description:
+    "Elige el plan perfecto para tu negocio. Desde el plan gratuito hasta el plan empresarial, Zentro escala contigo.",
+  openGraph: {
+    title: "Planes y precios | Zentro",
+    description:
+      "Elige el plan perfecto para tu negocio. Desde el plan gratuito hasta el plan empresarial, Zentro escala contigo.",
+  },
+};
 
 export default function PlanesPage() {
   return (
