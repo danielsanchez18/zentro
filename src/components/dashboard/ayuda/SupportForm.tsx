@@ -28,28 +28,28 @@ export const SupportForm = () => {
 
   return (
     <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
-      <h3 className="text-base font-medium">¿No encontraste lo que buscas?</h3>
+      <h3 className="text-base font-medium font-sans">¿No encontraste lo que buscas?</h3>
       <p className="mt-1 text-sm text-muted-foreground">
         Escríbenos y te respondemos por correo con una referencia de
         seguimiento.
       </p>
 
       <form
-        className="mt-5 space-y-4"
+        className="mt-5 space-y-5"
         onSubmit={(event) => {
           event.preventDefault();
           handleSubmit();
         }}
       >
-        <div className="space-y-1.5">
-          <label htmlFor="support-category" className="text-xs font-medium">
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="support-category" className="text-sm font-medium">
             Categoría
           </label>
           <select
             id="support-category"
             value={category}
             onChange={(event) => setCategory(event.target.value)}
-            className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            className="px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           >
             {CATEGORIES.map((item) => (
               <option key={item} value={item}>
@@ -59,8 +59,8 @@ export const SupportForm = () => {
           </select>
         </div>
 
-        <div className="space-y-1.5">
-          <label htmlFor="support-subject" className="text-xs font-medium">
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="support-subject" className="text-sm font-medium">
             Asunto
           </label>
           <Input
@@ -68,11 +68,12 @@ export const SupportForm = () => {
             value={subject}
             onChange={(event) => setSubject(event.target.value)}
             placeholder="Ej: No puedo cambiar de plan"
+            className="h-fit px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label htmlFor="support-message" className="text-xs font-medium">
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="support-message" className="text-sm font-medium">
             Mensaje
           </label>
           <textarea
@@ -81,7 +82,7 @@ export const SupportForm = () => {
             onChange={(event) => setMessage(event.target.value)}
             rows={4}
             placeholder="Cuéntanos qué te sucede…"
-            className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+            className="h-fit px-3 py-2 w-full rounded-lg border border-input bg-transparent text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />
         </div>
 
@@ -89,6 +90,7 @@ export const SupportForm = () => {
           <Button
             type="submit"
             disabled={sending || !subject.trim() || !message.trim()}
+            className="px-4 py-2 text-sm h-fit rounded-full font-semibold"
           >
             {sending && <Loader2 className="size-4 animate-spin" />}
             {sending ? "Enviando…" : "Enviar"}
@@ -101,12 +103,12 @@ export const SupportForm = () => {
 
 export const SearchInput = () => {
   return (
-    <div className="relative">
-      <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+    <div className="relative w-full">
+      <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="search"
         placeholder="Buscar en la ayuda…"
-        className="pl-8"
+        className="pl-10 text-base! rounded-lg w-full py-2 h-fit"
         aria-label="Buscar en la ayuda"
       />
     </div>

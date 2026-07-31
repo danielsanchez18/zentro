@@ -33,12 +33,12 @@ export const ContactSection = () => {
         {CONTACTS.map((contact) => {
           const content = (
             <>
-              <div className="flex size-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-                <contact.icon className="size-5" />
+              <div className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                <contact.icon className="size-4.5" />
               </div>
               <h3 className="mt-4 text-sm font-medium">{contact.title}</h3>
               <p className="mt-1 text-sm">{contact.value}</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {contact.hint}
               </p>
             </>

@@ -68,19 +68,21 @@ export const FaqAccordion = () => {
   return (
     <div className="space-y-8">
       {FAQ_GROUPS.map((group, groupIndex) => (
-        <section key={group.topic} aria-labelledby={`faq-${groupIndex}`}>
+        <section key={group.topic} aria-labelledby={`faq-${groupIndex}`} className="space-y-5">
           <h3
             id={`faq-${groupIndex}`}
-            className="text-sm font-medium text-muted-foreground"
+            className="font-medium text-muted-foreground font-sans"
           >
-            {group.topic}
+            0{groupIndex + 1}. {group.topic}
           </h3>
           <Accordion className="mt-2">
             {group.items.map((item) => (
               <AccordionItem key={item.q} value={item.q}>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
+                <AccordionTrigger className="font-sans py-3 text-base">
+                  {item.q}
+                </AccordionTrigger>
                 <AccordionContent>
-                  <p className="text-muted-foreground">{item.a}</p>
+                  <p className="text-muted-foreground text-base">{item.a}</p>
                 </AccordionContent>
               </AccordionItem>
             ))}
