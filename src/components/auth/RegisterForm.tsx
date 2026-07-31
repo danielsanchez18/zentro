@@ -9,7 +9,18 @@ import { SocialLogin } from "./SocialLogin";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/auth-store";
 import { checkEmailService } from "@/lib/services/auth.service";
+import { useValidateEmailParam } from "@/hooks/use-validate-email-param";
 import { showError, showSuccess } from "@/components/ui/toast-message";
+
+/**
+ * Precondición del paso 2 de registro: el correo de la URL NO debe existir.
+ * Si alguien forja /registrar?email=... con un correo ya registrado, se
+ * redirige al paso 1 con el error correspondiente.
+ */
+const validateRegisterEmail = async (email: string) => {
+  const { exists } = await checkEmailService(email);
+  return !exists;
+};
 
 export function RegisterForm() {
   const searchParams = useSearchParams();
@@ -17,6 +28,14 @@ export function RegisterForm() {
   const emailParam = searchParams.get("email");
 
   const { register, isLoading, clearError } = useAuthStore();
+
+  const { status: emailGateStatus } = useValidateEmailParam({
+    email: emailParam ?? "",
+    validate: validateRegisterEmail,
+    redirectTo: "/registrar",
+    errorTitle: "Este correo ya está registrado",
+    errorDescription: "Inicia sesión con tu cuenta existente.",
+  });
 
   const [email, setEmail] = useState(emailParam || "");
   const [firstName, setFirstName] = useState("");
@@ -85,6 +104,14 @@ export function RegisterForm() {
   };
 
   if (emailParam) {
+    if (emailGateStatus !== "valid") {
+      return (
+        <div className="w-full max-w-md flex justify-center py-10">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
+
     return (
       <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5 px-5">
         <div className="px-4 py-2.5 flex items-center gap-x-3 bg-muted rounded-full border border-border">

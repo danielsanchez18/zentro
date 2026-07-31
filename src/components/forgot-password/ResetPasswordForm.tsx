@@ -4,15 +4,46 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Lock } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { resetPasswordService } from "@/lib/services/auth.service";
-import { getResetCode, clearResetCode } from "@/lib/reset-code";
+import { getResetContext, clearResetContext } from "@/lib/reset-code";
+import { useValidateEmailParam } from "@/hooks/use-validate-email-param";
 import { showError, showSuccess } from "@/components/ui/toast-message";
+
+/**
+ * Precondición del paso de nueva contraseña: el correo de la URL debe coincidir
+ * EXACTAMENTE con el que emitió el código (contexto en sessionStorage).
+ * Evita cambiar el ?email= a mitad del flujo para resetear una cuenta ajena.
+ */
+const validateResetContext = async (email: string) => {
+  const context = getResetContext();
+  if (!context) return false;
+  return context.email.toLowerCase() === email.toLowerCase();
+};
 
 export function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+
+  const { status: emailGateStatus } = useValidateEmailParam({
+    email,
+    validate: validateResetContext,
+    redirectTo: "/ingresar",
+    errorTitle: "Flujo de recuperación inválido",
+    errorDescription: "Solicita un nuevo código para restablecer tu contraseña.",
+  });
+
+  // Sin ?email= en la URL no hay flujo válido → volver al login.
+  useEffect(() => {
+    if (!email) {
+      showError(
+        "Flujo de recuperación inválido",
+        "Solicita un nuevo código para restablecer tu contraseña."
+      );
+      router.replace("/ingresar");
+    }
+  }, [email, router]);
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,8 +72,8 @@ export function ResetPasswordForm() {
       return;
     }
 
-    const code = getResetCode();
-    if (!code) {
+    const context = getResetContext();
+    if (!context) {
       showError(
         "Código no encontrado",
         "Solicita un nuevo código para restablecer tu contraseña.",
@@ -53,8 +84,8 @@ export function ResetPasswordForm() {
 
     setIsLoading(true);
     try {
-      await resetPasswordService(email, code, password);
-      clearResetCode();
+      await resetPasswordService(email, context.code, password);
+      clearResetContext();
       showSuccess("Contraseña actualizada", "Ya puedes iniciar sesión con tu nueva contraseña.");
       router.push(`/ingresar?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
@@ -67,6 +98,14 @@ export function ResetPasswordForm() {
       setIsLoading(false);
     }
   };
+
+  if (emailGateStatus !== "valid") {
+    return (
+      <div className="w-full max-w-sm flex justify-center py-10">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-y-10 w-full max-w-sm">

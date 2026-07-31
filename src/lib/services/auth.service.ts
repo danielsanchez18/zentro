@@ -147,3 +147,23 @@ export async function resetPasswordService(
   await authApi.resetPassword(email, code, newPassword);
   return { isMock: false };
 }
+
+/**
+ * Valida la sesión actual contra el backend (GET /auth/me).
+ * - En modo mock confía en el token local (no es un JWT real), devolviendo
+ *   el usuario mock para mantener la demo sin backend.
+ * - En modo API devuelve el usuario actualizado si el token es válido.
+ *
+ * Lanza un error si el token no es válido/expirado (401) o el backend no responde.
+ */
+export async function validateSessionService(token: string): Promise<{ user: User | null; isMock: boolean }> {
+  const isMock = await resolveMockMode();
+
+  if (isMock) {
+    await delay(100);
+    return { user: MOCK_USER, isMock: true };
+  }
+
+  const data = await authApi.me(token);
+  return { user: data.user, isMock: false };
+}

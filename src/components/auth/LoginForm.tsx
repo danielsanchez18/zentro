@@ -10,7 +10,18 @@ import Link from "next/link";
 import { SendCodeDialog } from "../forgot-password/SendCodeDialog";
 import { useAuthStore } from "@/stores/auth-store";
 import { checkEmailService } from "@/lib/services/auth.service";
+import { useValidateEmailParam } from "@/hooks/use-validate-email-param";
 import { showError } from "@/components/ui/toast-message";
+
+/**
+ * Precondición del paso 2 de login: el correo de la URL debe existir.
+ * Si alguien forja /ingresar?email=... con un correo inexistente, se
+ * redirige al paso 1 con el error correspondiente.
+ */
+const validateLoginEmail = async (email: string) => {
+  const { exists } = await checkEmailService(email);
+  return exists;
+};
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -18,6 +29,14 @@ export function LoginForm() {
   const emailParam = searchParams.get("email");
 
   const { login, isLoading, clearError } = useAuthStore();
+
+  const { status: emailGateStatus } = useValidateEmailParam({
+    email: emailParam ?? "",
+    validate: validateLoginEmail,
+    redirectTo: "/ingresar",
+    errorTitle: "Este correo no está registrado",
+    errorDescription: "Revisa que esté bien escrito o crea una cuenta nueva.",
+  });
 
   const [email, setEmail] = useState(emailParam || "");
   const [password, setPassword] = useState("");
@@ -76,6 +95,14 @@ export function LoginForm() {
   };
 
   if (emailParam) {
+    if (emailGateStatus !== "valid") {
+      return (
+        <div className="w-full max-w-sm flex justify-center py-10">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        </div>
+      );
+    }
+
     return (
       <form onSubmit={handlePasswordSubmit} className="w-full max-w-sm space-y-5 px-5">
         <div className="px-5 py-2.5 flex items-center gap-x-3 bg-muted p-2 rounded-full border border-border">

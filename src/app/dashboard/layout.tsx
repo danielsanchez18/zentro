@@ -1,21 +1,21 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { useAuthStore } from '@/stores/auth-store';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { MockBadge } from '@/components/ui/mock-badge';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, user, logout } = useAuthStore();
-  const router = useRouter();
+  const { checking } = useRequireAuth();
+  const { user, logout } = useAuthStore();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/ingresar');
-    }
-  }, [isAuthenticated, router]);
-
-  if (!isAuthenticated) return null;
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -11,9 +11,9 @@
 
 | Si tu tarea es sobre | Lee primero | Archivos que tocarás |
 |---|---|---|
-| **Auth** (login, registro) | `docs/agents/frontend/auth/README.md` | `src/app/(auth)/*`, `src/components/features/auth/*` |
-| **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/layout.tsx`, `src/app/(dashboard)/*` |
-| **Catálogo / Productos** | Notion 04 + docs | `src/app/(dashboard)/catalog/*` |
+| **Auth** (login, registro, forgot-password, protección de rutas) | `docs/agents/frontend/auth/README.md`, `docs/decisions/005-route-protection.md` | `src/app/(auth)/*`, `src/components/auth/*`, `src/components/forgot-password/*`, `src/hooks/use-*-guard*.ts`, `src/hooks/use-validate-email-param.ts` |
+| **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/dashboard/layout.tsx`, `src/app/layout.tsx`, `src/hooks/use-require-auth.ts` |
+| **Catálogo / Productos** | Notion 04 + docs | `src/app/dashboard/catalog/*` |
 | **UI / Componentes globales** | — | `src/components/ui/*`, `src/app/layout.tsx` |
 | **Modo Mock / Datos de prueba** | `docs/mock-mode.md` | `src/lib/mock/data.ts`, `src/components/ui/mock-help-button.tsx`, `src/components/ui/mock-badge.tsx` |
 | **Arquitectura general** | `docs/02-ARCHITECTURE.md`, Notion 06 | — |
@@ -37,23 +37,26 @@ src/
 ├── app/
 │   ├── layout.tsx              # Root layout
 │   ├── (auth)/
-│   │   ├── login/page.tsx
-│   │   └── register/page.tsx
-│   └── (dashboard)/
-│       ├── layout.tsx           # Sidebar + header
-│       ├── page.tsx             # Dashboard (KPIs)
-│       ├── catalog/
-│       ├── crm/
-│       ├── pos/
-│       └── settings/
+│   │   ├── layout.tsx           # Guest guard (ingresar/registrar → dashboard si hay sesión)
+│   │   ├── ingresar/page.tsx    # Login
+│   │   ├── registrar/page.tsx   # Registro
+│   │   ├── forgot-password/page.tsx   # OTP de recuperación
+│   │   └── reset-password/page.tsx    # Nueva contraseña
+│   ├── (landing)/              # Landing (/, /clientes, /servicios, /planes)
+│   └── dashboard/
+│       ├── layout.tsx           # useRequireAuth (JWT vs /auth/me) + header + spinner
+│       └── page.tsx             # Dashboard (KPIs)
 ├── components/
-│   ├── ui/                     # shadcn/ui
-│   └── features/               # Feature-specific
+│   ├── ui/                     # shadcn/ui + toasts + mock (badge/help)
+│   ├── auth/                   # LoginForm, RegisterForm, SocialLogin, AuthHeader
+│   └── forgot-password/        # SendCodeDialog, ForgotPassword (OTP), ResetPasswordForm
 ├── lib/
-│   └── api/                    # API client
-├── stores/                     # Zustand
+│   ├── api/                    # API client + auth endpoints
+│   ├── services/               # auth.service.ts (mock/API) + reset-code.ts
+│   └── mock/                   # Datos de prueba (data.ts)
+├── stores/                     # Zustand (auth-store, app-store)
 ├── types/                      # TypeScript
-└── hooks/                      # Custom hooks
+└── hooks/                      # use-require-auth, use-guest-guard, use-validate-email-param
 ```
 
 ## 🧭 Documentación relacionada

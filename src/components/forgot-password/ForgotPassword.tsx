@@ -9,11 +9,22 @@ import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { verifyCodeService, forgotPasswordService } from "@/lib/services/auth.service";
-import { saveResetCode } from "@/lib/reset-code";
+import { verifyCodeService, forgotPasswordService, checkEmailService } from "@/lib/services/auth.service";
+import { saveResetContext } from "@/lib/reset-code";
+import { useValidateEmailParam } from "@/hooks/use-validate-email-param";
 import { showError, showInfo } from "@/components/ui/toast-message";
 
 const RESEND_COOLDOWN_SECONDS = 60;
+
+/**
+ * Precondición de la pantalla OTP: el correo de la URL debe existir.
+ * Si alguien forja /forgot-password?email=... con un correo inexistente,
+ * se redirige al login con el error correspondiente.
+ */
+const validateForgotEmail = async (email: string) => {
+  const { exists } = await checkEmailService(email);
+  return exists;
+};
 
 export function ForgotPassword() {
   const searchParams = useSearchParams();
@@ -25,6 +36,26 @@ export function ForgotPassword() {
   const [resending, setResending] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const { status: emailGateStatus } = useValidateEmailParam({
+    email,
+    validate: validateForgotEmail,
+    redirectTo: "/ingresar",
+    errorTitle: "Este correo no está registrado",
+    errorDescription: "Solicita un nuevo código con un correo válido.",
+  });
+
+  // La recuperación SIEMPRE inicia desde el login (SendCodeDialog). Llegar a
+  // /forgot-password sin ?email= es un flujo inválido → volver al login.
+  useEffect(() => {
+    if (!email) {
+      showError(
+        "Flujo de recuperación inválido",
+        "Inicia la recuperación desde el inicio de sesión."
+      );
+      router.replace("/ingresar");
+    }
+  }, [email, router]);
 
   // Limpia el intervalo si el componente se desmonta
   useEffect(() => {
@@ -59,7 +90,7 @@ export function ForgotPassword() {
     setChecking(true);
     try {
       await verifyCodeService(email, code);
-      saveResetCode(code);
+      saveResetContext(email, code);
       router.push(`/reset-password?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       const message =
@@ -96,6 +127,14 @@ export function ForgotPassword() {
       setResending(false);
     }
   };
+
+  if (emailGateStatus !== "valid") {
+    return (
+      <div className="w-full max-w-sm flex justify-center py-10">
+        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-y-10 w-full max-w-sm">
