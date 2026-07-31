@@ -8,7 +8,8 @@ import { useState } from "react";
 import { SocialLogin } from "./SocialLogin";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/auth-store";
-import { showError } from "@/components/ui/toast-message";
+import { checkEmailService } from "@/lib/services/auth.service";
+import { showError, showSuccess } from "@/components/ui/toast-message";
 
 export function RegisterForm() {
   const searchParams = useSearchParams();
@@ -22,6 +23,7 @@ export function RegisterForm() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +35,29 @@ export function RegisterForm() {
       return;
     }
 
+    setCheckingEmail(true);
     clearError();
-    router.push(`?email=${encodeURIComponent(email)}`);
+
+    try {
+      const { exists } = await checkEmailService(email);
+
+      if (exists) {
+        setEmailError("");
+        showError(
+          "Este correo ya está registrado",
+          "Inicia sesión con tu cuenta existente."
+        );
+        return;
+      }
+
+      router.push(`?email=${encodeURIComponent(email)}`);
+    } catch {
+      // Si el check falla (backend caído entre medio), dejamos pasar al
+      // siguiente paso y el registro real mostrará el error si es necesario.
+      router.push(`?email=${encodeURIComponent(email)}`);
+    } finally {
+      setCheckingEmail(false);
+    }
   };
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
@@ -43,6 +66,7 @@ export function RegisterForm() {
 
     try {
       await register(emailParam, password, `${firstName} ${lastName}`);
+      showSuccess("¡Cuenta creada!", "Bienvenido a Zentro.");
       router.push("/dashboard");
     } catch (err: unknown) {
       const message =
@@ -145,9 +169,17 @@ export function RegisterForm() {
           <p className="text-sm text-destructive">{emailError}</p>
         )}
 
-        <Button type="submit" className="w-full py-2 h-fit mt-5 rounded-full text-base" disabled={isLoading}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Continuar con correo electrónico
+        <Button type="submit" className="w-full py-2 h-fit mt-5 rounded-full text-base" disabled={isLoading || checkingEmail}>
+          {checkingEmail ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Verificando…
+            </>
+          ) : isLoading ? (
+            "Verificando…"
+          ) : (
+            "Continuar con correo electrónico"
+          )}
         </Button>
       </form>
 
