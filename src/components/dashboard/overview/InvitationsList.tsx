@@ -55,12 +55,12 @@ export const InvitationsList = () => {
               key={invitation.id}
               className="flex flex-wrap items-center justify-between gap-3 gap-y-5 rounded-xl border border-border bg-card p-4"
             >
-              <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+              <div className="flex gap-3">
+                <div className="flex mt-0.5 size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                   <Clock3 className="size-4" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium">{invitation.orgName}</p>
+                  <p className="text-base font-medium">{invitation.orgName}</p>
                   <p className="text-sm text-muted-foreground">
                     {invitation.invitedBy} te invitó como {invitation.role} ·
                     expira en {invitation.expiresIn}

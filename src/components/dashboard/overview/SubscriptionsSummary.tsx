@@ -60,13 +60,13 @@ export const SubscriptionsSummary = () => {
                 key={subscription.id}
                 className="flex flex-wrap items-center justify-between gap-3 p-4"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                <div className="flex gap-3">
+                  <div className="flex mt-0.5 size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                     <CreditCard className="size-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">{subscription.orgName}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-base font-medium">{subscription.orgName}</p>
+                    <p className="text-sm text-muted-foreground">
                       Próximo cobro: {subscription.nextCharge}
                     </p>
                   </div>
