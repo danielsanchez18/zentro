@@ -20,7 +20,7 @@ export const StatusChip = ({ status }: { status: SubscriptionStatus }) => {
   return (
     <span
       className={cn(
-        "rounded-full px-2.5 py-1 text-xs uppercase tracking-wide",
+        "rounded-full px-2.5 py-1 text-xs font-medium uppercase tracking-wide",
         STYLES[status]
       )}
     >
