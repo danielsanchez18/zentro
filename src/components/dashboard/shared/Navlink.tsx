@@ -18,7 +18,7 @@ const links = [
   { href: "/dashboard/organizaciones", label: "Organizaciones" },
   { href: "/dashboard/invitaciones", label: "Invitaciones" },
   { href: "/dashboard/suscripciones", label: "Suscripciones" },
-  { href: "/ayuda", label: "Ayuda" },
+  { href: "/dashboard/ayuda", label: "Ayuda" },
 ];
 
 export const Navlink = () => {
