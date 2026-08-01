@@ -24,15 +24,21 @@ const links = [
 export const Navlink = () => {
   const pathname = usePathname();
 
-  // Coincidencia por la ruta MÁS ESPECÍFICA (la más larga gana).
-  // Evita que /dashboard (Overview) robe el activo a /dashboard/organizaciones.
+  // Overview (/dashboard) solo está activo en la ruta EXACTA.
+  // Los demás links activan también sus sub-rutas (ej: /dashboard/organizaciones/nueva).
   const active = links
-    .filter(
-      (link) => pathname === link.href || pathname.startsWith(`${link.href}/`),
+    .filter((link) =>
+      link.href === "/dashboard"
+        ? pathname === "/dashboard"
+        : pathname === link.href || pathname.startsWith(`${link.href}/`),
     )
     .sort((a, b) => b.href.length - a.href.length)[0];
 
-  const currentLabel = active?.label ?? "Overview";
+  // Fallback para páginas que no están en el nav (ej: /dashboard/cuenta).
+  const lastSegment = pathname.split("/").filter(Boolean).pop() ?? "overview";
+  const currentLabel =
+    active?.label ??
+    lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
 
   return (
     <div className="w-full border-b border-border">
@@ -45,8 +51,8 @@ export const Navlink = () => {
               <Link
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-x-2.5 h-fit px-4 py-2 text-sm rounded-lg hover:bg-secondary text-secondary-foreground",
-                  active?.href === link.href && "bg-secondary",
+                  "flex items-center gap-x-2.5 h-fit px-4 py-2 text-sm rounded-lg hover:bg-secondary font-medium text-muted-foreground hover:text-primary",
+                  active?.href === link.href && "bg-secondary text-primary",
                 )}
               >
                 {link.label}
