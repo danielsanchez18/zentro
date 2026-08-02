@@ -81,7 +81,7 @@ export const NotificacionesSection = () => {
 
   return (
     <div className="w-full space-y-6">
-      <div className="lg:pl-5">
+      <div className="max-lg:pt-3 lg:pl-5">
         <h2 className="text-base font-medium font-sans">Notificaciones</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Elige qué avisos quieres recibir por correo.

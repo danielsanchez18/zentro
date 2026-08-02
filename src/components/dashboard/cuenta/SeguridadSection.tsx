@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Laptop, Lock, Loader2, Smartphone } from "lucide-react";
+import { Laptop, Lock, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ChangePasswordDialog } from "@/components/dashboard/cuenta/ChangePasswordDialog";
 
 interface Session {
   id: string;
@@ -35,33 +35,20 @@ const SESSIONS: Session[] = [
 ];
 
 export const SeguridadSection = () => {
-  const [current, setCurrent] = useState("");
-  const [next, setNext] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  const handleChangePassword = () => {
-    setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
-      setCurrent("");
-      setNext("");
-      setConfirm("");
-    }, 600);
-  };
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
       <div className="flex flex-col w-full lg:pl-5">
 
         {/* Contraseña */}
-        <div className="pb-5 border-b border-border space-y-2 flex flex-wrap items-center justify-between gap-x-5">
+        <div className="max-lg:pt-3 pb-4 border-b border-border space-y-2 flex flex-wrap items-center justify-between gap-x-5">
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <p className="text-sm font-medium">Contraseña</p>
             <p className="text-muted-foreground text-sm">Usa al menos 8 caracteres.</p>
           </div>
 
-          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Cambiar</Button>
+          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5" onClick={() => setDialogOpen(true)}>Cambiar</Button>
         </div>
 
         {/* Sesiones */}
@@ -106,7 +93,7 @@ export const SeguridadSection = () => {
         </div>
 
         {/* 2FA */}
-        <div className="pt-5 space-y-2 flex flex-wrap items-center justify-between gap-x-5">
+        <div className="pt-4 space-y-2 flex flex-wrap items-center justify-between gap-x-5">
 
           <div className="space-y-2">
             <p className="text-sm font-medium">Verificación en dos pasos (2FA)</p>
@@ -115,6 +102,11 @@ export const SeguridadSection = () => {
 
           <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Verificar</Button>
         </div>
+
+        <ChangePasswordDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
 
       </div>
   );

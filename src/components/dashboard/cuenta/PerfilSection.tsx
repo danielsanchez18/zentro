@@ -1,25 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeAlert, BadgeCheck, Loader2, Upload } from "lucide-react";
+import { BadgeAlert, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 // TODO(0.2): leer desde GET /users/me y PATCH /users/me
 const PROFILE = {
-  name: "Juan Pérez",
-  email: "admin@lasrocas.com",
-  emailVerified: true,
+  name: "Daniel Sánchez",
+  email: "dsanchez151r@gmail.com",
+  emailVerified: false,
+  phone: "936245721",
 };
 
 export const PerfilSection = () => {
-  const [name, setName] = useState(PROFILE.name);
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = () => {
-    setSaving(true);
-    setTimeout(() => setSaving(false), 600);
-  };
+  const [phone, setPhone] = useState(PROFILE.phone);
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className="flex flex-col w-full lg:pl-5">
@@ -47,7 +43,7 @@ export const PerfilSection = () => {
 
         <div className="space-y-1">
           <p className="text-sm font-medium">Nombres Completos</p>
-          <p className="text-muted-foreground text-sm">Daniel Sánchez</p>
+          <p className="text-muted-foreground text-sm">{PROFILE.name}</p>
         </div>
 
       </div>
@@ -59,7 +55,7 @@ export const PerfilSection = () => {
           <p className="text-sm font-medium">Correo electrónico</p>
           
           <div className="flex items-center gap-x-3 flex-wrap">
-            <p className="text-muted-foreground text-sm">dsanchez151r@gmail.com</p>
+            <p className="text-muted-foreground text-sm">{PROFILE.email}</p>
             {/* <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
               <BadgeCheck className="size-4" />
               <span>Verificado</span>
@@ -79,16 +75,51 @@ export const PerfilSection = () => {
 
         <div className="space-y-1">
           <p className="text-sm font-medium">Teléfono</p>
-          {/* <p className="text-muted-foreground text-sm">+52 999 1234 567</p> */}
-          <Input className="mt-3 h-fit px-4 py-2 w-full text-sm" placeholder="Teléfono" value="936245721" />
-          
-          <div className="mt-2 flex items-center gap-x-1">
-            <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Cancelar</Button>
-            <Button size="sm" className="text-sm rounded-full h-fit px-4 py-1.5">Guardar</Button>
-          </div>
+
+          {isEditing ? (
+            <>
+              <Input
+                className="mt-3 h-fit px-4 py-2 w-full text-sm"
+                placeholder="Teléfono"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                autoFocus
+              />
+              <div className="mt-2 flex items-center gap-x-1">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-sm rounded-full h-fit px-3 py-1.5"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  size="sm"
+                  className="text-sm rounded-full h-fit px-3 py-1.5"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Guardar
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center gap-x-3 flex-wrap">
+              <p className="text-muted-foreground text-sm">{phone}</p>
+            </div>
+          )}
         </div>
-        
-        {/* <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Editar</Button> */}
+
+        {!isEditing && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-sm rounded-full h-fit px-3 py-1.5"
+            onClick={() => setIsEditing(true)}
+          >
+            Editar
+          </Button>
+        )}
       </div>
 
     </div>

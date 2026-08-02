@@ -48,7 +48,7 @@ const STATUS_LABELS: Record<ProviderStatus, string> = {
 export const AccesoSection = () => {
   return (
     <div className="space-y-6 w-full">
-      <div className="lg:pl-5">
+      <div className="max-lg:pt-3 lg:pl-5">
         <h2 className="text-base font-medium font-sans">Cómo inicias sesión</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Conecta tu cuenta con proveedores externos.
