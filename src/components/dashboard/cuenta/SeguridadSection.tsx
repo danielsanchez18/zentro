@@ -61,7 +61,7 @@ export const SeguridadSection = () => {
             <p className="text-muted-foreground text-sm">Usa al menos 8 caracteres.</p>
           </div>
 
-          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Cambiar</Button>
+          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Cambiar</Button>
         </div>
 
         {/* Sesiones */}
@@ -113,7 +113,7 @@ export const SeguridadSection = () => {
             <p className="text-muted-foreground text-sm">Una capa extra de seguridad con una app de autenticación. Disponible próximamente.</p>
           </div>
 
-          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Verificar</Button>
+          <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Verificar</Button>
         </div>
 
       </div>

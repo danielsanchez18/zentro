@@ -77,11 +77,11 @@ export const CuentaPage = () => {
       </div>
 
       {/* Tabs Mobile */}
-      <div className="lg:hidden overflow-x-auto">
+      <div className="lg:hidden overflow-x-auto p-1.5 border border-border rounded-xl">
         <div
           role="tablist"
           aria-label="Secciones de tu cuenta"
-          className="flex w-full flex-nowrap pb-3 gap-1"
+          className="flex flex-nowrap gap-1 w-fit"
         >
           {TABS.map((tab) => (
             <button
@@ -92,7 +92,7 @@ export const CuentaPage = () => {
               onClick={() => setActiveTab(tab.id)}
               className={getButtonClasses(activeTab === tab.id, "tabs")}
             >
-              <tab.icon className="size-4 " />
+              <tab.icon className="size-4" />
               <span className="text-sm font-medium font-sans">{tab.label}</span>
             </button>
           ))}
