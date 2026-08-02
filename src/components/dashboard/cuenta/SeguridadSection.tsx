@@ -58,7 +58,7 @@ export const SeguridadSection = () => {
 
           <div className="space-y-2">
             <p className="text-sm font-medium">Contraseña</p>
-            <p className="text-primary/75">Usa al menos 8 caracteres.</p>
+            <p className="text-primary/75 text-sm">Usa al menos 8 caracteres.</p>
           </div>
 
           <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Cambiar</Button>
@@ -110,7 +110,7 @@ export const SeguridadSection = () => {
 
           <div className="space-y-2">
             <p className="text-sm font-medium">Verificación en dos pasos (2FA)</p>
-            <p className="text-primary/75">Una capa extra de seguridad con una app de autenticación. Disponible próximamente.</p>
+            <p className="text-primary/75 text-sm">Una capa extra de seguridad con una app de autenticación. Disponible próximamente.</p>
           </div>
 
           <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Verificar</Button>

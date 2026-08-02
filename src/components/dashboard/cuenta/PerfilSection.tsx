@@ -25,7 +25,7 @@ export const PerfilSection = () => {
     <div className="flex flex-col w-full lg:pl-5">
 
       {/* Foto */}
-      <div className="pb-5 border-b border-border flex items-center gap-x-5">
+      <div className="pb-5 border-b border-border flex items-center gap-x-3">
         <div className="size-15 bg-accent rounded-full flex items-center justify-center">
           <svg className="size-6" 
               xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@ export const PerfilSection = () => {
 
         <div className="space-y-2">
           <p className="text-sm font-medium">Nombres Completos</p>
-          <p className="text-primary/75">Daniel Sánchez</p>
+          <p className="text-primary/75 text-sm">Daniel Sánchez</p>
         </div>
 
       </div>
@@ -59,12 +59,12 @@ export const PerfilSection = () => {
           <p className="text-sm font-medium">Correo electrónico</p>
           
           <div className="flex items-center gap-x-3 flex-wrap">
-            <p className="text-primary/75">dsanchez151r@gmail.com</p>
-            {/* <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1.5 uppercase font-medium border border-emerald-700 w-fit">
+            <p className="text-primary/75 text-sm">dsanchez151r@gmail.com</p>
+            {/* <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
               <BadgeCheck className="size-4" />
               <span>Verificado</span>
             </div> */}
-            <div className="h-fit flex items-center gap-x-1 text-yellow-700 dark:text-yellow-400 bg-yellow-500/10 text-xs rounded-full px-2 py-1.5 uppercase font-medium border border-yellow-700 w-fit">
+            <div className="h-fit flex items-center gap-x-1 text-yellow-700 dark:text-yellow-400 bg-yellow-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-yellow-700 w-fit">
               <BadgeAlert className="size-4" />
               <span>Sin verificar</span>
             </div>
@@ -75,12 +75,12 @@ export const PerfilSection = () => {
       </div>
 
       {/* Teléfono */}
-      <div className="pt-5 space-y-2 flex flex-wrap items-center justify-between gap-5 w-full">
+      <div className="pt-5 space-y-2 flex flex-wrap items-center justify-between gap-x-5 w-full">
 
         <div className="space-y-2 w-full sm:max-w-xs">
           <p className="text-sm font-medium">Teléfono</p>
-          <p className="text-primary/75">+52 999 1234 567</p>
-          {/* <Input className="h-fit px-4 py-2 w-full text-base!" placeholder="Teléfono" value="936245721" />
+          <p className="text-primary/75 text-sm">+52 999 1234 567</p>
+          {/* <Input className="h-fit px-4 py-2 w-full" placeholder="Teléfono" value="936245721" />
           
           <div className="mt-2 flex items-center gap-x-1">
             <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-4 py-1.5">Cancelar</Button>
