@@ -1,0 +1,101 @@
+/* Sobrescrituras de estilos del popover de driver.js para que use
+   los tokens de tema de la aplicación (globals.css) y se vea como un
+   card de shadcn/ui: bg-popover, borde, rounded-xl y botones pill. */
+
+.zentro-driver-popover.driver-popover {
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  font-family: var(--font-sans);
+  padding: 16px;
+  min-width: 260px;
+  max-width: 320px;
+}
+
+.zentro-driver-popover .driver-popover-arrow {
+  display: none;
+}
+
+.zentro-driver-popover .driver-popover-title {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--popover-foreground);
+}
+
+.zentro-driver-popover .driver-popover-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.zentro-driver-popover .driver-popover-progress-text {
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.zentro-driver-popover .driver-popover-close-btn {
+  color: var(--muted-foreground);
+  width: 28px;
+  height: 24px;
+  font-size: 15px;
+}
+.zentro-driver-popover .driver-popover-close-btn:hover,
+.zentro-driver-popover .driver-popover-close-btn:focus {
+  color: var(--foreground);
+}
+
+.zentro-driver-popover .driver-popover-footer-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* Botón principal (Siguiente / Finalizar) */
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:last-child {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:last-child:hover,
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:last-child:focus {
+  background-color: color-mix(in oklab, var(--primary) 88%, black);
+}
+
+/* Botón secundario (Anterior) */
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:first-child {
+  background-color: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:first-child:hover,
+.zentro-driver-popover
+  .driver-popover-navigation-btns
+  .driver-popover-footer-btn:first-child:focus {
+  background-color: var(--muted);
+}
