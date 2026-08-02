@@ -47,7 +47,7 @@ export const PerfilSection = () => {
 
         <div className="space-y-2">
           <p className="text-sm font-medium">Nombres Completos</p>
-          <p className="text-primary/75 text-sm">Daniel Sánchez</p>
+          <p className="text-muted-foreground text-sm">Daniel Sánchez</p>
         </div>
 
       </div>
@@ -59,7 +59,7 @@ export const PerfilSection = () => {
           <p className="text-sm font-medium">Correo electrónico</p>
           
           <div className="flex items-center gap-x-3 flex-wrap">
-            <p className="text-primary/75 text-sm">dsanchez151r@gmail.com</p>
+            <p className="text-muted-foreground text-sm">dsanchez151r@gmail.com</p>
             {/* <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
               <BadgeCheck className="size-4" />
               <span>Verificado</span>
@@ -79,7 +79,7 @@ export const PerfilSection = () => {
 
         <div className="space-y-2 w-full sm:max-w-xs">
           <p className="text-sm font-medium">Teléfono</p>
-          <p className="text-primary/75 text-sm">+52 999 1234 567</p>
+          <p className="text-muted-foreground text-sm">+52 999 1234 567</p>
           {/* <Input className="h-fit px-4 py-2 w-full" placeholder="Teléfono" value="936245721" />
           
           <div className="mt-2 flex items-center gap-x-1">
