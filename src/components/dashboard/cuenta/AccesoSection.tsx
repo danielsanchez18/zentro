@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Globe, KeyRound, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { toastMsg } from "@/components/ui/toast-message";
+import { DisconnectProviderDialog } from "@/components/dashboard/cuenta/DisconnectProviderDialog";
 
 type ProviderStatus = "ACTIVE" | "CONNECTED" | "DISCONNECTED";
 
@@ -15,7 +18,8 @@ interface Provider {
 }
 
 // TODO(0.2): OAuth post-MVP (roadmap). Diseño de la sección.
-const PROVIDERS: Provider[] = [
+// TODO(0.2): leer/guardar desde GET /users/me/providers y DELETE /users/me/providers/:provider
+const INITIAL_PROVIDERS: Provider[] = [
   {
     id: "local",
     name: "Correo y contraseña",
@@ -46,6 +50,18 @@ const STATUS_LABELS: Record<ProviderStatus, string> = {
 };
 
 export const AccesoSection = () => {
+  const [providers, setProviders] = useState<Provider[]>(INITIAL_PROVIDERS);
+  const [pendingProvider, setPendingProvider] = useState<Provider | null>(null);
+
+  const handleDisconnect = (provider: Provider) => {
+    setProviders((prev) =>
+      prev.map((item) =>
+        item.id === provider.id ? { ...item, status: "DISCONNECTED" } : item,
+      ),
+    );
+    toastMsg.success("Provider desconectado", `${provider.name} ya no está conectado.`);
+  };
+
   return (
     <div className="space-y-6 w-full">
       <div className="max-lg:pt-3 lg:pl-5">
@@ -55,7 +71,7 @@ export const AccesoSection = () => {
         </p>
 
         <ul className="mt-5 space-y-3">
-          {PROVIDERS.map((provider) => (
+          {providers.map((provider) => (
             <li
               key={provider.id}
               className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3"
@@ -77,7 +93,13 @@ export const AccesoSection = () => {
                   <span className="rounded-full bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
                     {STATUS_LABELS.CONNECTED}
                   </span>
-                  <Button type="button" variant="outline" size="sm" className="rounded-full h-fit py-1">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full h-fit py-1"
+                    onClick={() => setPendingProvider(provider)}
+                  >
                     Desconectar
                   </Button>
                 </div>
@@ -108,6 +130,17 @@ export const AccesoSection = () => {
           La conexión con Google y Facebook estará disponible próximamente.
         </p>
       </div>
+
+      <DisconnectProviderDialog
+        open={pendingProvider !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingProvider(null);
+        }}
+        providerName={pendingProvider?.name ?? ""}
+        onConfirm={() => {
+          if (pendingProvider) handleDisconnect(pendingProvider);
+        }}
+      />
     </div>
   );
 };

@@ -46,6 +46,12 @@ export const MOCK_TEST_EMAILS = {
 export const MOCK_RESET_CODE = '123456';
 
 /**
+ * Código de verificación de correo en modo mock.
+ * El modal "Verificar correo" de /cuenta acepta este código.
+ */
+export const MOCK_EMAIL_VERIFICATION_CODE = '123456';
+
+/**
  * Tips mostrados en el botón "?" flotante (MockHelpButton).
  */
 export const MOCK_TIPS: string[] = [
@@ -54,4 +60,5 @@ export const MOCK_TIPS: string[] = [
   `El correo ${MOCK_CREDENTIALS.email} ya existe: sirve para probar el bloqueo del registro`,
   `Un correo que no existe (ej. ${MOCK_TEST_EMAILS.notRegistered}) queda bloqueado en el login`,
   `Recuperar contraseña: usa ${MOCK_CREDENTIALS.email} y código ${MOCK_RESET_CODE}`,
+  `Verificar correo (en /cuenta): código ${MOCK_EMAIL_VERIFICATION_CODE}`,
 ];

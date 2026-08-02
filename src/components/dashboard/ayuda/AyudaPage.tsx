@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { ContactSection } from "@/components/dashboard/ayuda/ContactSection";
 import { FaqAccordion } from "@/components/dashboard/ayuda/FaqAccordion";
 import {
@@ -18,7 +21,13 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 
 export const AyudaPage = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>("faq");
+
+  const handleReopenOnboarding = () => {
+    sessionStorage.removeItem("zentro-onboarding-skipped");
+    router.push("/dashboard");
+  };
 
   return (
     <div className="space-y-8">
@@ -55,6 +64,29 @@ export const AyudaPage = () => {
 
       {activeTab === "faq" && (
         <div className="space-y-8">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card p-4">
+            <div className="flex gap-3">
+              <div className="flex size-9 min-w-9 mt-0.5 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                <Rocket className="size-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">¿Empezando con Zentro?</p>
+                <p className="text-sm text-muted-foreground">
+                  Reabre la guía de primeros pasos para configurar tu cuenta y
+                  organizaciones.
+                </p>
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full text-sm"
+              onClick={handleReopenOnboarding}
+            >
+              Reabrir guía
+            </Button>
+          </div>
+
           <div className="max-w-full">
             <SearchInput />
           </div>

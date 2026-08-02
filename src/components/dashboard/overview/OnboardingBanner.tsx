@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { CheckCircle2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toastMsg } from "@/components/ui/toast-message";
 
 /**
  * Primeros pasos (onboarding) — banner del hub.
@@ -11,8 +15,23 @@ const STEPS = [
   { key: "activate_plan", label: "Activa un plan", done: false },
 ] as const;
 
+const SKIP_FLAG = "zentro-onboarding-skipped";
+
 export const OnboardingBanner = () => {
+  const [skipped, setSkipped] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem(SKIP_FLAG) === "1";
+  });
+
   const doneCount = STEPS.filter((step) => step.done).length;
+
+  const handleSkip = () => {
+    sessionStorage.setItem(SKIP_FLAG, "1");
+    setSkipped(true);
+    toastMsg.info("Guía oculta", "Puedes reabrirla desde Ayuda → Preguntas frecuentes.");
+  };
+
+  if (skipped) return null;
 
   return (
     <section
@@ -28,7 +47,7 @@ export const OnboardingBanner = () => {
             {doneCount} de {STEPS.length} completados
           </p>
         </div>
-        <Button type="button" variant="outline" className="text-sm px-3 rounded-full">
+        <Button type="button" variant="outline" className="text-sm px-3 rounded-full" onClick={handleSkip}>
           Omitir
         </Button>
       </div>

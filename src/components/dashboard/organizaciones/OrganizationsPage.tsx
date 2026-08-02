@@ -6,44 +6,12 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { OrganizationCard } from "@/components/dashboard/organizaciones/OrganizationCard";
 import { NewOrganizationDialog } from "@/components/dashboard/organizaciones/NewOrganizationDialog";
-import type { Organization } from "@/components/dashboard/organizaciones/types";
-
-// TODO(0.2): leer desde GET /orgs
-const ORGS: Organization[] = [
-  {
-    id: "org_001",
-    name: "Las Rocas Restaurante",
-    slug: "las-rocas",
-    plan: "Esencial",
-    role: "Owner",
-    status: "TRIAL",
-    members: 3,
-    branches: 1,
-  },
-  {
-    id: "org_002",
-    name: "Café del Valle",
-    slug: "cafe-del-valle",
-    plan: "Crecimiento",
-    role: "Admin",
-    status: "ACTIVE",
-    members: 5,
-    branches: 2,
-  },
-  {
-    id: "org_003",
-    name: "Fonda La Abuela",
-    slug: "fonda-la-abuela",
-    plan: "Esencial",
-    role: "Miembro",
-    status: "ACTIVE",
-    members: 2,
-    branches: 1,
-  },
-];
+import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
 
 export const OrganizationsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const ORGS = MOCK_ORGANIZATIONS;
 
   return (
     <div className="space-y-8">

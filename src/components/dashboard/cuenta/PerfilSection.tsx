@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeAlert, Upload } from "lucide-react";
+import { BadgeAlert, BadgeCheck, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { VerifyEmailDialog } from "@/components/dashboard/cuenta/VerifyEmailDialog";
 
 // TODO(0.2): leer desde GET /users/me y PATCH /users/me
 const PROFILE = {
@@ -16,6 +17,8 @@ const PROFILE = {
 export const PerfilSection = () => {
   const [phone, setPhone] = useState(PROFILE.phone);
   const [isEditing, setIsEditing] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(PROFILE.emailVerified);
+  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
 
   return (
     <div className="flex flex-col w-full lg:pl-5">
@@ -56,18 +59,30 @@ export const PerfilSection = () => {
           
           <div className="flex items-center gap-x-3 flex-wrap">
             <p className="text-muted-foreground text-sm">{PROFILE.email}</p>
-            {/* <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
-              <BadgeCheck className="size-4" />
-              <span>Verificado</span>
-            </div> */}
-            <div className="h-fit flex items-center gap-x-1 text-yellow-700 dark:text-yellow-400 bg-yellow-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-yellow-700 w-fit">
-              <BadgeAlert className="size-4" />
-              <span>Sin verificar</span>
-            </div>
+            {emailVerified ? (
+              <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
+                <BadgeCheck className="size-4" />
+                <span>Verificado</span>
+              </div>
+            ) : (
+              <div className="h-fit flex items-center gap-x-1 text-yellow-700 dark:text-yellow-400 bg-yellow-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-yellow-700 w-fit">
+                <BadgeAlert className="size-4" />
+                <span>Sin verificar</span>
+              </div>
+            )}
           </div>
         </div>
 
-        <Button size="sm" variant="outline" className="text-sm rounded-full h-fit px-3 py-1.5">Verificar</Button>
+        {!emailVerified && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-sm rounded-full h-fit px-3 py-1.5"
+            onClick={() => setVerifyDialogOpen(true)}
+          >
+            Verificar
+          </Button>
+        )}
       </div>
 
       {/* Teléfono */}
@@ -121,6 +136,13 @@ export const PerfilSection = () => {
           </Button>
         )}
       </div>
+
+      <VerifyEmailDialog
+        open={verifyDialogOpen}
+        onOpenChange={setVerifyDialogOpen}
+        email={PROFILE.email}
+        onVerified={() => setEmailVerified(true)}
+      />
 
     </div>
   );

@@ -25,9 +25,15 @@ const DEFAULT_PREFERENCES: Preference[] = [
     enabled: true,
   },
   {
+    key: "recovery",
+    label: "Recuperación",
+    description: "Restablecimiento de contraseña y códigos de recuperación",
+    enabled: true,
+  },
+  {
     key: "security",
-    label: "Recuperación y seguridad",
-    description: "Cambios de contraseña y nuevos inicios de sesión",
+    label: "Seguridad",
+    description: "Nuevos inicios de sesión y cambios de dispositivo",
     enabled: true,
   },
   {
