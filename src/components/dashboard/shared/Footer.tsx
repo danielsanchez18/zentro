@@ -1,7 +1,7 @@
 export const Footer = () => {
   return (
         <div className="w-full px-5 md:px-7 xl:px-10 max-w-350 mx-auto pt-10">
-            <footer className="w-full text-muted-foreground text-sm py-5 flex items-center justify-center sm:justify-between gap-5 flex-wrap">
+            <footer className="w-full text-muted-foreground text-sm py-5 flex items-center justify-center sm:justify-between gap-x-5 gap-y-3 flex-wrap">
                 <p>2026 © Zentro</p>
                 <div className="flex items-center gap-x-3">
                     <button className="text-sm hover:underline hover:text-primary">

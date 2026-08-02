@@ -44,8 +44,8 @@ export const Header = () => {
                                 </g>
                             </svg>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48 p-1">
-                        <DropdownMenuItem render={<Link href="/dashboard/cuenta" />} className="cursor-pointer px-4 py-2">
+                    <DropdownMenuContent align="end" className="w-40 p-1">
+                        <DropdownMenuItem render={<Link href="/dashboard/cuenta" />} className="cursor-pointer px-2 py-1.5">
                             <svg className="size-4" 
                                 xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path d="M0 0h24v24H0z" fill="none" />
@@ -57,7 +57,7 @@ export const Header = () => {
                             Mi perfil
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer px-4 py-2">
+                        <DropdownMenuItem className="cursor-pointer px-2 py-1.5">
                             <LogOut />
                             Cerrar sesión
                         </DropdownMenuItem>
