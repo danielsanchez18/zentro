@@ -4,6 +4,7 @@ import { OnboardingBanner } from "@/components/dashboard/overview/OnboardingBann
 import { OrganizationsGrid } from "@/components/dashboard/overview/OrganizationsGrid";
 import { InvitationsList } from "@/components/dashboard/overview/InvitationsList";
 import { SubscriptionsSummary } from "@/components/dashboard/overview/SubscriptionsSummary";
+import { DemoTour } from "@/components/dashboard/overview/DemoTour";
 
 /**
  * Overview del hub (/dashboard)
@@ -27,6 +28,7 @@ export const Overview = () => {
       <OrganizationsGrid />
       <InvitationsList />
       <SubscriptionsSummary />
+      <DemoTour />
     </div>
   );
 };

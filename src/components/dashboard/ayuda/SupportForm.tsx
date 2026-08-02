@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/select";
 import { toastMsg } from "@/components/ui/toast-message";
 import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
+import { saveTicket } from "@/components/dashboard/ayuda/tickets";
+import type { SupportTicket } from "@/components/dashboard/ayuda/types";
 
 const CATEGORIES = ["Duda", "Consulta", "Reclamo", "Soporte técnico"] as const;
 
@@ -44,6 +46,20 @@ export const SupportForm = () => {
     setSending(true);
     const nextReference = `ZNT-${Math.floor(100000 + Math.random() * 900000)}`;
     setTimeout(() => {
+      const orgOption = TENANT_OPTIONS.find((option) => option.value === tenantId);
+      const ticket: SupportTicket = {
+        id: `ticket_${Date.now()}`,
+        reference: nextReference,
+        category,
+        tenantName:
+          tenantId === "none" ? "Ninguna (consulta general)" : orgOption?.label ?? "",
+        subject,
+        message,
+        status: "OPEN",
+        createdAt: new Date().toISOString(),
+      };
+      saveTicket(ticket);
+
       setSending(false);
       setReference(nextReference);
       setSubmitted(true);

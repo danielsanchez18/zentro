@@ -77,7 +77,7 @@ export const ChangePasswordDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={step !== "success"}>
-        <DialogHeader className="px-2 gap-y-0">
+        <DialogHeader className="sm:px-1 gap-y-0">
           <DialogTitle className="font-sans text-lg font-medium">
             {step === "current"
               ? "Cambiar contraseña"
@@ -95,7 +95,7 @@ export const ChangePasswordDialog = ({
         </DialogHeader>
 
         {step === "current" && (
-          <div className="flex flex-col gap-y-3 pt-2 px-2">
+          <div className="flex flex-col gap-y-3 pt-2 sm:px-1">
             <label htmlFor="pw-current" className="text-sm font-medium">
               Contraseña actual
             </label>
@@ -115,7 +115,7 @@ export const ChangePasswordDialog = ({
         )}
 
         {step === "new" && (
-          <div className="space-y-4 px-2 pt-2">
+          <div className="space-y-4 sm:px-1 pt-2">
             <div className="flex flex-col gap-y-3">
               <label htmlFor="pw-next" className="text-sm font-medium">
                 Nueva contraseña
@@ -150,7 +150,7 @@ export const ChangePasswordDialog = ({
         )}
 
         {step === "success" && (
-          <div className="flex justify-center py-2 mb-2 px-2">
+          <div className="flex justify-center py-2">
             <div className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
               <Check className="size-6" />
             </div>
@@ -158,7 +158,7 @@ export const ChangePasswordDialog = ({
         )}
 
         {error && (
-          <p className="rounded-lg bg-destructive/10 px-4 py-2 mx-2 text-sm text-destructive">
+          <p className="rounded-lg bg-destructive/10 px-4 py-2 sm:mx-1 text-sm text-destructive">
             {error}
           </p>
         )}

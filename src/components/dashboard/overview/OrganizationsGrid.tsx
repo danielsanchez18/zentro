@@ -46,7 +46,7 @@ export const OrganizationsGrid = () => {
 
   if (ORGS.length === 0) {
     return (
-      <section aria-labelledby="orgs-title">
+      <section data-demo="organizations" aria-labelledby="orgs-title">
         {header}
         <div className="mt-4 rounded-xl border border-dashed border-border">
           <EmptyState
@@ -62,7 +62,7 @@ export const OrganizationsGrid = () => {
   }
 
   return (
-    <section aria-labelledby="orgs-title">
+    <section data-demo="organizations" aria-labelledby="orgs-title">
       {header}
       <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {ORGS.map((org) => (

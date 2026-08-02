@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Rocket } from "lucide-react";
+import { Rocket, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ContactSection } from "@/components/dashboard/ayuda/ContactSection";
 import { FaqAccordion } from "@/components/dashboard/ayuda/FaqAccordion";
+import { TicketsList } from "@/components/dashboard/ayuda/TicketsList";
 import {
   SearchInput,
   SupportForm,
@@ -16,6 +17,7 @@ const TABS = [
   { id: "faq", label: "Preguntas frecuentes" },
   { id: "contacto", label: "Contacto" },
   { id: "mensaje", label: "Mensaje" },
+  { id: "tickets", label: "Mis tickets" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -26,6 +28,11 @@ export const AyudaPage = () => {
 
   const handleReopenOnboarding = () => {
     sessionStorage.removeItem("zentro-onboarding-skipped");
+    router.push("/dashboard");
+  };
+
+  const handleStartDemo = () => {
+    sessionStorage.setItem("zentro-demo-request", "1");
     router.push("/dashboard");
   };
 
@@ -77,14 +84,25 @@ export const AyudaPage = () => {
                 </p>
               </div>
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="rounded-full text-sm"
-              onClick={handleReopenOnboarding}
-            >
-              Reabrir guía
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full text-sm"
+                onClick={handleStartDemo}
+              >
+                <Sparkles className="size-4" />
+                Explorar demo
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full text-sm"
+                onClick={handleReopenOnboarding}
+              >
+                Reabrir guía
+              </Button>
+            </div>
           </div>
 
           <div className="max-w-full">
@@ -97,6 +115,8 @@ export const AyudaPage = () => {
       {activeTab === "contacto" && <ContactSection />}
 
       {activeTab === "mensaje" && <SupportForm />}
+
+      {activeTab === "tickets" && <TicketsList />}
     </div>
   );
 };

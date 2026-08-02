@@ -28,7 +28,7 @@ const INVITATIONS: Invitation[] = [
 
 export const InvitationsList = () => {
   return (
-    <section aria-labelledby="invitaciones-title">
+    <section data-demo="invitations" aria-labelledby="invitaciones-title">
       <div className="flex items-center gap-2">
         <h2 id="invitaciones-title" className="text-base font-medium">
           Invitaciones

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, Circle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
 
@@ -16,6 +16,7 @@ const STEPS = [
 ] as const;
 
 const SKIP_FLAG = "zentro-onboarding-skipped";
+const DEMO_START_EVENT = "zentro:demo-start";
 
 export const OnboardingBanner = () => {
   const [skipped, setSkipped] = useState(() => {
@@ -31,10 +32,16 @@ export const OnboardingBanner = () => {
     toastMsg.info("Guía oculta", "Puedes reabrirla desde Ayuda → Preguntas frecuentes.");
   };
 
+  const handleStartDemo = () => {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(new CustomEvent(DEMO_START_EVENT));
+  };
+
   if (skipped) return null;
 
   return (
     <section
+      data-demo="onboarding"
       aria-labelledby="onboarding-title"
       className="rounded-xl border border-border bg-card p-5"
     >
@@ -47,9 +54,15 @@ export const OnboardingBanner = () => {
             {doneCount} de {STEPS.length} completados
           </p>
         </div>
-        <Button type="button" variant="outline" className="text-sm px-3 rounded-full" onClick={handleSkip}>
-          Omitir
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button type="button" variant="outline" className="text-sm px-3 rounded-full" onClick={handleStartDemo}>
+            <Sparkles className="size-4" />
+            Explorar demo
+          </Button>
+          <Button type="button" variant="outline" className="text-sm px-3 rounded-full" onClick={handleSkip}>
+            Omitir
+          </Button>
+        </div>
       </div>
 
       <div

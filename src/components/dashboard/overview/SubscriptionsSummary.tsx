@@ -29,7 +29,7 @@ const SUBSCRIPTIONS: Subscription[] = [
 
 export const SubscriptionsSummary = () => {
   return (
-    <section aria-labelledby="suscripciones-title">
+    <section data-demo="subscriptions" aria-labelledby="suscripciones-title">
       <div className="flex items-center justify-between gap-3">
         <h2 id="suscripciones-title" className="text-base font-medium">
           Suscripciones

@@ -6,13 +6,15 @@ import { PerfilSection } from "@/components/dashboard/cuenta/PerfilSection";
 import { SeguridadSection } from "@/components/dashboard/cuenta/SeguridadSection";
 import { AccesoSection } from "@/components/dashboard/cuenta/AccesoSection";
 import { NotificacionesSection } from "@/components/dashboard/cuenta/NotificacionesSection";
-import { Bell, KeyRound, Lock, LogOut, User } from "lucide-react";
+import { PagosSection } from "@/components/dashboard/cuenta/PagosSection";
+import { Bell, CreditCard, KeyRound, Lock, LogOut, User } from "lucide-react";
 
 const TABS = [
   { id: "perfil", label: "Información Personal", icon: User },
   { id: "seguridad", label: "Seguridad", icon: Lock },
   { id: "acceso", label: "Acceso", icon: KeyRound },
   { id: "notificaciones", label: "Notificaciones", icon: Bell },
+  { id: "pagos", label: "Pagos", icon: CreditCard },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -103,6 +105,7 @@ export const CuentaPage = () => {
       {activeTab === "seguridad" && <SeguridadSection />}
       {activeTab === "acceso" && <AccesoSection />}
       {activeTab === "notificaciones" && <NotificacionesSection />}
+      {activeTab === "pagos" && <PagosSection />}
     </div>
   );
 };

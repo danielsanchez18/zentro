@@ -43,7 +43,7 @@ export const TenantEntry = () => {
   };
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5">
+    <section data-demo="tenant" className="rounded-xl border border-border bg-card p-5">
       {single ? (
         /* 1 tenant: entrada directa */
         <div className="flex flex-wrap items-center justify-between gap-4">
