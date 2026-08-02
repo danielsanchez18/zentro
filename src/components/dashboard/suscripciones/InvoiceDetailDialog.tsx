@@ -186,7 +186,7 @@ export const InvoiceDetailDialog = ({
 
           {/* Footer */}
           <div className="flex items-center justify-end gap-2 border-t border-border bg-muted/40 p-4 sm:p-5">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button variant="outline" onClick={() => onOpenChange(false)} className="h-fit rounded-full px-3 py-1.5">
               Cerrar
             </Button>
             <DownloadInvoiceButton

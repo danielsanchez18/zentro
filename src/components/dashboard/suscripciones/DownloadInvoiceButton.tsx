@@ -47,7 +47,7 @@ export const DownloadInvoiceButton = ({
       type="button"
       variant="outline"
       size="sm"
-      className="rounded-full h-fit py-1"
+      className="rounded-full h-fit py-1.5 px-3"
       onClick={handleDownload}
       disabled={downloading}
     >
