@@ -10,3 +10,6 @@ export interface Organization {
   members: number;
   branches: number;
 }
+
+// Re-export del modelo del hub (servicios/orgs.service.ts) para consumo del dashboard.
+export type { HubOrganization } from "@/lib/services/orgs.service";

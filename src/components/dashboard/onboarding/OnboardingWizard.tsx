@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
 import {
   EMPTY_MODULES,
+  MODULE_CODES,
   RUBROS_BY_CODE,
   STEPS,
   type IndustryCode,
@@ -20,6 +21,11 @@ import { ActivityStep } from "./ActivityStep";
 import { LocalStep } from "./LocalStep";
 import { ModulesStep } from "./ModulesStep";
 import { IndispensableDialog } from "./IndispensableDialog";
+import {
+  updateOrgFeaturesService,
+  updateOrgIndustryService,
+} from "@/lib/services/orgs.service";
+import { TrialAnnouncementModal } from "./TrialAnnouncementModal";
 
 const DEFAULT_LOCAL: LocalData = {
   nombre: "Sucursal principal",
@@ -31,16 +37,20 @@ const DEFAULT_LOCAL: LocalData = {
 /**
  * Wizard de onboarding (paso 2 de creación de org).
  * Captura rubro → sucursal → módulos con sugerencias por rubro.
- * TODO(0.2): persistir rubro/modules/features en la org (PATCH /orgs/:id + PUT /orgs/:id/features).
+ * Al terminar persiste: PATCH /orgs/:id { industry } + PUT /orgs/:id/features.
  */
 export const OnboardingWizard = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const orgId = searchParams.get("org");
 
   const [step, setStep] = useState<StepId>("actividad");
   const [rubro, setRubro] = useState<IndustryCode | null>(null);
   const [local, setLocal] = useState<LocalData>(DEFAULT_LOCAL);
   const [selected, setSelected] = useState<Record<ModuleKey, boolean>>(EMPTY_MODULES);
   const [pendingModule, setPendingModule] = useState<ModuleKey | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [trialModalOpen, setTrialModalOpen] = useState(true);
 
   const activeStepIndex = STEPS.findIndex((s) => s.id === step);
   const currentRubro = rubro ? RUBROS_BY_CODE[rubro] : undefined;
@@ -64,12 +74,44 @@ export const OnboardingWizard = () => {
     setSelected((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const finish = () => {
-    toastMsg.success(
-      "Organización configurada",
-      "Tu negocio está listo. Puedes editarlo desde el hub."
-    );
-    navigateAway();
+  const finish = async () => {
+    if (!orgId) {
+      toastMsg.error(
+        "Falta la organización",
+        "Crea tu organización primero desde el hub."
+      );
+      navigateAway();
+      return;
+    }
+
+    setSaving(true);
+    try {
+      // 1) Rubro → PATCH /orgs/:id { industry }
+      if (rubro) {
+        await updateOrgIndustryService(orgId, rubro);
+      }
+
+      // 2) Módulos + capacidades → PUT /orgs/:id/features
+      const selectedKeys = (Object.keys(selected) as ModuleKey[]).filter(
+        (key) => selected[key]
+      );
+      const modules = selectedKeys.map((key) => MODULE_CODES[key].module);
+      const features = selectedKeys.flatMap((key) => MODULE_CODES[key].features);
+      await updateOrgFeaturesService(orgId, modules, features);
+
+      toastMsg.success(
+        "Organización configurada",
+        "Tu negocio está listo. Puedes editarlo desde el hub."
+      );
+      navigateAway();
+    } catch (err) {
+      const message =
+        err && typeof err === "object" && "message" in err
+          ? String((err as { message: string }).message)
+          : "No pudimos guardar la configuración.";
+      toastMsg.error("No se pudo guardar", message);
+      setSaving(false);
+    }
   };
 
   const navigateAway = () => navigate("/dashboard");
@@ -111,6 +153,11 @@ export const OnboardingWizard = () => {
         <StepProgress step={step} />
       </header>
 
+      <TrialAnnouncementModal
+        open={trialModalOpen}
+        onClose={() => setTrialModalOpen(false)}
+      />
+
       {step === "actividad" && (
         <ActivityStep rubro={rubro} onSelect={handleSelectRubro} />
       )}
@@ -151,10 +198,14 @@ export const OnboardingWizard = () => {
             type="button"
             className="text-sm px-3 py-2 h-fit rounded-full"
             onClick={handleNext}
-            disabled={step === "actividad" && !rubro}
+            disabled={saving || (step === "actividad" && !rubro)}
           >
-            Continuar
-            <ArrowRight className="size-4" />
+            {saving ? (
+              <Store className="size-4 animate-pulse" />
+            ) : (
+              <ArrowRight className="size-4" />
+            )}
+            {saving ? "Guardando…" : "Continuar"}
           </Button>
         </div>
       </div>

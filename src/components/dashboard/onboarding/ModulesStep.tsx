@@ -106,10 +106,10 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                         key={f}
                         className="flex items-start gap-1.5 text-sm leading-snug text-muted-foreground"
                       >
-                        <span
+                        <div
                           className={cn(
-                            "mt-1 size-1 shrink-0 rounded-full",
-                            checked ? "bg-foreground/60" : "bg-border"
+                            "mt-1.5 size-1 shrink-0 rounded-full",
+                            checked ? "bg-foreground" : "bg-border"
                           )}
                           aria-hidden="true"
                         />

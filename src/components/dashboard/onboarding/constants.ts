@@ -204,3 +204,18 @@ export const STEPS: { id: StepId; label: string }[] = [
   { id: "local", label: "Tu local" },
   { id: "modulos", label: "Módulos" },
 ];
+
+/**
+ * Códigos que se persisten en la org (Organizations.modules / .features).
+ * - moduleCode: código top-level en MAYÚSCULAS (["VENTAS","CLIENTES",...]).
+ * - featureCodes: capacidades lowercase ([ "pos","catalog","crm",...]).
+ * Ver docs/planning/user-dashboard-data-model.md (3.7).
+ */
+export const MODULE_CODES: Record<ModuleKey, { module: string; features: string[] }> = {
+  ventas: { module: "VENTAS", features: ["pos", "orders", "payments", "cash"] },
+  catalogo: { module: "CATALOGO", features: ["catalog", "products", "prices"] },
+  clientes: { module: "CLIENTES", features: ["crm", "agenda", "forms"] },
+  inventario: { module: "INVENTARIO", features: ["stock", "purchases", "transfers"] },
+  presencia: { module: "PRESENCIA", features: ["web", "blog", "marketing"] },
+  finanzas: { module: "FINANZAS", features: ["expenses", "invoicing", "reports"] },
+};

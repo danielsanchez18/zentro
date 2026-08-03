@@ -10,8 +10,7 @@ import { validateSessionService } from '@/lib/services/auth.service';
  *
  * Flujo:
  * - Sin sesión (isAuthenticated/token ausente) → redirige a /ingresar.
- * - Con sesión en modo MOCK → confía en el store (el token mock no es un JWT real).
- * - Con sesión en modo API → valida el token contra GET /auth/me.
+ * - Con sesión → valida el token contra GET /auth/me.
  *   - 200 → refresca el usuario del store y permite el acceso.
  *   - 401/error → cierra sesión y redirige a /ingresar.
  *

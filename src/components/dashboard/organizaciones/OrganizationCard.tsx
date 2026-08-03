@@ -20,9 +20,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
-import type { Organization } from "@/components/dashboard/organizaciones/types";
+import type { HubOrganization } from "@/lib/services/orgs.service";
 
-export const OrganizationCard = ({ org }: { org: Organization }) => {
+export const OrganizationCard = ({ org }: { org: HubOrganization }) => {
   return (
     <article className="flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/40">
       <div className="flex items-start justify-between gap-3">
@@ -31,7 +31,7 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
         </div>
 
         <div className="flex items-center gap-2">
-          <StatusChip status={org.status} />
+          <StatusChip status={org.subscriptionStatus} />
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -45,20 +45,15 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
               <MoreHorizontal />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem render={<Link href={`/app/${org.slug}`} />}>
+              {/* TODO(0.2#12): enlazar a /app/:slug cuando exista el workspace */}
+              <DropdownMenuItem render={<Link href="/dashboard/organizaciones" />}>
                 <ArrowUpRight />
                 Abrir workspace
               </DropdownMenuItem>
-              <DropdownMenuItem
-                render={<Link href={`/app/${org.slug}/configuracion`} />}
-              >
+              <DropdownMenuItem render={<Link href="/dashboard/organizaciones" />}>
                 <Settings /> Configuración
               </DropdownMenuItem>
-              <DropdownMenuItem
-                render={
-                  <Link href={`/app/${org.slug}/configuracion/miembros`} />
-                }
-              >
+              <DropdownMenuItem render={<Link href="/dashboard/organizaciones" />}>
                 <Users /> Miembros
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -100,8 +95,9 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
         </div>
       </dl>
 
+      {/* TODO(0.2#12): href /app/:slug cuando exista el workspace */}
       <a
-        href={`/app/${org.slug}`}
+        href="/dashboard/organizaciones"
         className="mt-auto inline-flex items-center gap-1 pt-4 text-sm w-fit font-medium hover:underline"
       >
         Abrir <ArrowUpRight className="size-3.5" />

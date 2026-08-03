@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, password) => {
         set({ isLoading: true, error: null });
         try {
-          const { data } = await loginService({ email, password });
+          const data = await loginService({ email, password });
           set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
         } catch (err: unknown) {
           const message =
@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (email, password, name) => {
         set({ isLoading: true, error: null });
         try {
-          const { data } = await registerService({ email, password, name });
+          const data = await registerService({ email, password, name });
           set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
         } catch (err: unknown) {
           const message =

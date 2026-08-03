@@ -16,9 +16,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { MOCK_EMAIL_VERIFICATION_CODE } from "@/lib/mock/data";
 
 const RESEND_COOLDOWN_SECONDS = 60;
+
+// TODO(0.2): reemplazar por el código real devuelto por el backend
+// POST /users/me/verify-email (eliminar cuando esté integrado).
+const MOCK_EMAIL_VERIFICATION_CODE = "123456";
 
 interface VerifyEmailDialogProps {
   open: boolean;

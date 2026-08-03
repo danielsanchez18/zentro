@@ -7,6 +7,7 @@ import { SeguridadSection } from "@/components/dashboard/cuenta/SeguridadSection
 import { AccesoSection } from "@/components/dashboard/cuenta/AccesoSection";
 import { NotificacionesSection } from "@/components/dashboard/cuenta/NotificacionesSection";
 import { PagosSection } from "@/components/dashboard/cuenta/PagosSection";
+import { LogoutDialog } from "@/components/dashboard/shared/LogoutDialog";
 import { Bell, CreditCard, KeyRound, Lock, LogOut, User } from "lucide-react";
 
 const TABS = [
@@ -45,6 +46,7 @@ const getButtonClasses = (isActive: boolean, variant: "sidebar" | "tabs") => {
 
 export const CuentaPage = () => {
   const [activeTab, setActiveTab] = useState<TabId>("perfil");
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
@@ -69,6 +71,7 @@ export const CuentaPage = () => {
           <div className="pt-3 mt-3 border-t border-border">
             <button
               type="button"
+              onClick={() => setLogoutOpen(true)}
               className="w-full px-4 py-2.5 text-sm rounded-lg text-muted-foreground hover:bg-accent hover:text-primary flex items-center gap-x-2.5 font-medium"
             >
               <LogOut className="size-4" />
@@ -106,6 +109,8 @@ export const CuentaPage = () => {
       {activeTab === "acceso" && <AccesoSection />}
       {activeTab === "notificaciones" && <NotificacionesSection />}
       {activeTab === "pagos" && <PagosSection />}
+
+      <LogoutDialog open={logoutOpen} onOpenChange={setLogoutOpen} />
     </div>
   );
 };

@@ -4,27 +4,36 @@ import { useState } from "react";
 import { CheckCircle2, Circle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
+import type { OrgsStatus } from "@/hooks/use-orgs";
 
 /**
  * Primeros pasos (onboarding) — banner del hub.
- * TODO(0.2): leer progreso real desde `GET /users/me/onboarding`.
+ * El paso 1 (crear org) se marca como hecho si el usuario ya tiene organizaciones.
  */
-const STEPS = [
-  { key: "create_org", label: "Crea tu organización", done: true },
-  { key: "business_data", label: "Completa los datos de tu negocio", done: false },
-  { key: "activate_plan", label: "Activa un plan", done: false },
-] as const;
-
 const SKIP_FLAG = "zentro-onboarding-skipped";
 const DEMO_START_EVENT = "zentro:demo-start";
 
-export const OnboardingBanner = () => {
+interface OnboardingBannerProps {
+  orgsCount: number;
+  status: OrgsStatus;
+}
+
+export const OnboardingBanner = ({ orgsCount, status }: OnboardingBannerProps) => {
   const [skipped, setSkipped] = useState(() => {
     if (typeof window === "undefined") return false;
     return sessionStorage.getItem(SKIP_FLAG) === "1";
   });
 
-  const doneCount = STEPS.filter((step) => step.done).length;
+  const createOrgDone = status === "success" && orgsCount >= 1;
+
+  const steps = [
+    { key: "create_org", label: "Crea tu organización", done: createOrgDone },
+    { key: "business_data", label: "Completa los datos de tu negocio", done: false },
+    { key: "activate_plan", label: "Activa un plan", done: false },
+  ];
+
+  const doneCount = steps.filter((step) => step.done).length;
+  const totalSteps = steps.length;
 
   const handleSkip = () => {
     sessionStorage.setItem(SKIP_FLAG, "1");
@@ -51,7 +60,7 @@ export const OnboardingBanner = () => {
             Primeros pasos
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {doneCount} de {STEPS.length} completados
+            {doneCount} de {totalSteps} completados
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -70,16 +79,16 @@ export const OnboardingBanner = () => {
         role="progressbar"
         aria-valuenow={doneCount}
         aria-valuemin={0}
-        aria-valuemax={STEPS.length}
+        aria-valuemax={totalSteps}
       >
         <div
           className="h-full rounded-full bg-primary transition-all"
-          style={{ width: `${(doneCount / STEPS.length) * 100}%` }}
+          style={{ width: `${(doneCount / totalSteps) * 100}%` }}
         />
       </div>
 
       <ol className="mt-4 grid gap-3 sm:grid-cols-3">
-        {STEPS.map((step, index) => (
+        {steps.map((step, index) => (
           <li key={step.key} className="flex gap-2 text-sm">
             {step.done ? (
               <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />

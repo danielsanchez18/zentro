@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { MockHelpButton } from "@/components/ui/mock-help-button";
 import "./globals.css";
 
 const inter = Inter({
@@ -91,7 +90,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ThemeProvider>{children}</ThemeProvider>
         <Toaster />
-        <MockHelpButton />
       </body>
     </html>
   );

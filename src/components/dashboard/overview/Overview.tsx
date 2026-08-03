@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Greeting } from "@/components/dashboard/overview/Greeting";
 import { TenantEntry } from "@/components/dashboard/overview/TenantEntry";
 import { OnboardingBanner } from "@/components/dashboard/overview/OnboardingBanner";
@@ -5,6 +8,8 @@ import { OrganizationsGrid } from "@/components/dashboard/overview/Organizations
 import { InvitationsList } from "@/components/dashboard/overview/InvitationsList";
 import { SubscriptionsSummary } from "@/components/dashboard/overview/SubscriptionsSummary";
 import { DemoTour } from "@/components/dashboard/overview/DemoTour";
+import { NewOrganizationDialog } from "@/components/dashboard/organizaciones/NewOrganizationDialog";
+import { useOrgs } from "@/hooks/use-orgs";
 
 /**
  * Overview del hub (/dashboard)
@@ -17,18 +22,28 @@ import { DemoTour } from "@/components/dashboard/overview/DemoTour";
  *   5. Invitaciones
  *   6. Suscripciones
  *
- * TODO(0.2): conectar con datos reales (/users/me, /orgs, /invitations).
+ * Los datos de organizaciones se leen de `GET /orgs` (useOrgs) y se comparten
+ * entre TenantEntry, OnboardingBanner y OrganizationsGrid.
  */
 export const Overview = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { orgs, status, refetch } = useOrgs();
+
   return (
     <div className="space-y-10">
       <Greeting />
-      <TenantEntry />
-      <OnboardingBanner />
-      <OrganizationsGrid />
+      <TenantEntry orgs={orgs} status={status} />
+      <OnboardingBanner orgsCount={orgs.length} status={status} />
+      <OrganizationsGrid orgs={orgs} status={status} onNew={() => setDialogOpen(true)} />
       <InvitationsList />
       <SubscriptionsSummary />
       <DemoTour />
+
+      <NewOrganizationDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onCreated={() => refetch()}
+      />
     </div>
   );
 };

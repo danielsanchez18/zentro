@@ -1,45 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight, Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
 import { useTenantStore } from "@/stores/tenant-store";
-import type { Organization } from "@/components/dashboard/organizaciones/types";
+import type { HubOrganization } from "@/lib/services/orgs.service";
+import type { OrgsStatus } from "@/hooks/use-orgs";
 
-const REDIRECT_FLAG = "zentro-hub-redirected";
+interface TenantEntryProps {
+  orgs: HubOrganization[];
+  status: OrgsStatus;
+}
 
-export const TenantEntry = () => {
+export const TenantEntry = ({ orgs, status }: TenantEntryProps) => {
   const router = useRouter();
   const { setActiveTenant } = useTenantStore();
-  const orgs = MOCK_ORGANIZATIONS;
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Si el usuario tiene EXACTAMENTE 1 tenant → pasar por el hub y redirigir
   // a su tenant automáticamente (una vez por sesión; luego puede usar el hub).
-  useEffect(() => {
-    if (orgs.length !== 1) return;
-    if (typeof window !== "undefined" && sessionStorage.getItem(REDIRECT_FLAG)) {
-      return;
-    }
-    sessionStorage.setItem(REDIRECT_FLAG, "1");
-    const org = orgs[0];
-    setActiveTenant({ orgId: org.id, slug: org.slug, name: org.name });
-    router.replace(`/app/${org.slug}`);
-  }, [orgs, router, setActiveTenant]);
+  // TODO(0.2#12): descomentar cuando exista /app/:orgSlug (workspace).
+  // useEffect(() => {
+  //   if (status !== "success") return;
+  //   if (orgs.length !== 1) return;
+  //   if (typeof window !== "undefined" && sessionStorage.getItem(REDIRECT_FLAG)) {
+  //     return;
+  //   }
+  //   sessionStorage.setItem(REDIRECT_FLAG, "1");
+  //   const org = orgs[0];
+  //   setActiveTenant({ orgId: org.id, slug: org.slug, name: org.name });
+  //   router.replace(`/app/${org.slug}`);
+  // }, [orgs, status, router, setActiveTenant]);
+
+  // Estado de carga: placeholder gris para evitar saltos de layout.
+  if (status === "loading") {
+    return (
+      <section data-demo="tenant" className="rounded-xl border border-border bg-card p-5">
+        <div className="h-5 w-40 animate-pulse rounded bg-muted" />
+      </section>
+    );
+  }
 
   // El estado de bienvenida con 0 tenants lo maneja OrganizationsGrid.
   if (orgs.length === 0) return null;
 
   const single = orgs.length === 1 ? orgs[0] : null;
-  const selected =
-    orgs.find((org) => org.id === selectedId) ?? orgs[0];
+  const selected = orgs.find((org) => org.id === selectedId) ?? orgs[0];
 
-  const openWorkspace = (org: Organization) => {
+  const openWorkspace = (org: HubOrganization) => {
     setActiveTenant({ orgId: org.id, slug: org.slug, name: org.name });
-    router.push(`/app/${org.slug}`);
+    // TODO(0.2#12): redirigir a /app/:orgSlug cuando exista el workspace.
+    router.push("/dashboard/organizaciones");
   };
 
   return (
