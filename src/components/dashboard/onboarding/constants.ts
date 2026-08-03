@@ -27,6 +27,7 @@ export interface Module {
   key: ModuleKey;
   label: string;
   descripcion: string;
+  features: string[];
   icon: typeof Utensils;
 }
 
@@ -50,12 +51,78 @@ export interface LocalData {
  * Módulos disponibles (agrupación top-level, ver docs/planning/user-dashboard-data-model.md).
  */
 export const MODULES: Module[] = [
-  { key: "ventas", label: "Ventas", descripcion: "POS, pedidos, pagos, caja", icon: Wallet },
-  { key: "catalogo", label: "Catálogo", descripcion: "Productos y servicios", icon: Package },
-  { key: "clientes", label: "Clientes", descripcion: "CRM, agenda, formularios", icon: Users },
-  { key: "inventario", label: "Inventario", descripcion: "Stock y compras", icon: Boxes },
-  { key: "presencia", label: "Presencia digital", descripcion: "Web, blog, marketing", icon: Globe },
-  { key: "finanzas", label: "Finanzas", descripcion: "Gastos, facturación, reportes", icon: LineChart },
+  {
+    key: "ventas",
+    label: "Ventas",
+    descripcion: "POS, pedidos, pagos y caja",
+    features: [
+      "Punto de venta (POS) con facturación",
+      "Pedidos para mesa, para llevar y delivery",
+      "Múltiples métodos de pago",
+      "Cierre de caja y control de turnos",
+    ],
+    icon: Wallet,
+  },
+  {
+    key: "catalogo",
+    label: "Catálogo",
+    descripcion: "Productos y servicios",
+    features: [
+      "Productos con foto, precios y categorías",
+      "Opción de incluir o no impuestos",
+      "Control de precios por lista",
+      "Servicios y planes recurrentes",
+    ],
+    icon: Package,
+  },
+  {
+    key: "clientes",
+    label: "Clientes",
+    descripcion: "CRM, agenda y formularios",
+    features: [
+      "Base de datos de clientes con historial",
+      "Agenda de citas y turnos",
+      "Formularios para captar leads",
+      "Notas y seguimiento de negociaciones",
+    ],
+    icon: Users,
+  },
+  {
+    key: "inventario",
+    label: "Inventario",
+    descripcion: "Stock y compras",
+    features: [
+      "Stock por sucursal y alertas de bajo nivel",
+      "Compras y órdenes a proveedores",
+      "Transferencias entre sucursales",
+      "Ajustes por mermas y devoluciones",
+    ],
+    icon: Boxes,
+  },
+  {
+    key: "presencia",
+    label: "Presencia digital",
+    descripcion: "Web, blog y marketing",
+    features: [
+      "Constructor de tu página web",
+      "Blog y contenido para SEO",
+      "Campañas de marketing y coupons",
+      "Perfiles de redes sociales",
+    ],
+    icon: Globe,
+  },
+  {
+    key: "finanzas",
+    label: "Finanzas",
+    descripcion: "Gastos, facturación y reportes",
+    features: [
+      "Registro de gastos por categoría",
+      "Facturación electrónica",
+      "Reportes de ventas e ingresos",
+      "Estado de cuentas y flujo de caja",
+    ],
+    icon: LineChart,
+  },
 ];
 
 export const MODULE_MAP = MODULES.reduce<Record<ModuleKey, Module>>(

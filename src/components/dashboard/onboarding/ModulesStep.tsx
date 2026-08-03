@@ -23,7 +23,7 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
   const total = MODULES.length;
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-7">
       <div>
         <h2 className="text-lg font-medium tracking-tight">¿Qué módulos quieres activar?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -49,13 +49,13 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
             <li key={m.key}>
               <label
                 className={cn(
-                  "group relative flex cursor-pointer gap-x-3 gap-y-5 rounded-xl border bg-card p-3.5 h-full transition-all duration-200",
+                  "group relative flex cursor-pointer gap-3.5 rounded-xl h-full border bg-card p-4 transition-all duration-200",
                   checked
-                    ? "border-foreground"
+                    ? "border-foreground shadow-[0_0_0_4px_rgba(0,0,0,0.04)]"
                     : "border-border hover:border-foreground/30"
                 )}
               >
-                <span aria-hidden="true" className="mt-0.5 flex shrink-0 gap-3">
+                <span aria-hidden="true" className="flex shrink-0 gap-3">
                   <input
                     type="checkbox"
                     checked={checked}
@@ -72,52 +72,75 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                   >
                     <Check className="size-3" strokeWidth={3} />
                   </span>
-                  <span
-                    className={cn(
-                      "flex size-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                      checked
-                        ? "border-foreground/15 bg-foreground/5 text-foreground"
-                        : "border-border bg-muted/40 text-muted-foreground"
-                    )}
-                  >
-                    <Icon className="size-4" strokeWidth={1.5} />
-                  </span>
                 </span>
 
-                <span className="flex flex-1 flex-col">
-                  <span className="flex items-center gap-2 text-sm font-medium">
-                    {m.label}
-                    {isIndispensable && (
-                      <AlertTriangle
-                        className="size-3.5 text-foreground"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{m.descripcion}</span>
-                </span>
-
-                {(isRecomendado || isIndispensable) && (
-                  <span className="flex shrink-0 flex-col items-end gap-1">
-                    {isRecomendado && (
-                      <span
-                        className={cn(
-                          "inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium",
-                          checked
-                            ? "border-foreground/15 bg-foreground/5 text-foreground/70"
-                            : "border-border bg-muted/40 text-foreground/60"
+                <span className="flex min-w-0 flex-1 flex-col gap-5">
+                  <span className="flex items-start gap-3">
+                    <span
+                      className={cn(
+                        "flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors",
+                        checked
+                          ? "border-foreground/15 bg-foreground/5 text-foreground"
+                          : "border-border bg-muted/40 text-muted-foreground"
+                      )}
+                    >
+                      <Icon className="size-4.5" strokeWidth={1.5} />
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="flex items-center gap-2 text-sm font-medium">
+                        {m.label}
+                        {isIndispensable && (
+                          <AlertTriangle
+                            className="size-3.5 shrink-0 text-foreground/50"
+                            aria-hidden="true"
+                          />
                         )}
-                      >
-                        Recomendado
                       </span>
-                    )}
-                    {isIndispensable && (
-                      <span className="text-xs text-muted-foreground">
-                        Esencial para tu rubro
-                      </span>
-                    )}
+                      <span className="text-sm text-muted-foreground">{m.descripcion}</span>
+                    </span>
                   </span>
-                )}
+
+                  <ul className="grid gap-1.5">
+                    {m.features.map((f) => (
+                      <li
+                        key={f}
+                        className="flex items-start gap-1.5 text-sm leading-snug text-muted-foreground"
+                      >
+                        <span
+                          className={cn(
+                            "mt-1 size-1 shrink-0 rounded-full",
+                            checked ? "bg-foreground/60" : "bg-border"
+                          )}
+                          aria-hidden="true"
+                        />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {(isRecomendado || isIndispensable) && (
+                    <span className="mt-0.5 flex shrink-0 items-center gap-3">
+                      {isRecomendado && (
+                        <span
+                          className={cn(
+                            "inline-flex items-center rounded-full border px-2 py-1 text-xs w-fit font-medium",
+                            checked
+                              ? "border-foreground/15 bg-foreground/5 text-foreground"
+                              : "border-border bg-muted/40 text-foreground/60"
+                          )}
+                        >
+                          Recomendado
+                        </span>
+                      )}
+                      {isIndispensable && (
+                        <span className="text-sm text-muted-foreground">
+                          Esencial para tu rubro
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </span>
+
               </label>
             </li>
           );
