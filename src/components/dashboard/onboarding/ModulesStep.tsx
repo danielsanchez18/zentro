@@ -51,7 +51,7 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                 className={cn(
                   "group relative flex cursor-pointer gap-3.5 rounded-xl h-full border bg-card p-4 transition-all duration-200",
                   checked
-                    ? "border-foreground shadow-[0_0_0_4px_rgba(0,0,0,0.04)]"
+                    ? "border-foreground"
                     : "border-border hover:border-foreground/30"
                 )}
               >
