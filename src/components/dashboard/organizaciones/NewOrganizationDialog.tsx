@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Building2, Loader2, ArrowRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,26 +20,45 @@ interface NewOrganizationDialogProps {
 }
 
 /**
- * Modal de creación de organización.
- * TODO(0.2): POST /orgs + auto-sugerir slug desde el nombre.
+ * Paso 1 de la creación de organización: modal con nombre + slug (auto-sugerido).
+ * Al confirmar navega a `/dashboard/onboarding` (paso 2: rubro, sucursal, módulos).
+ * TODO(0.2): POST /orgs { name, slug } antes de navegar.
  */
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 export const NewOrganizationDialog = ({
   open,
   onOpenChange,
 }: NewOrganizationDialogProps) => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
+  const [slugTouched, setSlugTouched] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const handleNameChange = (value: string) => {
+    setName(value);
+    if (!slugTouched) setSlug(slugify(value));
+  };
 
   const handleCreate = () => {
     setSaving(true);
-    // TODO(0.2): llamar POST /orgs { name, slug }
+    // TODO(0.2): llamar POST /orgs { name, slug } → obtiene orgId
     setTimeout(() => {
       setSaving(false);
       setName("");
       setSlug("");
+      setSlugTouched(false);
       onOpenChange(false);
-    }, 600);
+      router.push("/dashboard/onboarding");
+    }, 500);
   };
 
   return (
@@ -46,10 +66,11 @@ export const NewOrganizationDialog = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-sans text-base">
-            <Building2 className="size-4 text-primary" /> Nueva organización
+            <Building2 className="size-4 text-primary" /> Crea tu organización
           </DialogTitle>
-          <DialogDescription>
-            Crea tu espacio de trabajo. Podrás configurar tu workspace e invitar a tu equipo después.
+          <DialogDescription className="text-sm">
+            Sólo nombre y slug para arrancar. El resto (rubro, tu local y módulos)
+            lo configuramos a continuación.
           </DialogDescription>
         </DialogHeader>
 
@@ -61,7 +82,7 @@ export const NewOrganizationDialog = ({
             <Input
               id="org-name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => handleNameChange(e.target.value)}
               placeholder="Ej: Zentro"
               autoFocus
               className="text-sm px-3 py-2 h-fit"
@@ -77,30 +98,37 @@ export const NewOrganizationDialog = ({
               <Input
                 id="org-slug"
                 value={slug}
-                onChange={(e) => setSlug(e.target.value)}
+                onChange={(e) => {
+                  setSlug(e.target.value);
+                  setSlugTouched(true);
+                }}
                 placeholder="zentro"
                 className="text-sm px-3 py-2 h-fit"
               />
             </div>
+            <p className="text-xs text-muted-foreground">
+              {slug ? `Tu workspace será /app/${slug}` : "Se autogenera desde el nombre."}
+            </p>
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="sm:justify-between">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={saving}
-            className="text-sm px-3 py-2 h-fit rounded-full"
+            className="text-sm px-3 rounded-full"
           >
             Cancelar
           </Button>
           <Button
+            type="button"
             onClick={handleCreate}
-            disabled={saving || !name.trim()}
-            className="text-sm px-3 py-2 h-fit rounded-full"
+            disabled={saving || !name.trim() || !slug.trim()}
+            className="text-sm px-3 rounded-full"
           >
-            {saving && <Loader2 className="size-4 animate-spin" />}
-            {saving ? "Creando…" : "Crear organización"}
+            {saving ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+            {saving ? "Creando…" : "Crear y configurar"}
           </Button>
         </DialogFooter>
       </DialogContent>

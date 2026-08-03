@@ -28,7 +28,7 @@ export const InvoiceDetailDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="inset-0 h-dvh w-full max-w-none translate-x-0 translate-y-0 gap-0 overflow-hidden rounded-none p-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[85dvh] sm:w-full sm:max-w-2xl sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl"
+        className="inset-0 h-dvh w-full max-w-none translate-x-0 translate-y-0 gap-0 overflow-hidden sm:overflow-y-auto rounded-none p-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[85dvh] sm:w-full sm:max-w-2xl sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-xl"
       >
         <div className="flex h-full flex-col overflow-hidden sm:h-auto">
           {/* Header */}
@@ -46,7 +46,7 @@ export const InvoiceDetailDialog = ({
                 </DialogDescription>
               </div>
             </div>
-            <div className="mr-5">
+            <div className="mr-7">
               <InvoiceStatusChip status={invoice.status} />
             </div>
           </div>
@@ -185,7 +185,7 @@ export const InvoiceDetailDialog = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-2 border-t border-border bg-muted/40 p-4 sm:p-5">
+          <div className="flex items-center justify-end gap-2 border-t border-border bg-muted/40 px-5 py-5">
             <Button variant="outline" onClick={() => onOpenChange(false)} className="h-fit rounded-full px-3 py-1.5">
               Cerrar
             </Button>
