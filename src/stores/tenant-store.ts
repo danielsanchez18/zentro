@@ -5,6 +5,13 @@ export interface TenantContext {
   orgId: string;
   slug: string;
   name: string;
+  /** Nombre legible del plan (ej. "Trial", "Esencial"). */
+  plan: string;
+  planSlug: string;
+  /** Estado de suscripción (ACTIVE, TRIAL, PAST_DUE, CANCELED). */
+  subscriptionStatus: string;
+  /** Fin del período de prueba (ISO) o null. */
+  trialEndsAt: string | null;
 }
 
 interface TenantStore {

@@ -50,7 +50,15 @@ export const TenantEntry = ({ orgs, status }: TenantEntryProps) => {
   const selected = orgs.find((org) => org.id === selectedId) ?? orgs[0];
 
   const openWorkspace = (org: HubOrganization) => {
-    setActiveTenant({ orgId: org.id, slug: org.slug, name: org.name });
+setActiveTenant({
+      orgId: org.id,
+      slug: org.slug,
+      name: org.name,
+      plan: org.plan,
+      planSlug: org.planSlug,
+      subscriptionStatus: org.subscriptionStatus,
+      trialEndsAt: org.trialEndsAt,
+    });
     // TODO(0.2#12): redirigir a /app/:orgSlug cuando exista el workspace.
     router.push("/dashboard/organizaciones");
   };

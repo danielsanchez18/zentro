@@ -118,7 +118,15 @@ export const NewOrganizationDialog = ({
     setCreateError(null);
     try {
       const org = await createOrgService({ name: name.trim(), slug: slug.trim() });
-      setActiveTenant({ orgId: org.id, slug: org.slug, name: org.name });
+      setActiveTenant({
+        orgId: org.id,
+        slug: org.slug,
+        name: org.name,
+        plan: org.plan,
+        planSlug: org.planSlug,
+        subscriptionStatus: org.subscriptionStatus,
+        trialEndsAt: org.trialEndsAt,
+      });
       setName("");
       setSlug("");
       setSlugTouched(false);
@@ -139,7 +147,6 @@ export const NewOrganizationDialog = ({
 
   const slugInvalid = !!slug && !/^[a-z0-9-]+$/.test(slug);
   const nameTaken = verify.status === "taken" && verify.nameTaken;
-  const slugTaken = verify.status === "taken" && !verify.nameTaken;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

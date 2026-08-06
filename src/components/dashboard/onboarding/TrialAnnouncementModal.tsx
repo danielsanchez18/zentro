@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Gift, X, Sparkles } from "lucide-react";
+import { Gift, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -30,8 +29,7 @@ export const TrialAnnouncementModal = ({
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
         className="max-w-md gap-0 p-0 overflow-hidden"
-        /* Evita que el usuario cierre con clic fuera — debe leerlo */
-        onInteractOutside={(e) => e.preventDefault()}
+        showCloseButton={false}
       >
         {/* Header decorativo */}
         <div className="relative flex flex-col items-center gap-3 bg-primary/5 px-8 pt-10 pb-6 text-center border-b border-border">

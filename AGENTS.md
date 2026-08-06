@@ -28,6 +28,11 @@
 - No instales dependencias sin consultar.
 - No conviertas Server Components a Client Components sin justificación.
 - No modifiques el `layout.tsx` raíz sin aprobación.
+- **Nunca definas componentes dentro de un `page.tsx`.** Las páginas (`src/app/**/page.tsx`)
+  deben ser delgadas: solo componer y delegar. Todos los componentes de UI se crean en
+  `src/components/<módulo>/<entidad>/` (ej. `src/components/app/users/Title.tsx`,
+  `src/components/app/users/MembersTable.tsx`, `InviteMemberDialog.tsx`, `Empty.tsx`). Clasifícalos
+  por entidad/dominio (users, roles, products, ...) no por tipo genérico.
 - Siempre verifica `docs/03-ROADMAP.md` para ver el estado actual de tu tarea.
 
 ## 📁 Estructura del proyecto
