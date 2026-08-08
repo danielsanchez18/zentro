@@ -1,6 +1,4 @@
-import { KPIS } from "@/components/app/team/KPIS";
-import { List } from "@/components/app/team/List";
-import { Title } from "@/components/app/team/Title";
+import { TeamModule } from "@/components/app/team/TeamModule";
 import { teamMembers } from "@/lib/mock/team";
 
 /**
@@ -17,11 +15,5 @@ export default async function TeamPage({
 }) {
   const { slug } = await params;
 
-  return (
-    <div className="w-full px-5 md:px-7 xl:px-10 py-7 space-y-10 lg:space-y-7">
-      <Title />
-      <KPIS members={teamMembers} />
-      <List initialMembers={teamMembers} slug={slug} />
-    </div>
-  );
+  return <TeamModule slug={slug} members={teamMembers} />;
 }

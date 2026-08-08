@@ -1,24 +1,10 @@
 "use client";
 
-import {
-  User,
-  MoreHorizontal,
-  Eye,
-  ShieldCheck,
-  UserCheck,
-  UserX,
-  Trash2,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MemberStatus, TeamMember } from "@/lib/mock/team";
+import type { TeamMember } from "@/lib/mock/team";
 import { StatusBadge } from "../shared/StatusBadge";
+import { MemberActionsMenu } from "./MemberActionsMenu";
 
 interface TableProps {
   members: TeamMember[];
@@ -106,61 +92,13 @@ export const Table = ({
                 <LastSeenChip lastSeen={member.lastSeen} />
               </td>
               <td className="px-5 py-3 text-right text-nowrap">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    onClick={(e) => e.stopPropagation()}
-                    className="rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
-                    aria-label={`Acciones de ${member.name}`}
-                  >
-                    <MoreHorizontal className="size-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem
-                      onClick={() => onPreview(member)}
-                      className="py-1.5 px-2"
-                    >
-                      <Eye />
-                      Ver detalle
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                      onClick={() => onRequestRoleChange(member)}
-                      className="py-1.5 px-2"
-                    >
-                      <ShieldCheck />
-                      Cambiar rol
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-
-                    {member.status === "deshabilitado" ? (
-                      <DropdownMenuItem
-                        onClick={() => onToggleAccess(member.id)}
-                        className="py-1.5 px-2"
-                      >
-                        <UserCheck />
-                        Habilitar acceso
-                      </DropdownMenuItem>
-                    ) : (
-                      <DropdownMenuItem
-                        onClick={() => onToggleAccess(member.id)}
-                        className="py-1.5 px-2"
-                      >
-                        <UserX />
-                        Deshabilitar acceso
-                      </DropdownMenuItem>
-                    )}
-
-                    <DropdownMenuItem
-                      variant="destructive"
-                      onClick={() => onRemove(member.id)}
-                      className="py-1.5 px-2"
-                    >
-                      <Trash2 />
-                      Eliminar de la empresa
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <MemberActionsMenu
+                  member={member}
+                  onPreview={onPreview}
+                  onRequestRoleChange={onRequestRoleChange}
+                  onToggleAccess={onToggleAccess}
+                  onRemove={onRemove}
+                />
               </td>
             </tr>
           ))}
