@@ -82,7 +82,7 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
   };
 
   return (
-    <div className="sm:p-5 font-heading sm:rounded-lg sm:border sm:border-border sm:bg-card space-y-5">
+    <div className="sm:p-5 font-heading sm:rounded-xl sm:border sm:border-border sm:bg-card space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="w-full md:max-w-md flex-1 min-w-60">
           <Search

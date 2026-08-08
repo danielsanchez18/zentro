@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import type { TeamMember } from "@/lib/mock/team";
-import { LastSeenChip, StatusChip } from "./Table";
+import { LastSeenChip } from "./Table";
+import { StatusBadge } from "../shared/StatusBadge";
 
 interface MemberPreviewDialogProps {
   /** Integrante cuyo preview se muestra (null = cerrado). */
@@ -24,7 +25,7 @@ interface MemberPreviewDialogProps {
 
 /** Fila clave/valor compacta del preview. */
 const Row = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <div className="flex items-start justify-between gap-3">
+  <div className="flex items-center justify-between gap-3">
     <dt className="text-sm  tracking-wide text-muted-foreground pt-0.5">
       {label}
     </dt>
@@ -73,7 +74,7 @@ export const MemberPreviewDialog = ({
         <dl className="grid gap-2.5 border-t border-border pt-4">
           <Row label="Rol">{member?.role}</Row>
           <Row label="Estado">
-            <StatusChip status={member?.status ?? "invitado"} />
+            <StatusBadge status={member?.status ?? "invitado"} />
           </Row>
           <Row label="Última conexión">
             <LastSeenChip lastSeen={member?.lastSeen ?? "nunca"} />

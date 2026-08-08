@@ -37,7 +37,7 @@ export const KPIS = ({ members }: KPISProps) => {
       {stats.map((item) => (
         <div
           key={item.title}
-          className="border border-border bg-card rounded-lg px-5 py-4 font-heading"
+          className="border border-border bg-card rounded-xl px-5 py-4 font-heading"
         >
           <div className="space-y-2">
             <div className="flex justify-between text-primary/70 items-center">

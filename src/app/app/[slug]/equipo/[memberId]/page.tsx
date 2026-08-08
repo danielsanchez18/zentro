@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { teamMembers, type MemberAuditType, type TeamMember } from "@/lib/mock/team";
-import { LastSeenChip, StatusChip } from "@/components/app/team/Table";
+import { LastSeenChip } from "@/components/app/team/Table";
+import { StatusBadge } from "@/components/app/shared/StatusBadge";
 
 const AUDIT_ICONS: Record<MemberAuditType, string> = {
   rol: "👤",
@@ -94,7 +95,7 @@ export default async function MemberDetailPage({
               <span className="inline-flex rounded-full bg-secondary px-2.5 py-1 text-xs font-medium">
                 {member.role}
               </span>
-              <StatusChip status={member.status} />
+              <StatusBadge status={member.status} />
               <LastSeenChip lastSeen={member.lastSeen} />
             </div>
           </div>
@@ -124,7 +125,7 @@ export default async function MemberDetailPage({
           <dl className="mt-4 grid gap-3 border-t border-border pt-4">
             <Field label="Rol">{member.role}</Field>
             <Field label="Estado">
-              <StatusChip status={member.status} />
+              <StatusBadge status={member.status} />
             </Field>
             <Field label="Última conexión">
               <LastSeenChip lastSeen={member.lastSeen} />

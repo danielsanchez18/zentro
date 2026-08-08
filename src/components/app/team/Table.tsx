@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { MemberStatus, TeamMember } from "@/lib/mock/team";
+import { StatusBadge } from "../shared/StatusBadge";
 
 interface TableProps {
   members: TeamMember[];
@@ -28,43 +29,22 @@ interface TableProps {
   onRemove: (id: string) => void;
 }
 
-const STATUS_STYLES: Record<MemberStatus, string> = {
-  activo: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  invitado: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  deshabilitado: "bg-muted text-muted-foreground",
-};
-
-const STATUS_LABEL: Record<MemberStatus, string> = {
-  activo: "Activo",
-  invitado: "Pendiente",
-  deshabilitado: "Deshabilitado",
-};
-
-/** Chip de estado (Estilo base-nova, como InvitationStatusChip). */
-export const StatusChip = ({ status }: { status: MemberStatus }) => (
-  <span
-    className={cn(
-      "inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase tracking-wide",
-      STATUS_STYLES[status],
-    )}
-  >
-    {STATUS_LABEL[status]}
-  </span>
-);
-
 /** Badge de «última conexión» con el mismo estilo base-nova. */
 export const LastSeenChip = ({ lastSeen }: { lastSeen: string }) => {
   if (lastSeen === "online") {
     return (
-      <span className="inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase font-sans tracking-wide bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-        Online
-      </span>
+      <div className="flex items-center gap-x-1.5">
+        <div className="size-1.5 rounded-full bg-green-500" />
+        <span className="text-sm">Online</span>
+      </div>
     );
   }
   return (
-    <span className="inline-flex rounded-full px-2.5 py-1 text-xs font-medium uppercase font-sans tracking-wide bg-muted text-muted-foreground">
-      {lastSeen === "nunca" ? "Nunca se conectó" : lastSeen}
-    </span>
+    <div className="flex items-center gap-x-1.5 text-muted-foreground">
+      <div className="size-1.5 rounded-full bg-neutral-500 dark:bg-neutral-400" />
+      <span className="text-sm first-letter:uppercase">{lastSeen === "nunca" ? "Nunca se conectó" : lastSeen}</span>
+    </div>
+
   );
 };
 
@@ -120,7 +100,7 @@ export const Table = ({
                 <span className="font-medium text-sm">{member.role}</span>
               </td>
               <td className="px-5 py-3 text-sm text-nowrap">
-                <StatusChip status={member.status} />
+                <StatusBadge status={member.status} />
               </td>
               <td className="px-5 py-3 text-sm text-nowrap">
                 <LastSeenChip lastSeen={member.lastSeen} />
