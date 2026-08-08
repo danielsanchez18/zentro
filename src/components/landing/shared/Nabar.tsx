@@ -10,7 +10,7 @@ export function Navbar() {
       <div className="max-w-300 mx-auto flex items-center gap-x-10 px-5 sm:px-7 py-4 xl:px-10">
 
         <Link href="/" className="flex items-center gap-x-3">
-          <span className="font-semibold leading-none uppercase">Zentro</span>
+          <span className="font-semibold text-lg leading-none">Zentro</span>
         </Link>
 
         <nav aria-label="Navegación principal" className="hidden md:flex gap-5 text-sm font-medium">
