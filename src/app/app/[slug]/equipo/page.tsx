@@ -1,12 +1,12 @@
 import { TeamModule } from "@/components/app/team/TeamModule";
-import { teamMembers } from "@/lib/mock/team";
+import { teamMembers, teamInvitations } from "@/lib/mock/team";
 
 /**
  * Módulo Equipo y permisos (mockup de flujo).
  *
  * Los componentes reciben los datos desde aquí: mientras no exista `GET /team`
- * en el backend, `teamMembers` (mock) hace de fuente de datos. Al conectar la
- * API solo se cambia este origen.
+ * en el backend, `teamMembers` y `teamInvitations` (mock) hacen de fuente de
+ * datos. Al conectar la API solo se cambia este origen.
  */
 export default async function TeamPage({
   params,
@@ -15,5 +15,11 @@ export default async function TeamPage({
 }) {
   const { slug } = await params;
 
-  return <TeamModule slug={slug} members={teamMembers} />;
+  return (
+    <TeamModule
+      slug={slug}
+      members={teamMembers}
+      invitations={teamInvitations}
+    />
+  );
 }

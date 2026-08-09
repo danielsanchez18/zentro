@@ -115,7 +115,7 @@ export const InviteMemberDialog = ({
                 }}
                 onBlur={() => setTouched(true)}
                 aria-invalid={showError}
-                className="h-fit pl-10 pr-4 py-2"
+                className="h-fit pl-10 pr-4 py-2 text-sm"
               />
             </div>
             {!showError && (

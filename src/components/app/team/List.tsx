@@ -7,7 +7,6 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
 import { Search } from "../shared/Search";
 import { Paginator } from "../shared/Paginator";
-import { InviteMemberDialog } from "./InviteMemberDialog";
 import { MemberCard } from "./MemberCard";
 import { MemberPreviewDialog } from "./MemberPreviewDialog";
 import { RoleChangeDialog } from "./RoleChangeDialog";
@@ -16,25 +15,12 @@ import { teamMembers, type TeamMember, type TeamRole } from "@/lib/mock/team";
 
 const PAGE_SIZE = 10;
 
-/** Nombre que se muestra para un invitado recién creado (hasta que acepte). */
-const placeholderName = (email: string) => {
-  const local = email.split("@")[0];
-  const words = local.split(/[._-]+/).filter(Boolean);
-  if (words.length === 0) return email;
-  return words
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-};
-
 type MemberView = "tabla" | "cards";
 
 interface ListProps {
   initialMembers?: TeamMember[];
   /** Slug de la organización (p. ej. las-rocas) para armar URLs internas. */
   slug: string;
-  /** Apertura del dialog de invitación (lo controla TeamModule). */
-  inviteOpen: boolean;
-  onInviteOpenChange: (open: boolean) => void;
 }
 
 const VIEWS: { id: MemberView; label: string; icon: typeof Table2 }[] = [
@@ -43,15 +29,10 @@ const VIEWS: { id: MemberView; label: string; icon: typeof Table2 }[] = [
 ];
 
 /**
- * Lista del módulo Equipo y permisos.
+ * Lista de miembros del módulo Equipo y permisos.
  * Orquesta búsqueda, paginación, vistas (tabla/cards) y acciones (mock).
  */
-export const List = ({
-  initialMembers = teamMembers,
-  slug,
-  inviteOpen,
-  onInviteOpenChange,
-}: ListProps) => {
+export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
   const [members, setMembers] = useState<TeamMember[]>(initialMembers);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -108,58 +89,6 @@ export const List = ({
     const name = members.find((m) => m.id === id)?.name ?? "Miembro";
     setMembers((prev) => prev.filter((m) => m.id !== id));
     toastMsg.info(`${name} eliminado/a de la empresa`, "Mockup: se enviará confirmación antes de borrar de verdad.");
-  };
-
-  const handleInvite = (email: string, role: TeamRole, message?: string) => {
-    const normalized = email.trim().toLowerCase();
-    const existing = members.find(
-      (m) => m.email.toLowerCase() === normalized,
-    );
-
-    // Ninguna invitación duplicada: si el correo ya es miembro/invitado,
-    // lo informamos en vez de crear una fila repetida.
-    if (existing) {
-      onInviteOpenChange(false);
-      toastMsg.info(
-        "Correo ya está en el equipo",
-        `${existing.name} ya recibe invitaciones o es parte de la empresa.`,
-      );
-      return;
-    }
-
-    const now = new Date();
-    const member: TeamMember = {
-      id: `u${now.getTime()}`,
-      name: placeholderName(normalized),
-      email: normalized,
-      phone: "",
-      role,
-      status: "invitado",
-      lastSeen: "nunca",
-      addedAt: now.toISOString().slice(0, 10),
-      addedBy: "Daniel Sánchez", // mock: usuario de la sesión
-      auditLog: [
-        {
-          id: `a-${now.getTime()}`,
-          at: now.toISOString(),
-          type: "invitacion",
-          description: message
-            ? `Invitado por Daniel Sánchez (${message})`
-            : "Invitado por Daniel Sánchez (pendiente de aceptar)",
-          actor: "Daniel Sánchez",
-        },
-      ],
-    };
-
-    setMembers((prev) => [member, ...prev]);
-    onInviteOpenChange(false);
-    setPage(1);
-    toastMsg.success(
-      "Invitación enviada",
-      message
-        ? `Correo enviado a ${normalized} como ${role}. Mensaje incluido: “${message}”.`
-        : `Correo enviado a ${normalized} como ${role}.`,
-    );
   };
 
   return (
@@ -249,12 +178,6 @@ export const List = ({
         open={roleMember !== null}
         onOpenChange={(open) => !open && setRoleMember(null)}
         onConfirm={handleRoleChange}
-      />
-
-      <InviteMemberDialog
-        open={inviteOpen}
-        onOpenChange={onInviteOpenChange}
-        onSend={handleInvite}
       />
     </div>
   );

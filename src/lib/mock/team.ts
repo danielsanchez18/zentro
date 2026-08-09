@@ -9,6 +9,28 @@ export type TeamRole = "Owner" | "Admin" | "Vendedor" | "Cajero" | "Contador";
 
 export type MemberStatus = "activo" | "invitado" | "deshabilitado";
 
+/** Ciclo de vida de una invitación enviada. */
+export type InvitationStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "DECLINED"
+  | "EXPIRED"
+  | "REVOKED";
+
+/** Invitación a unirse a la organización (antes de ser miembro). */
+export interface MemberInvitation {
+  id: string;
+  email: string;
+  role: TeamRole;
+  status: InvitationStatus;
+  /** Quién la envió. */
+  sentBy: string;
+  /** ISO datetime de envío. */
+  sentAt: string;
+  /** ISO datetime de expiración (7 días por defecto). */
+  expiresAt: string;
+}
+
 /** Tipos de evento del historial del miembro (auditoría operativa). */
 export type MemberAuditType =
   | "rol"
@@ -62,6 +84,73 @@ const audit = (
   description: string,
   actor: string,
 ): MemberAuditEvent => ({ id, at, type, description, actor });
+
+/** Historial de invitaciones enviadas (pendientes + cerradas). */
+export const teamInvitations: MemberInvitation[] = [
+  {
+    id: "inv_001",
+    email: "jfuentes@lasrocas.cl",
+    role: "Vendedor",
+    status: "PENDING",
+    sentBy: "Daniel Sánchez",
+    sentAt: "2026-07-28T18:00:00Z",
+    expiresAt: "2026-08-04T18:00:00Z",
+  },
+  {
+    id: "inv_002",
+    email: "benja.vega@lasrocas.cl",
+    role: "Cajero",
+    status: "PENDING",
+    sentBy: "Fernanda Soto",
+    sentAt: "2026-08-01T14:00:00Z",
+    expiresAt: "2026-08-08T14:00:00Z",
+  },
+  {
+    id: "inv_003",
+    email: "nico.bravo@lasrocas.cl",
+    role: "Cajero",
+    status: "PENDING",
+    sentBy: "Valentina Torres",
+    sentAt: "2026-07-15T17:00:00Z",
+    expiresAt: "2026-07-22T17:00:00Z",
+  },
+  {
+    id: "inv_004",
+    email: "lucia.moran@lasrocas.cl",
+    role: "Contador",
+    status: "ACCEPTED",
+    sentBy: "Daniel Sánchez",
+    sentAt: "2026-05-20T10:00:00Z",
+    expiresAt: "2026-05-27T10:00:00Z",
+  },
+  {
+    id: "inv_005",
+    email: "gabriel.perez@lasrocas.cl",
+    role: "Vendedor",
+    status: "DECLINED",
+    sentBy: "Valentina Torres",
+    sentAt: "2026-04-10T09:00:00Z",
+    expiresAt: "2026-04-17T09:00:00Z",
+  },
+  {
+    id: "inv_006",
+    email: "sara.molina@lasrocas.cl",
+    role: "Admin",
+    status: "EXPIRED",
+    sentBy: "Daniel Sánchez",
+    sentAt: "2026-03-02T16:00:00Z",
+    expiresAt: "2026-03-09T16:00:00Z",
+  },
+  {
+    id: "inv_007",
+    email: "rodrigo.salas@lasrocas.cl",
+    role: "Vendedor",
+    status: "REVOKED",
+    sentBy: "Fernanda Soto",
+    sentAt: "2026-06-15T12:00:00Z",
+    expiresAt: "2026-06-22T12:00:00Z",
+  },
+];
 
 export const teamMembers: TeamMember[] = [
   {
@@ -132,20 +221,6 @@ export const teamMembers: TeamMember[] = [
     ],
   },
   {
-    id: "u5",
-    name: "Joaquín Fuentes",
-    email: "jfuentes@lasrocas.cl",
-    phone: "+56 9 7709 3311",
-    role: "Vendedor",
-    status: "invitado",
-    lastSeen: "nunca",
-    addedAt: "2026-07-28",
-    addedBy: "Daniel Sánchez",
-    auditLog: [
-      audit("a5-1", "2026-07-28T18:00:00Z", "invitacion", "Invitado por Daniel Sánchez (pendiente de aceptar)", "Daniel Sánchez"),
-    ],
-  },
-  {
     id: "u6",
     name: "Antonia Pérez",
     email: "antonella.p@lasrocas.cl",
@@ -195,20 +270,6 @@ export const teamMembers: TeamMember[] = [
     ],
   },
   {
-    id: "u9",
-    name: "Benjamín Vega",
-    email: "benja.vega@lasrocas.cl",
-    phone: "+56 9 3322 1155",
-    role: "Cajero",
-    status: "invitado",
-    lastSeen: "nunca",
-    addedAt: "2026-08-01",
-    addedBy: "Fernanda Soto",
-    auditLog: [
-      audit("a9-1", "2026-08-01T14:00:00Z", "invitacion", "Invitado por Fernanda Soto (pendiente de aceptar)", "Fernanda Soto"),
-    ],
-  },
-  {
     id: "u10",
     name: "Isidora Castro",
     email: "isidora.c@lasrocas.cl",
@@ -255,20 +316,6 @@ export const teamMembers: TeamMember[] = [
     auditLog: [
       audit("a12-1", "2026-02-10T11:00:00Z", "invitacion", "Invitada por Fernanda Soto", "Fernanda Soto"),
       audit("a12-2", "2026-02-11T08:30:00Z", "ingreso", "Aceptó la invitación y entró por primera vez", "Catalina Núñez"),
-    ],
-  },
-  {
-    id: "u13",
-    name: "Nicolás Bravo",
-    email: "nico.bravo@lasrocas.cl",
-    phone: "+56 9 2233 8899",
-    role: "Cajero",
-    status: "invitado",
-    lastSeen: "nunca",
-    addedAt: "2026-07-15",
-    addedBy: "Valentina Torres",
-    auditLog: [
-      audit("a13-1", "2026-07-15T17:00:00Z", "invitacion", "Invitado por Valentina Torres (pendiente de verificar)", "Valentina Torres"),
     ],
   },
   {

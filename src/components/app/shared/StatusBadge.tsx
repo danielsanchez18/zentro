@@ -1,8 +1,20 @@
 "use client";
 
-import { BadgeCheck, Ban, CheckCircle2, Clock3, type LucideIcon } from "lucide-react";
+import {
+  BadgeCheck,
+  Ban,
+  CheckCheck,
+  CheckCircle2,
+  Clock3,
+  Hourglass,
+  XCircle,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MemberStatus } from "@/lib/mock/team";
+import type { MemberStatus, InvitationStatus } from "@/lib/mock/team";
+
+/** Estados soportados: miembros del equipo + ciclo de vida de invitaciones. */
+export type BadgeStatus = MemberStatus | InvitationStatus;
 
 /**
  * Configuración visual por estado 🎨.
@@ -12,13 +24,20 @@ import type { MemberStatus } from "@/lib/mock/team";
  * - `iconClass`  → clases solo del ícono (tint del ícono).
  * - `icon`       → icono lucide que lo representa.
  *
- * Los estados y su semántica:
+ * Estados de miembros:
  * - activo        → verde / check → acceso operativo.
  * - invitado      → ámbar / reloj → pendiente de aceptar.
- * - deshabilitado → neutro / prohibido → acceso revocado.
+ * - deshabilitado → rojo / prohibido → acceso revocado.
+ *
+ * Estados de invitación (ciclo de vida):
+ * - PENDING  → ámbar / reloj → esperando aceptación.
+ * - ACCEPTED → verde / check → el invitado ya es miembro.
+ * - DECLINED → rojo / cruz  → el invitado rechazó.
+ * - EXPIRED  → gris / reloj de arena → venció el enlace (7 días).
+ * - REVOKED  → gris / prohibido → el enlace se revocó antes de usarse.
  */
 const STATUS_CONFIG: Record<
-  MemberStatus,
+  BadgeStatus,
   {
     label: string;
     icon: LucideIcon;
@@ -47,15 +66,51 @@ const STATUS_CONFIG: Record<
       "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
+  PENDING: {
+    label: "Pendiente",
+    icon: Clock3,
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400 dark:ring-yellow-400/20",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  ACCEPTED: {
+    label: "Aceptada",
+    icon: CheckCheck,
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  DECLINED: {
+    label: "Rechazada",
+    icon: XCircle,
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  EXPIRED: {
+    label: "Expirada",
+    icon: Hourglass,
+    badge:
+      "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
+    iconClass: "text-neutral-800 dark:text-neutral-300",
+  },
+  REVOKED: {
+    label: "Revocada",
+    icon: Ban,
+    badge:
+      "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
+    iconClass: "text-neutral-800 dark:text-neutral-300",
+  },
 };
 
 interface StatusBadgeProps {
-  status: MemberStatus;
+  status: BadgeStatus;
 }
 
 /**
- * Badge de estado para la columna «Estado» de la tabla de Equipo.
+ * Badge de estado reutilizable para el módulo Equipo.
  * Reemplaza al chip plano: cada estado lleva su propio ícono y paleta de color.
+ * Soporta estados de miembros y estados del ciclo de vida de invitaciones.
  */
 export const StatusBadge = ({ status }: StatusBadgeProps) => {
   const { label, icon: Icon, badge, iconClass } = STATUS_CONFIG[status];

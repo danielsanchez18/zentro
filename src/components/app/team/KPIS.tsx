@@ -3,12 +3,14 @@ import type { TeamMember } from "@/lib/mock/team";
 
 interface KPISProps {
   members: TeamMember[];
+  /** Invitaciones pendientes activas (viven en el tab de Invitaciones). */
+  pendingInvitations?: number;
 }
 
 /**
  * KPIs del módulo Equipo y permisos, calculados desde los miembros (mock).
  */
-export const KPIS = ({ members }: KPISProps) => {
+export const KPIS = ({ members, pendingInvitations = 0 }: KPISProps) => {
   const stats = [
     {
       title: "Total de usuarios",
@@ -22,7 +24,7 @@ export const KPIS = ({ members }: KPISProps) => {
     },
     {
       title: "Invitaciones pendientes",
-      value: members.filter((m) => m.status === "invitado").length,
+      value: pendingInvitations,
       icon: MailPlus,
     },
     {
