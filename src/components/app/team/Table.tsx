@@ -11,8 +11,8 @@ interface TableProps {
   /** Se dispara al hacer clic en una fila o en «Ver detalle» del menú. */
   onPreview: (member: TeamMember) => void;
   onRequestRoleChange: (member: TeamMember) => void;
-  onToggleAccess: (id: string) => void;
-  onRemove: (id: string) => void;
+  onRequestToggleAccess: (member: TeamMember) => void;
+  onRequestRemove: (member: TeamMember) => void;
 }
 
 /** Badge de «última conexión» con el mismo estilo base-nova. */
@@ -38,8 +38,8 @@ export const Table = ({
   members,
   onPreview,
   onRequestRoleChange,
-  onToggleAccess,
-  onRemove,
+  onRequestToggleAccess,
+  onRequestRemove,
 }: TableProps) => {
   return (
     <div className="overflow-x-auto w-full">
@@ -96,8 +96,8 @@ export const Table = ({
                   member={member}
                   onPreview={onPreview}
                   onRequestRoleChange={onRequestRoleChange}
-                  onToggleAccess={onToggleAccess}
-                  onRemove={onRemove}
+                  onRequestToggleAccess={onRequestToggleAccess}
+                  onRequestRemove={onRequestRemove}
                 />
               </td>
             </tr>

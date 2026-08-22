@@ -1,6 +1,7 @@
 import type { TeamMember } from "@/lib/mock/team";
 import { StatusBadge } from "../../shared/StatusBadge";
 import { LastSeenChip } from "../Table";
+import { BadgeCheck } from "lucide-react";
 
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("es-CL", {
@@ -18,30 +19,29 @@ const initials = (name: string) =>
 
 /** Cabecera del detalle: avatar, nombre, rol/estado y fecha de ingreso. */
 export const MemberDetailHeader = ({ member }: { member: TeamMember }) => (
-  <section className="mt-5 flex flex-col gap-5 rounded-xl border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between">
-    <div className="flex items-center gap-4">
-      <div className="bg-accent flex h-16 w-16 items-center justify-center overflow-hidden rounded-full">
-        <span className="text-xl font-semibold text-muted-foreground">
-          {initials(member.name)}
-        </span>
+  <section className="mt-5 p-2 border border-border bg-card rounded-xl">
+
+    <div className="relative">
+      
+      {/* Background image */}
+      <div className="h-30 w-full rounded-lg bg-accent"></div>
+
+      {/* Avatar */}
+      <div className="relative bg-card rounded-full w-30 h-30 mx-auto -mt-20 border-2 border-border">
+
+        <div className="absolute bottom-0 right-5 w-4 h-4 rounded-full bg-green-500"></div>
+
       </div>
-      <div>
-        <h1 className="font-heading text-xl font-semibold">{member.name}</h1>
-        <p className="text-sm text-muted-foreground">{member.email}</p>
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          <span className="inline-flex rounded-full bg-secondary px-2.5 py-1 text-xs font-medium">
-            {member.role}
-          </span>
-          <StatusBadge status={member.status} />
-          <LastSeenChip lastSeen={member.lastSeen} />
-        </div>
+
+    </div>
+
+    <div className="flex flex-col items-center justify-center my-3">
+      <div className="flex items-center gap-x-2">
+        <h1 className="md:text-lg font-medium">{member.name}</h1>
+        <BadgeCheck className="w-4 h-4" />
       </div>
+      <p className="text-muted-foreground text-sm">{member.role}</p>
     </div>
-    <div className="text-sm text-muted-foreground">
-      Se unió a la organización el{" "}
-      <span className="font-medium text-foreground">
-        {formatDate(member.addedAt)}
-      </span>
-    </div>
+    
   </section>
 );

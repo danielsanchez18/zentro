@@ -1,11 +1,14 @@
+import { Button } from "@/components/ui/button";
 import type { MemberAuditType, TeamMember } from "@/lib/mock/team";
+import { Lock, UserCog, Mail, ArrowRight, Pencil } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const AUDIT_ICONS: Record<MemberAuditType, string> = {
-  rol: "👤",
-  acceso: "🔒",
-  invitacion: "✉️",
-  ingreso: "➡️",
-  perfil: "✏️",
+const AUDIT_ICONS: Record<MemberAuditType, LucideIcon> = {
+  rol: UserCog,
+  acceso: Lock,
+  invitacion: Mail,
+  ingreso: ArrowRight,
+  perfil: Pencil,
 };
 
 const formatDateTime = (iso: string) =>
@@ -24,26 +27,35 @@ export const MemberAuditCard = ({ member }: { member: TeamMember }) => {
   );
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 font-heading lg:col-span-1">
-      <h2 className="text-sm font-semibold text-primary">Auditoría</h2>
-      <ul className="mt-4 space-y-4 border-t border-border pt-4">
-        {events.map((event) => (
+    <section className="max-lg:p-5 max-lg:rounded-xl max-lg:bg-card max-lg:border max-lg:border-border lg:py-3 space-y-5">
+      <div className="flex items-center justify-between gap-x-5">
+        <h2 className="text-base font-medium">Historial operativo</h2>
+        <Button variant="outline" className="px-3">
+          Último mes
+        </Button>
+      </div>
+      <ul className="grid gap-5">
+        {events.map((event) => {
+          const Icon = AUDIT_ICONS[event.type];
+          return (
           <li key={event.id} className="flex items-start gap-3">
+            
             <span
               aria-hidden
-              className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-sm"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-sm"
             >
-              {AUDIT_ICONS[event.type]}
+              <Icon className="w-4 h-4" />
             </span>
+
             <div>
-              <p className="text-sm font-medium">{event.description}</p>
-              <p className="text-xs text-muted-foreground">
-                {formatDateTime(event.at)} ·{" "}
+              <h3 className="text-sm font-medium">{event.description}</h3>
+              <p className="text-sm text-muted-foreground">
+                {formatDateTime(event.at)} - {" "}
                 <span className="font-medium">{event.actor}</span>
               </p>
             </div>
           </li>
-        ))}
+        );})}
       </ul>
     </section>
   );

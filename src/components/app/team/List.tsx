@@ -10,6 +10,7 @@ import { Paginator } from "../shared/Paginator";
 import { MemberCard } from "./MemberCard";
 import { MemberPreviewDialog } from "./MemberPreviewDialog";
 import { RoleChangeDialog } from "./RoleChangeDialog";
+import { ConfirmDialog } from "./ConfirmDialog";
 import { Table } from "./Table";
 import { teamMembers, type TeamMember, type TeamRole } from "@/lib/mock/team";
 
@@ -41,6 +42,11 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
   const [roleMember, setRoleMember] = useState<TeamMember | null>(null);
   // Integrante que se muestra en el preview del perfil (null = cerrado).
   const [previewMember, setPreviewMember] = useState<TeamMember | null>(null);
+  // Confirmación de deshabilitar/habilitar acceso.
+  const [toggleAccessMember, setToggleAccessMember] =
+    useState<TeamMember | null>(null);
+  // Confirmación de eliminar miembro.
+  const [removeMember, setRemoveMember] = useState<TeamMember | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -139,8 +145,8 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
               members={pageItems}
               onPreview={setPreviewMember}
               onRequestRoleChange={setRoleMember}
-              onToggleAccess={handleToggleAccess}
-              onRemove={handleRemove}
+              onRequestToggleAccess={setToggleAccessMember}
+              onRequestRemove={setRemoveMember}
             />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -150,8 +156,8 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
                   member={member}
                   onPreview={setPreviewMember}
                   onRequestRoleChange={setRoleMember}
-                  onToggleAccess={handleToggleAccess}
-                  onRemove={handleRemove}
+                  onRequestToggleAccess={setToggleAccessMember}
+                  onRequestRemove={setRemoveMember}
                 />
               ))}
             </div>
@@ -178,6 +184,40 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
         open={roleMember !== null}
         onOpenChange={(open) => !open && setRoleMember(null)}
         onConfirm={handleRoleChange}
+      />
+
+      <ConfirmDialog
+        open={toggleAccessMember !== null}
+        onOpenChange={(open) => !open && setToggleAccessMember(null)}
+        title={
+          toggleAccessMember?.status === "deshabilitado"
+            ? "Habilitar acceso"
+            : "Deshabilitar acceso"
+        }
+        description={
+          toggleAccessMember?.status === "deshabilitado"
+            ? `${toggleAccessMember?.name} podrá volver a acceder a la organización.`
+            : `${toggleAccessMember?.name} no podrá acceder a la organización, pero seguirá siendo miembro del equipo.`
+        }
+        confirmLabel={
+          toggleAccessMember?.status === "deshabilitado"
+            ? "Habilitar"
+            : "Deshabilitar"
+        }
+        onConfirm={() => {
+          if (toggleAccessMember) handleToggleAccess(toggleAccessMember.id);
+        }}
+      />
+
+      <ConfirmDialog
+        open={removeMember !== null}
+        onOpenChange={(open) => !open && setRemoveMember(null)}
+        title="Eliminar de la empresa"
+        description={`${removeMember?.name} será eliminado/a de la organización. Esta acción no se puede deshacer.`}
+        confirmLabel="Eliminar"
+        onConfirm={() => {
+          if (removeMember) handleRemove(removeMember.id);
+        }}
       />
     </div>
   );

@@ -21,8 +21,8 @@ interface MemberActionsMenuProps {
   member: TeamMember;
   onPreview: (member: TeamMember) => void;
   onRequestRoleChange: (member: TeamMember) => void;
-  onToggleAccess: (id: string) => void;
-  onRemove: (id: string) => void;
+  onRequestToggleAccess: (member: TeamMember) => void;
+  onRequestRemove: (member: TeamMember) => void;
 }
 
 /**
@@ -36,8 +36,8 @@ export const MemberActionsMenu = ({
   member,
   onPreview,
   onRequestRoleChange,
-  onToggleAccess,
-  onRemove,
+  onRequestToggleAccess,
+  onRequestRemove,
 }: MemberActionsMenuProps) => {
   return (
     <DropdownMenu>
@@ -48,7 +48,11 @@ export const MemberActionsMenu = ({
       >
         <MoreHorizontal className="size-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent
+        align="end"
+        className="w-48"
+        onClick={(e) => e.stopPropagation()}
+      >
         <DropdownMenuItem onClick={() => onPreview(member)} className="py-1.5 px-2">
           <Eye />
           Ver detalle
@@ -66,7 +70,7 @@ export const MemberActionsMenu = ({
 
         {member.status === "deshabilitado" ? (
           <DropdownMenuItem
-            onClick={() => onToggleAccess(member.id)}
+            onClick={() => onRequestToggleAccess(member)}
             className="py-1.5 px-2"
           >
             <UserCheck />
@@ -74,7 +78,7 @@ export const MemberActionsMenu = ({
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem
-            onClick={() => onToggleAccess(member.id)}
+            onClick={() => onRequestToggleAccess(member)}
             className="py-1.5 px-2"
           >
             <UserX />
@@ -84,7 +88,7 @@ export const MemberActionsMenu = ({
 
         <DropdownMenuItem
           variant="destructive"
-          onClick={() => onRemove(member.id)}
+          onClick={() => onRequestRemove(member)}
           className="py-1.5 px-2"
         >
           <Trash2 />

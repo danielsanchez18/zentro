@@ -10,8 +10,8 @@ interface MemberCardProps {
   member: TeamMember;
   onPreview: (member: TeamMember) => void;
   onRequestRoleChange: (member: TeamMember) => void;
-  onToggleAccess: (id: string) => void;
-  onRemove: (id: string) => void;
+  onRequestToggleAccess: (member: TeamMember) => void;
+  onRequestRemove: (member: TeamMember) => void;
 }
 
 /**
@@ -31,8 +31,8 @@ export const MemberCard = ({
   member,
   onPreview,
   onRequestRoleChange,
-  onToggleAccess,
-  onRemove,
+  onRequestToggleAccess,
+  onRequestRemove,
 }: MemberCardProps) => {
   return (
     <div
@@ -54,8 +54,8 @@ export const MemberCard = ({
           member={member}
           onPreview={onPreview}
           onRequestRoleChange={onRequestRoleChange}
-          onToggleAccess={onToggleAccess}
-          onRemove={onRemove}
+          onRequestToggleAccess={onRequestToggleAccess}
+          onRequestRemove={onRequestRemove}
         />
       </div>
 
