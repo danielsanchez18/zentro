@@ -11,6 +11,7 @@
 
 | Si tu tarea es sobre | Lee primero | Archivos que tocarás |
 |---|---|---|
+| **Equipo y permisos** | `docs/frontend/modules/team/README.md` | `src/components/app/team/*`, `src/lib/mock/team.ts`, `src/app/app/[slug]/equipo/**` |
 | **Auth** (login, registro, forgot-password, protección de rutas) | `docs/agents/frontend/auth/README.md`, `docs/decisions/005-route-protection.md` | `src/app/(auth)/*`, `src/components/auth/*`, `src/components/forgot-password/*`, `src/hooks/use-*-guard*.ts`, `src/hooks/use-validate-email-param.ts` |
 | **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/dashboard/layout.tsx`, `src/app/layout.tsx`, `src/hooks/use-require-auth.ts` |
 | **Catálogo / Productos** | Notion 04 + docs | `src/app/dashboard/catalog/*` |
@@ -43,17 +44,24 @@ src/
 │   │   ├── forgot-password/page.tsx   # OTP de recuperación
 │   │   └── reset-password/page.tsx    # Nueva contraseña
 │   ├── (landing)/              # Landing (/, /clientes, /servicios, /planes)
-│   └── dashboard/
-│       ├── layout.tsx           # useRequireAuth (JWT vs /auth/me) + header + spinner
-│       └── page.tsx             # Dashboard (KPIs)
+│   └── app/
+│       └── [slug]/
+│           ├── page.tsx         # Overview
+│           └── equipo/
+│               ├── page.tsx     # Equipo y permisos (tabs miembros/invitaciones)
+│               └── [memberId]/
+│                   └── page.tsx # Detalle de miembro
 ├── components/
 │   ├── ui/                     # shadcn/ui + toasts + mock (badge/help)
 │   ├── auth/                   # LoginForm, RegisterForm, SocialLogin, AuthHeader
-│   └── forgot-password/        # SendCodeDialog, ForgotPassword (OTP), ResetPasswordForm
+│   ├── forgot-password/        # SendCodeDialog, ForgotPassword (OTP), ResetPasswordForm
+│   └── app/
+│       ├── team/               # Módulo Equipo y permisos
+│       └── shared/             # StatusBadge, Search, Paginator, Breadcrumb, etc.
 ├── lib/
 │   ├── api/                    # API client + auth endpoints
 │   ├── services/               # auth.service.ts (mock/API) + reset-code.ts
-│   └── mock/                   # Datos de prueba (data.ts)
+│   └── mock/                   # Datos de prueba (team.ts, data.ts)
 ├── stores/                     # Zustand (auth-store, app-store)
 ├── types/                      # TypeScript
 └── hooks/                      # use-require-auth, use-guest-guard, use-validate-email-param

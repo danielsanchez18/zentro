@@ -13,8 +13,8 @@ import {
 import { cn } from "@/lib/utils";
 import type { MemberStatus, InvitationStatus } from "@/lib/mock/team";
 
-/** Estados soportados: miembros del equipo + ciclo de vida de invitaciones. */
-export type BadgeStatus = MemberStatus | InvitationStatus;
+/** Estados soportados: miembros, invitaciones y catálogo. */
+export type BadgeStatus = MemberStatus | InvitationStatus | "activo" | "inactivo";
 
 /**
  * Configuración visual por estado 🎨.
@@ -96,6 +96,13 @@ const STATUS_CONFIG: Record<
   },
   REVOKED: {
     label: "Revocada",
+    icon: Ban,
+    badge:
+      "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
+    iconClass: "text-neutral-800 dark:text-neutral-300",
+  },
+  inactivo: {
+    label: "Inactivo",
     icon: Ban,
     badge:
       "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",

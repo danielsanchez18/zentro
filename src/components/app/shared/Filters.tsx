@@ -7,8 +7,8 @@ export const Filters = () => {
         variant="outline"
         className="py-2 h-fit rounded-lg px-3 text-muted-foreground hover:text-primary transition"
     >
-        <SlidersHorizontal />
-        Filtros
+        <SlidersHorizontal className="size-3.5" />
+        Filtros (0)
     </Button>
   )
 }

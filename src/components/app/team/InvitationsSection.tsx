@@ -103,7 +103,7 @@ export const InvitationsSection = ({
               <div className="my-3 border-t border-border" />
 
               {/* Metadata */}
-              <dl className="space-y-1.5 text-xs text-muted-foreground">
+              <dl className="space-y-1.5 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <User className="size-3.5" />
                   <span>Enviada por {invitation.sentBy}</span>
