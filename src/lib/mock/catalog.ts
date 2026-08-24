@@ -12,6 +12,11 @@ export interface CatalogCategory {
   name: string;
   slug: string;
   parentId: null;
+  description: string;
+  status: "activo" | "inactivo";
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CatalogSubcategory {
@@ -19,24 +24,29 @@ export interface CatalogSubcategory {
   name: string;
   slug: string;
   parentId: string;
+  description: string;
+  status: "activo" | "inactivo";
+  image?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type CatalogCategoryEntry = CatalogCategory | CatalogSubcategory;
 
 export const catalogCategories: CatalogCategory[] = [
-  { id: "cat_1", name: "Bebidas", slug: "bebidas", parentId: null },
-  { id: "cat_2", name: "Postres", slug: "postres", parentId: null },
-  { id: "cat_3", name: "Platos", slug: "platos", parentId: null },
-  { id: "cat_4", name: "Entradas", slug: "entradas", parentId: null },
-  { id: "cat_5", name: "Combos", slug: "combos", parentId: null },
+  { id: "cat_1", name: "Bebidas", slug: "bebidas", parentId: null, description: "Bebidas frías y calientes preparadas para acompañar cada pedido.", status: "activo", createdAt: "2026-07-18T15:40:00.000Z", updatedAt: "2026-08-12T18:20:00.000Z" },
+  { id: "cat_2", name: "Postres", slug: "postres", parentId: null, description: "Selección de postres y porciones dulces de la casa.", status: "activo", createdAt: "2026-07-18T15:45:00.000Z", updatedAt: "2026-08-10T16:10:00.000Z" },
+  { id: "cat_3", name: "Platos", slug: "platos", parentId: null, description: "Platos principales disponibles durante el servicio.", status: "activo", createdAt: "2026-07-19T13:20:00.000Z", updatedAt: "2026-08-14T20:05:00.000Z" },
+  { id: "cat_4", name: "Entradas", slug: "entradas", parentId: null, description: "Opciones ligeras para compartir o comenzar el pedido.", status: "activo", createdAt: "2026-07-20T11:10:00.000Z", updatedAt: "2026-08-09T14:30:00.000Z" },
+  { id: "cat_5", name: "Combos", slug: "combos", parentId: null, description: "Combinaciones de productos con precio especial.", status: "inactivo", createdAt: "2026-07-22T17:00:00.000Z", updatedAt: "2026-08-15T12:45:00.000Z" },
 ];
 
 export const catalogSubcategories: CatalogSubcategory[] = [
-  { id: "sub_1", name: "Jugos", slug: "jugos", parentId: "cat_1" },
-  { id: "sub_2", name: "Gaseosas", slug: "gaseosas", parentId: "cat_1" },
-  { id: "sub_3", name: "Cafés", slug: "cafes", parentId: "cat_1" },
-  { id: "sub_4", name: "Helados", slug: "helados", parentId: "cat_2" },
-  { id: "sub_5", name: "Tortas", slug: "tortas", parentId: "cat_2" },
+  { id: "sub_1", name: "Jugos", slug: "jugos", parentId: "cat_1", description: "Jugos naturales preparados al momento.", status: "activo", createdAt: "2026-07-18T16:00:00.000Z", updatedAt: "2026-08-12T18:20:00.000Z" },
+  { id: "sub_2", name: "Gaseosas", slug: "gaseosas", parentId: "cat_1", description: "Bebidas gaseosas en distintas presentaciones.", status: "activo", createdAt: "2026-07-18T16:05:00.000Z", updatedAt: "2026-08-11T12:10:00.000Z" },
+  { id: "sub_3", name: "Cafés", slug: "cafes", parentId: "cat_1", description: "Cafés calientes preparados para cada pedido.", status: "activo", createdAt: "2026-07-18T16:10:00.000Z", updatedAt: "2026-08-13T09:25:00.000Z" },
+  { id: "sub_4", name: "Helados", slug: "helados", parentId: "cat_2", description: "Helados por porción en sabores seleccionados.", status: "activo", createdAt: "2026-07-19T10:00:00.000Z", updatedAt: "2026-08-10T16:10:00.000Z" },
+  { id: "sub_5", name: "Tortas", slug: "tortas", parentId: "cat_2", description: "Porciones de tortas elaboradas en la casa.", status: "activo", createdAt: "2026-07-19T10:05:00.000Z", updatedAt: "2026-08-14T15:40:00.000Z" },
 ];
 
 // ─── Productos ──────────────────────────────────────────────────────────────

@@ -1,12 +1,6 @@
 "use client";
 
 import {
-  Coffee,
-  Dessert,
-  GlassWater,
-  Pizza,
-  Salad,
-  ShoppingBag,
   Tag,
   ChevronRight,
 } from "lucide-react";
@@ -38,20 +32,6 @@ const formatPrice = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
-/** Ícono y color por categoría. */
-const CATEGORY_STYLE: Record<
-  string,
-  { icon: typeof Coffee; bg: string; fg: string }
-> = {
-  cat_1: { icon: GlassWater, bg: "bg-sky-500/10", fg: "text-sky-600 dark:text-sky-400" },
-  cat_2: { icon: Dessert, bg: "bg-amber-500/10", fg: "text-amber-600 dark:text-amber-400" },
-  cat_3: { icon: Pizza, bg: "bg-rose-500/10", fg: "text-rose-600 dark:text-rose-400" },
-  cat_4: { icon: Salad, bg: "bg-emerald-500/10", fg: "text-emerald-600 dark:text-emerald-400" },
-  cat_5: { icon: ShoppingBag, bg: "bg-violet-500/10", fg: "text-violet-600 dark:text-violet-400" },
-};
-
-const FALLBACK_STYLE = { icon: Coffee, bg: "bg-muted", fg: "text-muted-foreground" };
-
 /**
  * Preview de un producto del Catálogo.
  *
@@ -70,12 +50,11 @@ export const ProductPreviewDialog = ({
   const router = useRouter();
   if (!product) return null;
 
-  const style = CATEGORY_STYLE[product.categoryId] ?? FALLBACK_STYLE;
   const variantCount = product.variants?.length ?? 0;
 
   const goToDetail = () => {
     onOpenChange(false);
-    router.push(`/app/${slug}/catalogo/${product.id}`);
+    router.push(`/app/${slug}/catalogo/producto/${product.id}`);
   };
 
   return (

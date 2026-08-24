@@ -1,0 +1,30 @@
+.chart :global(.apexcharts-tooltip) {
+  --apx-tt-bg: var(--background);
+  --apx-tt-arrow-bg: var(--background);
+  --apx-tt-border: var(--border);
+  --apx-tt-color: var(--foreground);
+  --apx-tt-color-muted: var(--primary);
+  --apx-tt-shadow: 0 6px 18px
+    color-mix(in oklch, var(--foreground) 12%, transparent);
+
+  padding: 0;
+  background: var(--background) !important;
+}
+
+.chart :global(.apexcharts-tooltip-arrow) {
+  background: var(--background) !important;
+}
+
+/* Apex posiciona barWidth desde el inicio del tick. Con barras al 50%,
+   media barra equivale al espacio que falta para centrar el resaltado. */
+.chart :global(.apexcharts-xcrosshairs) {
+  transform-box: fill-box;
+  transform: translateX(7%);
+}
+
+/* En móvil las barras usan columnWidth: 72%. */
+@media (max-width: 639px) {
+  .chart :global(.apexcharts-xcrosshairs) {
+    transform: translateX(19.444%);
+  }
+}
