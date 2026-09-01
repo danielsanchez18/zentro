@@ -42,7 +42,7 @@ export const ProductInfo = () => {
         </div>
 
         {/* Disponibilidad */}
-        <div className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-1 flex-wrap">
           <ShoppingBag className="size-4 text-muted-foreground" />
           <p className="mx-2 text-sm text-muted-foreground font-heading">Disponible:</p>
 
@@ -80,7 +80,7 @@ export const ProductInfo = () => {
         </div>
 
         {/* Variantes */}
-        <div className="pt-5 border-t border-border flex items-center gap-x-2 overflow-x-auto">
+        <div className="pt-5 border-t border-border flex items-center gap-2 flex-wrap">
           
           <button className="w-60 border border-border rounded-lg bg-muted/50 hover:border-primary hover:bg-primary/7 text-start p-2 flex items-center gap-x-2.5 cursor-pointer transition">
             <div className="size-10 bg-background rounded-md" />
