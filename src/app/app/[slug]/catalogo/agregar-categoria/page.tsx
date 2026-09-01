@@ -1,4 +1,4 @@
-import { AddCategoryPage } from "@/components/app/catalog/categories/AddCategoryPage";
+import { AddCategoryPage } from "@/components/app/catalog/categories/add/AddCategoryPage";
 
 export default async function Page({
   params,

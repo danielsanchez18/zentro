@@ -3,7 +3,7 @@
 import { ChevronRight, Package, Tag } from "lucide-react";
 import type { CatalogProduct } from "@/lib/mock/catalog";
 import { categoryName, subcategoryName } from "@/lib/mock/catalog";
-import { StatusBadge } from "../shared/StatusBadge";
+import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import { ProductActionsMenu } from "./ProductActionsMenu";
 
 interface ProductTableProps {

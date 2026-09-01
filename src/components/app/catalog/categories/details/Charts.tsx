@@ -19,6 +19,7 @@ type Metric = "orders" | "sales";
 interface ChartsProps {
   productCount: number;
   categoryName?: string;
+  scopeLabel?: string;
 }
 
 const MONTHS = [
@@ -58,7 +59,7 @@ const CHART_UI = {
   tooltipGap: "8px",
 } as const;
 
-export function Charts({ productCount, categoryName }: ChartsProps) {
+export function Charts({ productCount, categoryName, scopeLabel }: ChartsProps) {
   const { resolvedTheme } = useTheme();
   const [activeMetric, setActiveMetric] = useState<Metric>("orders");
   const [animatedValue, setAnimatedValue] = useState(0);
@@ -69,20 +70,20 @@ export function Charts({ productCount, categoryName }: ChartsProps) {
         label: "Pedidos",
         value: 3526 + productCount * 12,
         max: 5000,
-        description: `Pedidos realizados con productos de ${
-          categoryName ?? "esta categoría"
+        description: `Pedidos realizados con ${
+          scopeLabel ?? `productos de ${categoryName ?? "esta categoría"}`
         } durante el periodo seleccionado.`,
       },
       sales: {
         label: "Ventas",
         value: 22639.6 + productCount * 85,
         max: 50000,
-        description: `Ingresos generados por los productos de ${
-          categoryName ?? "esta categoría"
+        description: `Ingresos generados por ${
+          scopeLabel ?? `los productos de ${categoryName ?? "esta categoría"}`
         } durante el periodo seleccionado.`,
       },
     }),
-    [categoryName, productCount],
+    [categoryName, productCount, scopeLabel],
   );
 
   const selectedMetric = metrics[activeMetric];
@@ -118,7 +119,7 @@ export function Charts({ productCount, categoryName }: ChartsProps) {
       colors: [CHART_UI.barColor],
       plotOptions: {
         bar: {
-          borderRadius: 3,
+          borderRadius: 0,
           borderRadiusApplication: "end",
           columnWidth: "45%",
         },
@@ -143,7 +144,7 @@ export function Charts({ productCount, categoryName }: ChartsProps) {
           fill: {
             type: "solid",
             color: CHART_UI.hoverColor,
-            opacity: 0.55,
+            opacity: 0.1,
           },
           dropShadow: { enabled: false },
         },

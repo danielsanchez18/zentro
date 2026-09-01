@@ -22,8 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Search } from "../shared/Search";
-import { Paginator } from "../shared/Paginator";
+import { Search } from "@/components/app/shared/Search";
+import { Paginator } from "@/components/app/shared/Paginator";
 import {
   catalogCategories,
   catalogProducts,

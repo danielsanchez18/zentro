@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { toastMsg } from "@/components/ui/toast-message";
-import { ProductCard } from "@/components/app/catalog/ProductCard";
+import { ProductCard } from "@/components/app/catalog/products/overview/ProductCard";
 import type { CatalogProduct } from "@/lib/mock/catalog";
 
 interface ProductsRelatedProps {

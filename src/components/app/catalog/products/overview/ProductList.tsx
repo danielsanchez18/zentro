@@ -5,13 +5,13 @@ import { LayoutGrid, SearchX, Table2 } from "lucide-react";
 import { toastMsg } from "@/components/ui/toast-message";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
-import { Search } from "../shared/Search";
-import { Paginator } from "../shared/Paginator";
+import { Search } from "@/components/app/shared/Search";
+import { Paginator } from "@/components/app/shared/Paginator";
 import { ProductCard } from "./ProductCard";
 import { ProductTable } from "./ProductTable";
 import { FilterPopover } from "./FilterPopover";
 import { ProductPreviewDialog } from "./ProductPreviewDialog";
-import { ConfirmDialog } from "../team/ConfirmDialog";
+import { ConfirmDialog } from "@/components/app/team/ConfirmDialog";
 import {
   catalogProducts,
   catalogCategories,

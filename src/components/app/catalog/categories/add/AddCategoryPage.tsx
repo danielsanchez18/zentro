@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CategoryForm } from "./CategoryForm";
+import { CategoryForm } from "../shared/CategoryForm";
 import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
 import { Toast } from "@/components/app/shared/Toast";

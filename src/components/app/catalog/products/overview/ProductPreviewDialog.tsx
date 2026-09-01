@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { CatalogProduct } from "@/lib/mock/catalog";
 import { categoryName, subcategoryName } from "@/lib/mock/catalog";
-import { StatusBadge } from "../shared/StatusBadge";
+import { StatusBadge } from "@/components/app/shared/StatusBadge";
 
 interface ProductPreviewDialogProps {
   product: CatalogProduct | null;

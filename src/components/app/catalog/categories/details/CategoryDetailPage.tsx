@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ConfirmDialog } from "../../team/ConfirmDialog";
+import { ConfirmDialog } from "@/components/app/team/ConfirmDialog";
 import { toastMsg } from "@/components/ui/toast-message";
 import { catalogCategories, catalogProducts, catalogSubcategories } from "@/lib/mock/catalog";
-import { CategoryDetailHeader } from "./details/CategoryDetailHeader";
-import { Info } from "./details/Info";
-import { ProductsRelated } from "./details/ProductsRelated";
-import { Charts } from "./details/Charts";
+import { CategoryDetailHeader } from "./CategoryDetailHeader";
+import { Info } from "./Info";
+import { ProductsRelated } from "./ProductsRelated";
+import { Charts } from "./Charts";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Toast } from "@/components/app/shared/Toast";

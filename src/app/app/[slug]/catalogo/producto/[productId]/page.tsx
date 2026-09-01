@@ -1,4 +1,4 @@
-import { ProductDetailPage } from "@/components/app/catalog/product-detail/ProductDetailPage";
+import { ProductDetailPage } from "@/components/app/catalog/products/details/ProductDetailPage";
 
 export default async function Page({
   params,

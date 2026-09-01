@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
 import { catalogCategories, catalogSubcategories } from "@/lib/mock/catalog";
 import { Toast } from "@/components/app/shared/Toast";
-import { CategoryForm } from "./CategoryForm";
+import { CategoryForm } from "../shared/CategoryForm";
 
 interface EditCategoryPageProps {
   slug: string;

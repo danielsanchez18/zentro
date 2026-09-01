@@ -1,4 +1,4 @@
-import { CatalogModule } from "@/components/app/catalog/CatalogModule";
+import { CatalogModule } from "@/components/app/catalog/overview/CatalogModule";
 
 /**
  * Módulo Catálogo (mockup de flujo).

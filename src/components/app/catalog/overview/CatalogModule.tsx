@@ -5,8 +5,8 @@ import { LayoutGrid, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Title } from "./Title";
 import { KPIS } from "./KPIS";
-import { ProductList } from "./ProductList";
-import { CategoriesTab } from "./CategoriesTab";
+import { ProductList } from "../products/overview/ProductList";
+import { CategoriesTab } from "../categories/overview/CategoriesTab";
 import {
   catalogProducts,
   type CatalogProduct,
