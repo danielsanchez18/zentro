@@ -19,7 +19,7 @@ export const Title = ({ slug }: TitleProps) => (
       </p>
     </div>
     <Button
-      render={<Link href={`/app/${slug}/catalogo/agregar`} />}
+      render={<Link href={`/app/${slug}/catalogo/agregar-producto`} />}
       nativeButton={false}
       className="text-sm rounded-full px-3 gap-x-1"
     >
