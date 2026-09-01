@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Toast } from "@/components/app/shared/Toast";
 import { toastMsg } from "@/components/ui/toast-message";
-import { ProductForm } from "./ProductForm";
+import { ProductForm } from "../shared/ProductForm";
 
 interface AddProductPageProps {
   slug: string;

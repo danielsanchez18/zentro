@@ -1,4 +1,4 @@
-import { PackagePlus, Plus, Trash2 } from "lucide-react";
+import { PackagePlus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormSection, productInputClass } from "./FormSection";
 import type { ProductVariantDraft } from "./types";

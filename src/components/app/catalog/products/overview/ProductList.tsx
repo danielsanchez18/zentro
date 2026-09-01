@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LayoutGrid, SearchX, Table2 } from "lucide-react";
 import { toastMsg } from "@/components/ui/toast-message";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -45,6 +46,7 @@ export const ProductList = ({
   initialProducts = catalogProducts,
   slug,
 }: ProductListProps) => {
+  const router = useRouter();
   const [products, setProducts] =
     useState<CatalogProduct[]>(initialProducts);
   const [query, setQuery] = useState("");
@@ -237,7 +239,7 @@ export const ProductList = ({
             <ProductTable
               products={pageItems}
               onPreview={setPreviewProduct}
-              onEdit={() => {}}
+              onEdit={(product) => router.push(`/app/${slug}/catalogo/producto/${product.id}/editar`)}
               onRequestToggleStatus={setToggleStatusProduct}
               onRequestRemove={setRemoveProduct}
             />
@@ -248,7 +250,7 @@ export const ProductList = ({
                   key={product.id}
                   product={product}
                   onPreview={setPreviewProduct}
-                  onEdit={() => {}}
+                  onEdit={(product) => router.push(`/app/${slug}/catalogo/producto/${product.id}/editar`)}
                   onRequestToggleStatus={setToggleStatusProduct}
                   onRequestRemove={setRemoveProduct}
                 />

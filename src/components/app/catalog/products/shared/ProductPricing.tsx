@@ -41,11 +41,11 @@ export function ProductPricing({ price, compareAtPrice, available, scheduledAt, 
 
         <Field label="Estado">
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline">Disponible</Button>
-            <Button variant="outline">No disponible</Button>
-            <Button variant="outline">Borrador</Button>
-            <Button variant="outline">Próximamente</Button>
-            <Button variant="outline">Agotado</Button>
+            <Button type="button" variant={available ? "default" : "outline"} onClick={() => onChange("available", true)}>Disponible</Button>
+            <Button type="button" variant={!available ? "default" : "outline"} onClick={() => onChange("available", false)}>No disponible</Button>
+            <Button type="button" variant="outline">Borrador</Button>
+            <Button type="button" variant="outline">Próximamente</Button>
+            <Button type="button" variant="outline">Agotado</Button>
           </div>
         </Field>
 
@@ -59,15 +59,15 @@ export function ProductPricing({ price, compareAtPrice, available, scheduledAt, 
 
         <Field label="Disponible en ">
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline">
+            <Button type="button" variant="outline">
               <Laptop />
               Web
             </Button>
-            <Button variant="outline">
+            <Button type="button" variant="outline">
               <Store />
               Tienda
             </Button>
-            <Button variant="outline">
+            <Button type="button" variant="outline">
               <Globe />
               Marketplace
             </Button>

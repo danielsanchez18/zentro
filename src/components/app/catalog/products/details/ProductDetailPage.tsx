@@ -92,12 +92,7 @@ export const ProductDetailPage = ({ slug, productId }: ProductDetailPageProps) =
       <div className="sticky bottom-5 z-40 mx-auto w-fit">
         <ProductActions
           isEnabled={isEnabled}
-          onEdit={() =>
-            toastMsg.info(
-              "Edición en preparación",
-              "El formulario de productos se conectará en la siguiente etapa.",
-            )
-          }
+          onEdit={() => router.push(`/app/${slug}/catalogo/producto/${product.id}/editar`)}
           onToggleStatus={handleToggleStatus}
           onDelete={() => setDeleteOpen(true)}
         />

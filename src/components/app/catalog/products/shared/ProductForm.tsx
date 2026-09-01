@@ -8,10 +8,16 @@ import { ProductPricing } from "./ProductPricing";
 import { ProductOrganization } from "./ProductOrganization";
 import type { ProductFormValues } from "./types";
 
-const initialValues: ProductFormValues = { name: "", sku: "", weight: "", description: "", price: "", compareAtPrice: "", available: true, scheduledAt: "", categoryId: "", subcategoryId: "", vendor: "", tags: "", images: [], variants: [] };
+const emptyValues: ProductFormValues = { name: "", sku: "", weight: "", description: "", price: "", compareAtPrice: "", available: true, scheduledAt: "", categoryId: "", subcategoryId: "", vendor: "", tags: "", images: [], variants: [] };
 
-export function ProductForm({ id, onSubmit }: { id: string; onSubmit: (values: ProductFormValues) => void }) {
-  const [values, setValues] = useState(initialValues);
+interface ProductFormProps {
+  id: string;
+  initial?: Partial<ProductFormValues>;
+  onSubmit: (values: ProductFormValues) => void;
+}
+
+export function ProductForm({ id, initial, onSubmit }: ProductFormProps) {
+  const [values, setValues] = useState<ProductFormValues>(() => ({ ...emptyValues, ...initial }));
   const set = <K extends keyof ProductFormValues>(field: K, value: ProductFormValues[K]) => setValues((current) => ({ ...current, [field]: value }));
   const handleSubmit = (event: FormEvent) => { event.preventDefault(); onSubmit(values); };
 

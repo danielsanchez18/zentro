@@ -13,6 +13,7 @@ export function FormSection({ title, description, action, children }: FormSectio
       <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-3">
         <div>
           <h2 className="text-sm font-medium text-foreground">{title}</h2>
+          {description && <p className="mt-1 text-xs font-normal leading-5 text-muted-foreground">{description}</p>}
         </div>
         {action}
       </div>
