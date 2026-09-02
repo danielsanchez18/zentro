@@ -111,15 +111,13 @@ export const ProductTable = ({
               <StatusBadge status={product.status} />
             </td>
             <td className="px-5 py-3 text-right text-nowrap">
-              <div className="opacity-0 transition-opacity group-hover:opacity-100">
-                <ProductActionsMenu
-                  product={product}
-                  onPreview={onPreview}
-                  onEdit={onEdit}
-                  onRequestToggleStatus={onRequestToggleStatus}
-                  onRequestRemove={onRequestRemove}
-                />
-              </div>
+              <ProductActionsMenu
+                product={product}
+                onPreview={onPreview}
+                onEdit={onEdit}
+                onRequestToggleStatus={onRequestToggleStatus}
+                onRequestRemove={onRequestRemove}
+              />
             </td>
           </tr>
         ))}

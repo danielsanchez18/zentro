@@ -9,7 +9,7 @@ interface TitleProps {
 
 /** Encabezado del módulo Catálogo con botón «+ Producto». */
 export const Title = ({ slug }: TitleProps) => (
-  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+  <div className="flex flex-col gap-1 gap-y-3 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <h1 className="font-heading text-lg font-medium tracking-tight">
         Catálogo de productos

@@ -67,10 +67,10 @@ export const ProductInfo = () => {
           <Package2 className="size-4 text-muted-foreground" />
           <p className="mx-2 text-sm text-muted-foreground font-heading">Stock:</p>
           <p className="text-sm font-medium font-heading">120 unidades</p>
-          <Button variant="link" className="p-0 h-fit ml-5 gap-x-1 text-sm font-heading">
+          {/* <Button variant="link" className="p-0 h-fit ml-5 gap-x-1 text-sm font-heading">
             <Wrench className="size-3.5" />
             Ajustar
-          </Button>
+          </Button> */}
         </div>
 
         {/* Precio y Estado */}

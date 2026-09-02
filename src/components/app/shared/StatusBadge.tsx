@@ -7,6 +7,8 @@ import {
   CheckCircle2,
   Clock3,
   Hourglass,
+  PackageX,
+  TriangleAlert,
   XCircle,
   type LucideIcon,
 } from "lucide-react";
@@ -14,7 +16,14 @@ import { cn } from "@/lib/utils";
 import type { MemberStatus, InvitationStatus } from "@/lib/mock/team";
 
 /** Estados soportados: miembros, invitaciones y catálogo. */
-export type BadgeStatus = MemberStatus | InvitationStatus | "activo" | "inactivo";
+export type BadgeStatus =
+  | MemberStatus
+  | InvitationStatus
+  | "activo"
+  | "inactivo"
+  | "disponible"
+  | "bajo"
+  | "agotado";
 
 /**
  * Configuración visual por estado 🎨.
@@ -107,6 +116,27 @@ const STATUS_CONFIG: Record<
     badge:
       "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
     iconClass: "text-neutral-800 dark:text-neutral-300",
+  },
+  disponible: {
+    label: "Disponible",
+    icon: CheckCircle2,
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  bajo: {
+    label: "Stock bajo",
+    icon: TriangleAlert,
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400 dark:ring-yellow-400/20",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  agotado: {
+    label: "Agotado",
+    icon: PackageX,
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
   },
 };
 

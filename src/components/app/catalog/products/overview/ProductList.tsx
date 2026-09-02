@@ -10,7 +10,7 @@ import { Search } from "@/components/app/shared/Search";
 import { Paginator } from "@/components/app/shared/Paginator";
 import { ProductCard } from "./ProductCard";
 import { ProductTable } from "./ProductTable";
-import { FilterPopover } from "./FilterPopover";
+import { FilterPopover } from "@/components/app/shared/FilterPopover";
 import { ProductPreviewDialog } from "./ProductPreviewDialog";
 import { ConfirmDialog } from "@/components/app/team/ConfirmDialog";
 import {
