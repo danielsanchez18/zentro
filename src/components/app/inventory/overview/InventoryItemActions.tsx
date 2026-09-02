@@ -23,17 +23,21 @@ import { toastMsg } from "@/components/ui/toast-message";
 
 interface InventoryItemActionsProps {
   item: InventoryItem;
+  onPreview?: (item: InventoryItem) => void;
   onRegisterEntry: (item: InventoryItem) => void;
   onRegisterOutput?: (item: InventoryItem) => void;
   onEditMinStock?: (item: InventoryItem) => void;
+  onAdjustStock?: (item: InventoryItem) => void;
   onViewHistory?: (item: InventoryItem) => void;
 }
 
 export function InventoryItemActions({
   item,
+  onPreview,
   onRegisterEntry,
   onRegisterOutput,
   onEditMinStock,
+  onAdjustStock,
   onViewHistory,
 }: InventoryItemActionsProps) {
   return (
@@ -60,6 +64,28 @@ export function InventoryItemActions({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onAdjustStock?.(item);
+          }}
+          className="cursor-pointer gap-2 px-2.5 py-1.5"
+        >
+          <SlidersHorizontal className="size-4" />
+          <span>Ajustar stock físico</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onPreview?.(item);
+          }}
+          className="cursor-pointer gap-2 px-2.5 py-1.5"
+        >
+          <ExternalLink className="size-4" />
+          <span>Ver resumen</span>
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={(e) => {
@@ -106,7 +132,7 @@ export function InventoryItemActions({
           }}
           className="cursor-pointer gap-2 px-2.5 py-1.5"
         >
-          <SlidersHorizontal className="size-4" />
+          <PackageMinus className="size-4" />
           <span>Editar stock mínimo</span>
         </DropdownMenuItem>
 
@@ -128,21 +154,6 @@ export function InventoryItemActions({
           <span>Ver historial</span>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          onClick={(e) => {
-            e.stopPropagation();
-            toastMsg.info(
-              "Catálogo",
-              `Ver ${item.productName} en el catálogo`
-            );
-          }}
-          className="cursor-pointer gap-2 px-2.5 py-1.5"
-        >
-          <ExternalLink className="size-4" />
-          <span>Ver en Catálogo</span>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

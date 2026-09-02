@@ -15,10 +15,14 @@ interface InventoryCardProps {
   item: InventoryItem;
   onOpen: (item: InventoryItem) => void;
   onRegisterEntry: (item: InventoryItem) => void;
+  onRegisterOutput: (item: InventoryItem) => void;
+  onEditMinStock: (item: InventoryItem) => void;
+  onAdjustStock: (item: InventoryItem) => void;
+  onViewHistory: (item: InventoryItem) => void;
 }
 
 /** Vista card del inventario — mantiene la composición visual de ProductCard. */
-export function InventoryCard({ item, onOpen, onRegisterEntry }: InventoryCardProps) {
+export function InventoryCard({ item, onOpen, onRegisterEntry, onRegisterOutput, onEditMinStock, onAdjustStock, onViewHistory }: InventoryCardProps) {
   const available = availableStock(item);
 
   return (
@@ -31,7 +35,7 @@ export function InventoryCard({ item, onOpen, onRegisterEntry }: InventoryCardPr
           <Package className="size-6 text-muted-foreground group-hover:text-foreground" />
         </div>
 
-        <InventoryItemActions item={item} onRegisterEntry={onRegisterEntry} />
+        <InventoryItemActions item={item} onPreview={onOpen} onRegisterEntry={onRegisterEntry} onRegisterOutput={onRegisterOutput} onEditMinStock={onEditMinStock} onAdjustStock={onAdjustStock} onViewHistory={onViewHistory} />
       </div>
 
       <div className="mt-3 space-y-1">
@@ -96,7 +100,7 @@ function StockStat({
 }) {
   return (
     <div className="flex min-w-0 items-center justify-center gap-2 border border-border rounded-lg bg-accent p-1 text-center">
-      {/* <Icon className="size-3.5 shrink-0 text-muted-foreground" /> */}
+      <Icon className="size-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0">
         <p className="font-medium tabular-nums">{value}</p>
         <p className="truncate text-sm text-muted-foreground">{label}</p>

@@ -13,6 +13,12 @@ import type { InventoryItem, InventoryStatus } from "@/lib/mock/inventory";
 import { inventoryStatus } from "@/lib/mock/inventory";
 import { InventoryCard } from "./InventoryCard";
 import { InventoryTable } from "./InventoryTable";
+import { InventoryPreviewDialog } from "./InventoryPreviewDialog";
+import { RegisterOutputDialog } from "./RegisterOutputDialog";
+import { MinimumStockDialog } from "./MinimumStockDialog";
+import { InventoryHistoryDialog } from "./InventoryHistoryDialog";
+import { StockAdjustmentDialog } from "./StockAdjustmentDialog";
+import type { InventoryMovement } from "./types";
 
 const PAGE_SIZE = 10;
 type InventoryView = "tabla" | "cards";
@@ -25,15 +31,26 @@ const VIEWS: { id: InventoryView; label: string; icon: typeof Table2 }[] = [
 export function InventoryList({
   items,
   onRegisterEntry,
+  onUpdateItem,
+  movements,
+  onAddMovement,
 }: {
   items: InventoryItem[];
   onRegisterEntry: (item: InventoryItem) => void;
+  onUpdateItem: (itemId: string, changes: Partial<InventoryItem>) => void;
+  movements: InventoryMovement[];
+  onAddMovement: (movement: InventoryMovement) => void;
 }) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<InventoryStatus | "all">("all");
   const [categoryId, setCategoryId] = useState("all");
   const [page, setPage] = useState(1);
   const [view, setView] = useState<InventoryView>("tabla");
+  const [previewItem, setPreviewItem] = useState<InventoryItem | null>(null);
+  const [outputItem, setOutputItem] = useState<InventoryItem | null>(null);
+  const [minimumItem, setMinimumItem] = useState<InventoryItem | null>(null);
+  const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
+  const [adjustmentItem, setAdjustmentItem] = useState<InventoryItem | null>(null);
   const filtered = useMemo(() => items.filter((item) => {
     const text = `${item.productName} ${item.sku} ${item.brand} ${item.supplier}`.toLowerCase();
     return text.includes(query.trim().toLowerCase()) && (status === "all" || inventoryStatus(item) === status) && (categoryId === "all" || item.categoryId === categoryId);
@@ -42,7 +59,14 @@ export function InventoryList({
   const currentPage = Math.min(page, totalPages);
   const pageItems = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   const activeFilterCount = (status !== "all" ? 1 : 0) + (categoryId !== "all" ? 1 : 0);
-  const openActions = (item: InventoryItem) => toastMsg.info("Acciones de inventario", `El ajuste e historial de ${item.productName} se conectarán en el detalle.`);
+  const actionProps = {
+    onOpen: setPreviewItem,
+    onRegisterEntry,
+    onRegisterOutput: setOutputItem,
+    onEditMinStock: setMinimumItem,
+    onAdjustStock: setAdjustmentItem,
+    onViewHistory: setHistoryItem,
+  };
   const clearFilters = () => {
     setStatus("all");
     setCategoryId("all");
@@ -147,17 +171,17 @@ export function InventoryList({
         <>
           {view === "tabla" ? (
             <>
-              <InventoryTable items={pageItems} onOpen={openActions} onRegisterEntry={onRegisterEntry} />
+              <InventoryTable items={pageItems} {...actionProps} />
               <div className="grid gap-3 md:hidden">
                 {pageItems.map((item) => (
-                  <InventoryCard key={item.id} item={item} onOpen={openActions} onRegisterEntry={onRegisterEntry} />
+                  <InventoryCard key={item.id} item={item} {...actionProps} />
                 ))}
               </div>
             </>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {pageItems.map((item) => (
-                <InventoryCard key={item.id} item={item} onOpen={openActions} onRegisterEntry={onRegisterEntry} />
+                <InventoryCard key={item.id} item={item} {...actionProps} />
               ))}
             </div>
           )}
@@ -170,6 +194,30 @@ export function InventoryList({
           />
         </>
       )}
+      <InventoryPreviewDialog item={previewItem} open={Boolean(previewItem)} onOpenChange={(open) => !open && setPreviewItem(null)} />
+      <RegisterOutputDialog item={outputItem} open={Boolean(outputItem)} onOpenChange={(open) => !open && setOutputItem(null)} onSubmit={(quantity, metadata) => {
+        if (!outputItem) return;
+        const resultingStock = outputItem.currentStock - quantity;
+        onUpdateItem(outputItem.id, { currentStock: resultingStock, updatedAt: new Date().toISOString() });
+        onAddMovement({ id: `mov_${Date.now()}`, itemId: outputItem.id, type: "salida", quantity, previousStock: outputItem.currentStock, resultingStock, createdAt: new Date().toISOString(), ...metadata });
+        toastMsg.success("Salida registrada", `Se retiraron ${quantity} unidades de ${outputItem.productName}.`);
+        setOutputItem(null);
+      }} />
+      <MinimumStockDialog item={minimumItem} open={Boolean(minimumItem)} onOpenChange={(open) => !open && setMinimumItem(null)} onSubmit={(minimumStock) => {
+        if (!minimumItem) return;
+        onUpdateItem(minimumItem.id, { minimumStock, updatedAt: new Date().toISOString() });
+        toastMsg.success("Límite actualizado", `El stock mínimo ahora es ${minimumStock}.`);
+        setMinimumItem(null);
+      }} />
+      <InventoryHistoryDialog item={historyItem} open={Boolean(historyItem)} onOpenChange={(open) => !open && setHistoryItem(null)} movements={movements} />
+      <StockAdjustmentDialog item={adjustmentItem} open={Boolean(adjustmentItem)} onOpenChange={(open) => !open && setAdjustmentItem(null)} onSubmit={(newStock, reason) => {
+        if (!adjustmentItem) return;
+        const difference = newStock - adjustmentItem.currentStock;
+        onUpdateItem(adjustmentItem.id, { currentStock: newStock, updatedAt: new Date().toISOString() });
+        onAddMovement({ id: `mov_${Date.now()}`, itemId: adjustmentItem.id, type: "ajuste", quantity: difference, previousStock: adjustmentItem.currentStock, resultingStock: newStock, reason, createdAt: new Date().toISOString() });
+        toastMsg.success("Stock ajustado", `${adjustmentItem.productName} ahora tiene ${newStock} unidades.`);
+        setAdjustmentItem(null);
+      }} />
     </section>
   );
 }

@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState, useMemo, type FormEvent } from "react";
+import { useState, useMemo, type FormEvent } from "react";
 import {
   Package,
   PackagePlus,
   Boxes,
-  Plus,
   Trash2,
   Hash,
 } from "lucide-react";
@@ -28,6 +27,7 @@ import {
 import { toastMsg } from "@/components/ui/toast-message";
 import { cn } from "@/lib/utils";
 import type { InventoryItem } from "@/lib/mock/inventory";
+import type { MovementMetadata } from "./types";
 
 const REASON_OPTIONS = [
   { label: "Compra a proveedor", value: "compra" },
@@ -50,7 +50,7 @@ interface RegisterEntryDialogProps {
   onOpenChange: (open: boolean) => void;
   items: InventoryItem[];
   preselectedItem?: InventoryItem | null;
-  onSuccess?: (itemId: string, addedStock: number) => void;
+  onSuccess?: (itemId: string, addedStock: number, metadata: MovementMetadata) => void;
 }
 
 export function RegisterEntryDialog({
@@ -63,7 +63,7 @@ export function RegisterEntryDialog({
   const [entryMode, setEntryMode] = useState<EntryMode>("single");
 
   // Single mode state
-  const [selectedItemId, setSelectedItemId] = useState<string>("");
+  const [selectedItemId, setSelectedItemId] = useState<string>(preselectedItem?.id || items[0]?.id || "");
   const [quantity, setQuantity] = useState<string>("10");
   const [reason, setReason] = useState<string>("compra");
   const [unitCost, setUnitCost] = useState<string>("");
@@ -71,34 +71,7 @@ export function RegisterEntryDialog({
   const [notes, setNotes] = useState<string>("");
 
   // Batch mode state
-  const [batchRows, setBatchRows] = useState<BatchRow[]>([]);
-
-  useEffect(() => {
-    if (open) {
-      setEntryMode("single");
-      if (preselectedItem) {
-        setSelectedItemId(preselectedItem.id);
-      } else if (items.length > 0) {
-        setSelectedItemId(items[0].id);
-      }
-      setQuantity("10");
-      setReason("compra");
-      setUnitCost("");
-      setDocumentRef("");
-      setNotes("");
-
-      // Initialize batch rows
-      const defaultItemId = preselectedItem?.id || items[0]?.id || "";
-      setBatchRows([
-        {
-          id: "row_1",
-          itemId: defaultItemId,
-          quantity: "10",
-          unitCost: "",
-        },
-      ]);
-    }
-  }, [open, preselectedItem, items]);
+  const [batchRows, setBatchRows] = useState<BatchRow[]>([{ id: "row_1", itemId: preselectedItem?.id || items[0]?.id || "", quantity: "10", unitCost: "" }]);
 
   const currentItem = useMemo(() => {
     return items.find((i) => i.id === selectedItemId) || preselectedItem || items[0];
@@ -158,7 +131,7 @@ export function RegisterEntryDialog({
         return;
       }
 
-      onSuccess?.(currentItem.id, addedStock);
+      onSuccess?.(currentItem.id, addedStock, { reason, notes: notes.trim() || undefined, documentRef: documentRef.trim() || undefined, unitCost: Number(unitCost) > 0 ? Number(unitCost) : undefined });
 
       toastMsg.success(
         "Entrada registrada",
@@ -171,21 +144,32 @@ export function RegisterEntryDialog({
         return;
       }
 
-      let totalAdded = 0;
-      let validCount = 0;
-
-      batchRows.forEach((row) => {
+      const validRows = batchRows.filter((row) => {
         const addedStock = parseInt(row.quantity, 10);
-        if (!isNaN(addedStock) && addedStock > 0 && row.itemId) {
-          onSuccess?.(row.itemId, addedStock);
-          totalAdded += addedStock;
-          validCount += 1;
-        }
+        return !isNaN(addedStock) && addedStock > 0 && row.itemId;
+      });
+
+      if (validRows.length !== batchRows.length) {
+        toastMsg.error("Lote incompleto", "Selecciona un producto y una cantidad válida en cada fila.");
+        return;
+      }
+
+      const repeated = validRows.find((row, index) => validRows.findIndex((candidate) => candidate.itemId === row.itemId) !== index);
+      if (repeated) {
+        toastMsg.error("Producto repetido", "Cada producto debe aparecer una sola vez dentro del lote.");
+        return;
+      }
+
+      let totalAdded = 0;
+      validRows.forEach((row) => {
+        const addedStock = parseInt(row.quantity, 10);
+        onSuccess?.(row.itemId, addedStock, { reason, notes: notes.trim() || undefined, documentRef: documentRef.trim() || undefined, unitCost: Number(row.unitCost) > 0 ? Number(row.unitCost) : undefined });
+        totalAdded += addedStock;
       });
 
       toastMsg.success(
         "Entrada por lote registrada",
-        `Se ingresaron existencias para ${validCount} productos (${totalAdded} unidades en total).`
+        `Se ingresaron existencias para ${validRows.length} productos (${totalAdded} unidades en total).`
       );
     }
 
@@ -206,7 +190,7 @@ export function RegisterEntryDialog({
 
         <form onSubmit={handleSubmit} className="grid gap-5 font-heading">
           {/* Mode Switcher */}
-          <div className="grid grid-cols-2 gap-1 border-b border-border">
+          <div className="flex items-center w-full gap-1 border-b border-border">
             
             <button
               type="button"
@@ -241,7 +225,7 @@ export function RegisterEntryDialog({
           {entryMode === "single" && (
             <>
               {/* Producto */}
-              <div className="grid gap-2 mx-1">
+              <div className="flex flex-col gap-y-2 mx-1">
                 <label htmlFor="entry-product" className="text-sm font-medium">
                   Producto
                 </label>
@@ -277,7 +261,7 @@ export function RegisterEntryDialog({
 
               {/* Cantidad y Motivo */}
               <div className="grid grid-cols-2 gap-3 mx-1">
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="entry-quantity" className="text-sm font-medium">
                     Cantidad a ingresar
                   </label>
@@ -296,7 +280,7 @@ export function RegisterEntryDialog({
                   </div>
                 </div>
 
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="entry-reason" className="text-sm font-medium">
                     Motivo
                   </label>
@@ -324,7 +308,7 @@ export function RegisterEntryDialog({
 
               {/* Costo unitario y N° Guía */}
               <div className="grid grid-cols-2 gap-3 mx-1">
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="entry-cost" className="text-sm font-medium">
                     Costo unitario (opcional)
                   </label>
@@ -344,7 +328,7 @@ export function RegisterEntryDialog({
                   </div>
                 </div>
 
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="entry-doc" className="text-sm font-medium">
                     N° Guía / Factura
                   </label>
@@ -477,7 +461,7 @@ export function RegisterEntryDialog({
 
               {/* Shared Batch Metadata: Motivo & N° Guía */}
               <div className="grid grid-cols-2 gap-3 mx-1">
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="batch-reason" className="text-sm font-medium">
                     Motivo de lote
                   </label>
@@ -502,7 +486,7 @@ export function RegisterEntryDialog({
                   </Select>
                 </div>
 
-                <div className="grid gap-2">
+                <div className="flex flex-col gap-y-2">
                   <label htmlFor="batch-doc" className="text-sm font-medium">
                     N° Guía / Factura
                   </label>
@@ -520,7 +504,7 @@ export function RegisterEntryDialog({
           )}
 
           {/* Observaciones */}
-          <div className="grid gap-2 mx-1">
+          <div className="flex flex-col gap-y-2 mx-1">
             <label htmlFor="entry-notes" className="text-sm font-medium">
               Observaciones
             </label>
