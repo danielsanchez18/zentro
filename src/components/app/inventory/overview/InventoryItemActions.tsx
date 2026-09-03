@@ -26,6 +26,7 @@ interface InventoryItemActionsProps {
   onPreview?: (item: InventoryItem) => void;
   onRegisterEntry: (item: InventoryItem) => void;
   onRegisterOutput?: (item: InventoryItem) => void;
+  onRegisterWaste?: (item: InventoryItem) => void;
   onEditMinStock?: (item: InventoryItem) => void;
   onAdjustStock?: (item: InventoryItem) => void;
   onViewHistory?: (item: InventoryItem) => void;
@@ -36,6 +37,7 @@ export function InventoryItemActions({
   onPreview,
   onRegisterEntry,
   onRegisterOutput,
+  onRegisterWaste,
   onEditMinStock,
   onAdjustStock,
   onViewHistory,
@@ -64,6 +66,17 @@ export function InventoryItemActions({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            onRegisterOutput?.(item);
+          }}
+          className="cursor-pointer gap-2 px-2.5 py-1.5"
+        >
+          <PackageMinus className="size-4" />
+          <span>Registrar salida</span>
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={(e) => {
@@ -101,19 +114,12 @@ export function InventoryItemActions({
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation();
-            if (onRegisterOutput) {
-              onRegisterOutput(item);
-            } else {
-              toastMsg.info(
-                "Salida de stock",
-                `Registrar salida de ${item.productName}`
-              );
-            }
+            onRegisterWaste?.(item);
           }}
-          className="cursor-pointer gap-2 px-2.5 py-1.5"
+          className="cursor-pointer gap-2 px-2.5 py-1.5 text-destructive focus:text-destructive"
         >
           <PackageMinus className="size-4" />
-          <span>Registrar salida / merma</span>
+          <span>Registrar merma</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -126,7 +132,7 @@ export function InventoryItemActions({
             } else {
               toastMsg.info(
                 "Límite de stock",
-                `Stock mínimo de ${item.productName}: ${item.minimumStock} unidades`
+                `Stock mínimo de ${item.productName}: ${item.minimumStock} unidades`,
               );
             }
           }}
@@ -144,7 +150,7 @@ export function InventoryItemActions({
             } else {
               toastMsg.info(
                 "Historial",
-                `Ver bitácora de movimientos de ${item.productName}`
+                `Ver bitácora de movimientos de ${item.productName}`,
               );
             }
           }}
@@ -153,7 +159,6 @@ export function InventoryItemActions({
           <History className="size-4" />
           <span>Ver historial</span>
         </DropdownMenuItem>
-
       </DropdownMenuContent>
     </DropdownMenu>
   );

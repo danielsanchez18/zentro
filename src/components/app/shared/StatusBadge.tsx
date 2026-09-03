@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ArrowDownToLine,
+  ArrowUpFromLine,
   BadgeCheck,
   Ban,
   CheckCheck,
@@ -8,6 +10,7 @@ import {
   Clock3,
   Hourglass,
   PackageX,
+  SlidersHorizontal,
   TriangleAlert,
   XCircle,
   type LucideIcon,
@@ -23,7 +26,11 @@ export type BadgeStatus =
   | "inactivo"
   | "disponible"
   | "bajo"
-  | "agotado";
+  | "agotado"
+  | "entrada"
+  | "salida"
+  | "merma"
+  | "ajuste";
 
 /**
  * Configuración visual por estado 🎨.
@@ -137,6 +144,30 @@ const STATUS_CONFIG: Record<
     badge:
       "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  entrada: {
+    label: "Entrada",
+    icon: ArrowDownToLine,
+    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  salida: {
+    label: "Salida",
+    icon: ArrowUpFromLine,
+    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    iconClass: "text-sky-600 dark:text-sky-400",
+  },
+  merma: {
+    label: "Merma",
+    icon: PackageX,
+    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  ajuste: {
+    label: "Ajuste",
+    icon: SlidersHorizontal,
+    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400 dark:ring-yellow-400/20",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
   },
 };
 

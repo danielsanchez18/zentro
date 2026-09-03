@@ -9,7 +9,7 @@ Controlar las existencias de una sucursal activa. La selección de sucursal pert
 | Sección | Ruta propuesta | Estado |
 |---|---|---|
 | Overview | `/app/[slug]/inventario` | Prototipo en desarrollo |
-| Movimientos / Kardex | `/app/[slug]/inventario/movimientos` | Planeado |
+| Movimientos / Kardex | `/app/[slug]/inventario/movimientos` | Prototipo en desarrollo |
 | Detalle de existencia | `/app/[slug]/inventario/productos/[inventoryId]` | Planeado |
 | Proveedores | `/app/[slug]/inventario/proveedores` | Planeado |
 | Marcas | `/app/[slug]/inventario/marcas` | Planeado |
@@ -61,10 +61,9 @@ components/app/inventory/
 ## Documentos
 
 - [Overview](./overview.md)
-- `movements.md` — se completará al iniciar Movimientos / Kardex.
+- [Movimientos / Kardex](./movements.md)
 - `products.md` — se completará al iniciar el detalle de existencia.
 - `suppliers.md` — se completará al iniciar Proveedores.
 - `brands.md` — se completará al iniciar Marcas.
 - `counts.md` — se completará al iniciar Conteos.
 - `backend-contract.md` — se completará antes de la integración.
-

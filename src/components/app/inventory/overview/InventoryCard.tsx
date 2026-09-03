@@ -16,13 +16,23 @@ interface InventoryCardProps {
   onOpen: (item: InventoryItem) => void;
   onRegisterEntry: (item: InventoryItem) => void;
   onRegisterOutput: (item: InventoryItem) => void;
+  onRegisterWaste: (item: InventoryItem) => void;
   onEditMinStock: (item: InventoryItem) => void;
   onAdjustStock: (item: InventoryItem) => void;
   onViewHistory: (item: InventoryItem) => void;
 }
 
 /** Vista card del inventario — mantiene la composición visual de ProductCard. */
-export function InventoryCard({ item, onOpen, onRegisterEntry, onRegisterOutput, onEditMinStock, onAdjustStock, onViewHistory }: InventoryCardProps) {
+export function InventoryCard({
+  item,
+  onOpen,
+  onRegisterEntry,
+  onRegisterOutput,
+  onRegisterWaste,
+  onEditMinStock,
+  onAdjustStock,
+  onViewHistory,
+}: InventoryCardProps) {
   const available = availableStock(item);
 
   return (
@@ -35,7 +45,16 @@ export function InventoryCard({ item, onOpen, onRegisterEntry, onRegisterOutput,
           <Package className="size-6 text-muted-foreground group-hover:text-foreground" />
         </div>
 
-        <InventoryItemActions item={item} onPreview={onOpen} onRegisterEntry={onRegisterEntry} onRegisterOutput={onRegisterOutput} onEditMinStock={onEditMinStock} onAdjustStock={onAdjustStock} onViewHistory={onViewHistory} />
+        <InventoryItemActions
+          item={item}
+          onPreview={onOpen}
+          onRegisterEntry={onRegisterEntry}
+          onRegisterOutput={onRegisterOutput}
+          onRegisterWaste={onRegisterWaste}
+          onEditMinStock={onEditMinStock}
+          onAdjustStock={onAdjustStock}
+          onViewHistory={onViewHistory}
+        />
       </div>
 
       <div className="mt-3 space-y-1">
@@ -50,17 +69,15 @@ export function InventoryCard({ item, onOpen, onRegisterEntry, onRegisterOutput,
       <div className="my-3 border-t border-border" />
 
       <div className="space-y-2 text-sm text-muted-foreground">
-        
         <div className="flex min-w-0 items-center gap-2">
           <Tag className="size-3.5 shrink-0" />
           <span className="truncate">{item.brand}</span>
         </div>
-        
+
         <div className="flex min-w-0 items-center gap-2">
           <Truck className="size-3.5 shrink-0" />
           <span className="truncate">{item.supplier}</span>
         </div>
-
       </div>
 
       <div className="my-3 border-t border-border" />
@@ -82,8 +99,16 @@ export function InventoryCard({ item, onOpen, onRegisterEntry, onRegisterOutput,
 
       <div className="grid grid-cols-3 gap-2">
         <StockStat icon={Boxes} label="En stock" value={item.currentStock} />
-        <StockStat icon={Package} label="Reservado" value={item.reservedStock} />
-        <StockStat icon={ShieldAlert} label="Mínimo" value={item.minimumStock} />
+        <StockStat
+          icon={Package}
+          label="Reservado"
+          value={item.reservedStock}
+        />
+        <StockStat
+          icon={ShieldAlert}
+          label="Mínimo"
+          value={item.minimumStock}
+        />
       </div>
     </article>
   );
@@ -99,7 +124,7 @@ function StockStat({
   value: number;
 }) {
   return (
-    <div className="flex min-w-0 items-center justify-center gap-2 border border-border rounded-lg bg-accent p-1 text-center">
+    <div className="flex min-w-0 items-center justify-center gap-2 rounded-lg bg-accent/50 p-1 text-center">
       <Icon className="size-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0">
         <p className="font-medium tabular-nums">{value}</p>

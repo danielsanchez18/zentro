@@ -3,7 +3,7 @@ import type { InventoryItem } from "@/lib/mock/inventory";
 export interface InventoryMovement {
   id: string;
   itemId: string;
-  type: "entrada" | "salida" | "ajuste";
+  type: "entrada" | "salida" | "merma" | "ajuste";
   quantity: number;
   resultingStock: number;
   createdAt: string;

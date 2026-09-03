@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LayoutGrid, SearchX, Table2 } from "lucide-react";
 import { Search } from "@/components/app/shared/Search";
 import { FilterPopover } from "@/components/app/shared/FilterPopover";
@@ -16,7 +17,6 @@ import { InventoryTable } from "./InventoryTable";
 import { InventoryPreviewDialog } from "./InventoryPreviewDialog";
 import { RegisterOutputDialog } from "./RegisterOutputDialog";
 import { MinimumStockDialog } from "./MinimumStockDialog";
-import { InventoryHistoryDialog } from "./InventoryHistoryDialog";
 import { StockAdjustmentDialog } from "./StockAdjustmentDialog";
 import type { InventoryMovement } from "./types";
 
@@ -29,18 +29,19 @@ const VIEWS: { id: InventoryView; label: string; icon: typeof Table2 }[] = [
 ];
 
 export function InventoryList({
+  slug,
   items,
   onRegisterEntry,
   onUpdateItem,
-  movements,
   onAddMovement,
 }: {
+  slug: string;
   items: InventoryItem[];
   onRegisterEntry: (item: InventoryItem) => void;
   onUpdateItem: (itemId: string, changes: Partial<InventoryItem>) => void;
-  movements: InventoryMovement[];
   onAddMovement: (movement: InventoryMovement) => void;
 }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<InventoryStatus | "all">("all");
   const [categoryId, setCategoryId] = useState("all");
@@ -48,8 +49,8 @@ export function InventoryList({
   const [view, setView] = useState<InventoryView>("tabla");
   const [previewItem, setPreviewItem] = useState<InventoryItem | null>(null);
   const [outputItem, setOutputItem] = useState<InventoryItem | null>(null);
+  const [wasteItem, setWasteItem] = useState<InventoryItem | null>(null);
   const [minimumItem, setMinimumItem] = useState<InventoryItem | null>(null);
-  const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
   const [adjustmentItem, setAdjustmentItem] = useState<InventoryItem | null>(null);
   const filtered = useMemo(() => items.filter((item) => {
     const text = `${item.productName} ${item.sku} ${item.brand} ${item.supplier}`.toLowerCase();
@@ -63,9 +64,10 @@ export function InventoryList({
     onOpen: setPreviewItem,
     onRegisterEntry,
     onRegisterOutput: setOutputItem,
+    onRegisterWaste: setWasteItem,
     onEditMinStock: setMinimumItem,
     onAdjustStock: setAdjustmentItem,
-    onViewHistory: setHistoryItem,
+    onViewHistory: (item: InventoryItem) => router.push(`/app/${slug}/inventario/movimientos?producto=${item.id}`),
   };
   const clearFilters = () => {
     setStatus("all");
@@ -199,9 +201,17 @@ export function InventoryList({
         if (!outputItem) return;
         const resultingStock = outputItem.currentStock - quantity;
         onUpdateItem(outputItem.id, { currentStock: resultingStock, updatedAt: new Date().toISOString() });
-        onAddMovement({ id: `mov_${Date.now()}`, itemId: outputItem.id, type: "salida", quantity, previousStock: outputItem.currentStock, resultingStock, createdAt: new Date().toISOString(), ...metadata });
+        onAddMovement({ id: `mov_${Date.now()}`, itemId: outputItem.id, type: "salida", quantity: -quantity, previousStock: outputItem.currentStock, resultingStock, createdAt: new Date().toISOString(), ...metadata });
         toastMsg.success("Salida registrada", `Se retiraron ${quantity} unidades de ${outputItem.productName}.`);
         setOutputItem(null);
+      }} />
+      <RegisterOutputDialog mode="merma" item={wasteItem} open={Boolean(wasteItem)} onOpenChange={(open) => !open && setWasteItem(null)} onSubmit={(quantity, metadata) => {
+        if (!wasteItem) return;
+        const resultingStock = wasteItem.currentStock - quantity;
+        onUpdateItem(wasteItem.id, { currentStock: resultingStock, updatedAt: new Date().toISOString() });
+        onAddMovement({ id: `mov_${Date.now()}`, itemId: wasteItem.id, type: "merma", quantity: -quantity, previousStock: wasteItem.currentStock, resultingStock, createdAt: new Date().toISOString(), ...metadata });
+        toastMsg.success("Merma registrada", `Se descontaron ${quantity} unidades de ${wasteItem.productName}.`);
+        setWasteItem(null);
       }} />
       <MinimumStockDialog item={minimumItem} open={Boolean(minimumItem)} onOpenChange={(open) => !open && setMinimumItem(null)} onSubmit={(minimumStock) => {
         if (!minimumItem) return;
@@ -209,7 +219,6 @@ export function InventoryList({
         toastMsg.success("Límite actualizado", `El stock mínimo ahora es ${minimumStock}.`);
         setMinimumItem(null);
       }} />
-      <InventoryHistoryDialog item={historyItem} open={Boolean(historyItem)} onOpenChange={(open) => !open && setHistoryItem(null)} movements={movements} />
       <StockAdjustmentDialog item={adjustmentItem} open={Boolean(adjustmentItem)} onOpenChange={(open) => !open && setAdjustmentItem(null)} onSubmit={(newStock, reason) => {
         if (!adjustmentItem) return;
         const difference = newStock - adjustmentItem.currentStock;

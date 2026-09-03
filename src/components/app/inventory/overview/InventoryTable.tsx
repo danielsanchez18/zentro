@@ -9,13 +9,14 @@ interface InventoryTableProps {
   onOpen: (item: InventoryItem) => void;
   onRegisterEntry: (item: InventoryItem) => void;
   onRegisterOutput: (item: InventoryItem) => void;
+  onRegisterWaste: (item: InventoryItem) => void;
   onEditMinStock: (item: InventoryItem) => void;
   onAdjustStock: (item: InventoryItem) => void;
   onViewHistory: (item: InventoryItem) => void;
 }
 
 /** Vista de tabla del inventario — mantiene el patrón visual de ProductTable. */
-export function InventoryTable({ items, onOpen, onRegisterEntry, onRegisterOutput, onEditMinStock, onAdjustStock, onViewHistory }: InventoryTableProps) {
+export function InventoryTable({ items, onOpen, onRegisterEntry, onRegisterOutput, onRegisterWaste, onEditMinStock, onAdjustStock, onViewHistory }: InventoryTableProps) {
   return (
     <div className="hidden w-full overflow-x-auto md:block">
       <table className="min-w-full">
@@ -85,7 +86,7 @@ export function InventoryTable({ items, onOpen, onRegisterEntry, onRegisterOutpu
               </td>
 
               <td className="px-5 py-3 text-right text-nowrap">
-                <InventoryItemActions item={item} onPreview={onOpen} onRegisterEntry={onRegisterEntry} onRegisterOutput={onRegisterOutput} onEditMinStock={onEditMinStock} onAdjustStock={onAdjustStock} onViewHistory={onViewHistory} />
+                <InventoryItemActions item={item} onPreview={onOpen} onRegisterEntry={onRegisterEntry} onRegisterOutput={onRegisterOutput} onRegisterWaste={onRegisterWaste} onEditMinStock={onEditMinStock} onAdjustStock={onAdjustStock} onViewHistory={onViewHistory} />
               </td>
             </tr>
           ))}

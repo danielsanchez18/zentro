@@ -34,10 +34,11 @@ Dar una lectura rápida de las existencias de la sucursal activa y permitir oper
 - [x] Registrar entrada individual.
 - [x] Registrar entrada por lote.
 - [x] Registrar salida sin utilizar unidades reservadas.
+- [x] Registrar merma con motivo y observaciones.
 - [x] Editar stock mínimo.
 - [x] Consultar historial local de movimientos.
 - [x] Registrar ajuste manual de stock físico.
-- [ ] Abrir la pantalla completa de Movimientos / Kardex.
+- [x] Abrir la pantalla completa de Movimientos / Kardex.
 - [ ] Navegar al detalle de existencia del producto.
 
 ## Reglas del prototipo

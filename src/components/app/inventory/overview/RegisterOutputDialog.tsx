@@ -17,10 +17,14 @@ import { availableStock } from "@/lib/mock/inventory";
 import type { CommonDialogProps } from "./types";
 import type { MovementMetadata } from "./types";
 
-const OUTPUT_REASONS = ["Salida manual", "Merma", "Vencimiento", "Consumo interno", "Devolución a proveedor"];
+const REASONS = {
+  salida: ["Salida manual", "Consumo interno", "Devolución a proveedor"],
+  merma: ["Producto deteriorado", "Producto vencido", "Pérdida en manipulación"],
+};
 
 interface RegisterOutputDialogProps extends CommonDialogProps {
   onSubmit: (quantity: number, metadata: MovementMetadata) => void;
+  mode?: "salida" | "merma";
 }
 
 export function RegisterOutputDialog({
@@ -28,9 +32,11 @@ export function RegisterOutputDialog({
   open,
   onOpenChange,
   onSubmit,
+  mode = "salida",
 }: RegisterOutputDialogProps) {
+  const reasons = REASONS[mode];
   const [quantity, setQuantity] = useState("");
-  const [reason, setReason] = useState(OUTPUT_REASONS[0]);
+  const [reason, setReason] = useState(reasons[0]);
   if (!item) return null;
   const maximum = availableStock(item);
 
@@ -54,7 +60,7 @@ export function RegisterOutputDialog({
       <DialogContent className="sm:max-w-md font-heading">
         <form onSubmit={submit} className="space-y-5">
           <DialogHeader>
-            <DialogTitle>Registrar salida</DialogTitle>
+            <DialogTitle>{mode === "merma" ? "Registrar merma" : "Registrar salida"}</DialogTitle>
             <DialogDescription>
               {item.productName} · {maximum} unidades disponibles.
             </DialogDescription>
@@ -80,9 +86,9 @@ export function RegisterOutputDialog({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-y-2">
               <label htmlFor="output-reason" className="text-sm font-medium">Motivo</label>
-              <Select value={reason} onValueChange={(value) => setReason(value as string)} items={OUTPUT_REASONS.map((option) => ({ label: option, value: option }))}>
+              <Select value={reason} onValueChange={(value) => setReason(value as string)} items={reasons.map((option) => ({ label: option, value: option }))}>
                 <SelectTrigger id="output-reason" className="h-10 w-full px-3"><SelectValue placeholder="Selecciona un motivo" /></SelectTrigger>
-                <SelectContent>{OUTPUT_REASONS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
+                <SelectContent>{reasons.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div className="flex flex-col gap-y-2">
@@ -114,7 +120,7 @@ export function RegisterOutputDialog({
             </Button>
             <Button type="submit" disabled={maximum === 0} className="rounded-full px-3 gap-1.5">
               <PackageMinus className="size-4" />
-              <span>Registrar salida</span>
+              <span>{mode === "merma" ? "Registrar merma" : "Registrar salida"}</span>
             </Button>
           </DialogFooter>
         </form>
