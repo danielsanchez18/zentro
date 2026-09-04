@@ -1,7 +1,7 @@
 # Inventario — Movimientos / Kardex
 
 **Ruta:** `/app/[slug]/inventario/movimientos`  
-**Estado:** Prototipo funcional completo; pendiente de integración
+**Estado:** Prototipo funcional cerrado; pendiente de QA e integración
 
 ## Objetivo
 
@@ -42,3 +42,5 @@ Explicar cada cambio de existencias mediante una secuencia cronológica de entra
 - Archivos o documentos relacionados.
 - Exportación real de Kardex.
 - Permisos y auditoría.
+
+Los issues transversales y mejoras posteriores se centralizan en [issues.md](./issues.md).

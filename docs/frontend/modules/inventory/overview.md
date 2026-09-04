@@ -1,7 +1,7 @@
 # Inventario — Overview
 
 **Ruta:** `/app/[slug]/inventario`  
-**Estado:** Prototipo en desarrollo
+**Estado:** Prototipo funcional cerrado; pendiente de QA e integración
 
 ## Objetivo
 
@@ -39,7 +39,7 @@ Dar una lectura rápida de las existencias de la sucursal activa y permitir oper
 - [x] Consultar historial local de movimientos.
 - [x] Registrar ajuste manual de stock físico.
 - [x] Abrir la pantalla completa de Movimientos / Kardex.
-- [ ] Navegar al detalle de existencia del producto.
+- [x] Consultar la información completa de la existencia en el diálogo del overview.
 
 ## Reglas del prototipo
 
@@ -50,7 +50,7 @@ Dar una lectura rápida de las existencias de la sucursal activa y permitir oper
 - Un ajuste manual debe registrar la diferencia entre el stock anterior y el nuevo conteo.
 - Toda entrada, salida o ajuste debe generar un movimiento local.
 
-## Pendiente antes de cerrar el prototipo
+## Validación del cierre
 
 - [x] Añadir motivo y observaciones a las salidas.
 - [x] Validar completamente el registro por lote.
@@ -58,7 +58,7 @@ Dar una lectura rápida de las existencias de la sucursal activa y permitir oper
 - [x] Aplicar el costo unitario ingresado en una entrada.
 - [x] Guardar motivo, documento y observaciones en los movimientos locales.
 - [x] Corregir advertencias y errores de lint.
-- [ ] Probar interacciones en escritorio y teléfono.
+- [ ] Ejecutar una ronda formal de QA en escritorio y teléfono antes de integrar.
 
 ## Pendiente de backend
 
@@ -91,4 +91,6 @@ inventory/overview/
 
 ## Criterio de cierre del prototipo
 
-El overview se considera cerrado cuando todas las operaciones visibles modifican el estado local correctamente, generan un movimiento comprensible, actualizan KPIs/listados y no producen errores de TypeScript o ESLint.
+El overview queda cerrado a nivel de prototipo: las operaciones visibles modifican el estado local, generan movimientos comprensibles y actualizan KPIs y listados. La consulta ampliada se mantiene en `InventoryPreviewDialog`; no se construirá una página duplicada por producto dentro del alcance actual.
+
+Los pendientes que no bloquean el cierre del prototipo se centralizan en [issues.md](./issues.md).

@@ -1,0 +1,9 @@
+"use client";
+
+import { Eye, MoreHorizontal, PackageCheck, PackageX, Pencil, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import type { InventoryBrand } from "@/lib/mock/inventory-brands";
+
+export function BrandActionsMenu({ brand, onOpen, onEdit, onToggleStatus, onDelete }: { brand: InventoryBrand; onOpen: (brand: InventoryBrand) => void; onEdit: (brand: InventoryBrand) => void; onToggleStatus: (brand: InventoryBrand) => void; onDelete: (brand: InventoryBrand) => void }) {
+  return <DropdownMenu><DropdownMenuTrigger onClick={(event) => event.stopPropagation()} className="cursor-pointer rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground" aria-label={`Acciones de ${brand.name}`}><MoreHorizontal className="size-4" /></DropdownMenuTrigger><DropdownMenuContent align="end" className="w-48 font-heading" onClick={(event) => event.stopPropagation()}><DropdownMenuItem onClick={() => onOpen(brand)} className="cursor-pointer gap-2 px-2 py-1.5"><Eye className="size-4" />Ver detalle</DropdownMenuItem><DropdownMenuItem onClick={() => onEdit(brand)} className="cursor-pointer gap-2 px-2 py-1.5"><Pencil className="size-4" />Editar</DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem onClick={() => onToggleStatus(brand)} className="cursor-pointer gap-2 px-2 py-1.5">{brand.status === "activo" ? <PackageX className="size-4" /> : <PackageCheck className="size-4" />}{brand.status === "activo" ? "Desactivar" : "Activar"}</DropdownMenuItem><DropdownMenuItem variant="destructive" onClick={() => onDelete(brand)} className="cursor-pointer gap-2 px-2 py-1.5"><Trash2 className="size-4" />Eliminar</DropdownMenuItem></DropdownMenuContent></DropdownMenu>;
+}

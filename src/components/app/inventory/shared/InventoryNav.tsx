@@ -7,7 +7,14 @@ import { cn } from "@/lib/utils";
 export function InventoryNav({ slug }: { slug: string }) {
   const pathname = usePathname();
   const base = `/app/${slug}/inventario`;
-  const items = [
+  interface NavItem {
+    label: string;
+    href: string;
+    active: boolean;
+    disabled?: boolean;
+  }
+
+  const items: NavItem[] = [
     { label: "Existencias", href: base, active: pathname === base },
     {
       label: "Movimientos",
@@ -18,20 +25,18 @@ export function InventoryNav({ slug }: { slug: string }) {
       label: "Proveedores",
       href: `${base}/proveedores`,
       active: pathname.startsWith(`${base}/proveedores`),
-      disabled: true,
     },
     {
       label: "Marcas",
       href: `${base}/marcas`,
       active: pathname.startsWith(`${base}/marcas`),
-      disabled: true,
     },
   ];
 
   return (
     <nav
       aria-label="Secciones de inventario"
-      className="flex gap-1 overflow-x-auto border-b border-border"
+      className="flex gap-2 overflow-x-auto"
     >
       {items.map((item) =>
         item.disabled ? (
@@ -47,10 +52,10 @@ export function InventoryNav({ slug }: { slug: string }) {
             key={item.href}
             href={item.href}
             className={cn(
-              "whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium transition-colors",
+              "whitespace-nowrap rounded-lg px-2.5 py-1.5 leading-none text-sm font-medium transition-colors",
               item.active
-                ? "border-primary text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground bg-muted/50",
             )}
           >
             {item.label}

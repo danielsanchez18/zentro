@@ -1,5 +1,7 @@
 # Inventario
 
+**Estado del módulo:** Prototipo funcional cerrado; pendiente de QA e integración con backend.
+
 ## Objetivo
 
 Controlar las existencias de una sucursal activa. La selección de sucursal pertenece al layout de la aplicación y no forma parte de este módulo.
@@ -8,22 +10,29 @@ Controlar las existencias de una sucursal activa. La selección de sucursal pert
 
 | Sección | Ruta propuesta | Estado |
 |---|---|---|
-| Overview | `/app/[slug]/inventario` | Prototipo en desarrollo |
-| Movimientos / Kardex | `/app/[slug]/inventario/movimientos` | Prototipo en desarrollo |
-| Detalle de existencia | `/app/[slug]/inventario/productos/[inventoryId]` | Planeado |
-| Proveedores | `/app/[slug]/inventario/proveedores` | Planeado |
-| Marcas | `/app/[slug]/inventario/marcas` | Planeado |
-| Conteos físicos | `/app/[slug]/inventario/conteos` | Futuro |
+| Overview | `/app/[slug]/inventario` | Prototipo funcional completo |
+| Movimientos / Kardex | `/app/[slug]/inventario/movimientos` | Prototipo funcional completo |
+| Detalle de existencia | Diálogo desde el overview | Incluido en el prototipo |
+| Proveedores | `/app/[slug]/inventario/proveedores` | Prototipo funcional completo |
+| Marcas | `/app/[slug]/inventario/marcas` | Prototipo funcional completo |
+| Conteos físicos | Sin ruta definida | Expansión futura |
 
-## Orden de implementación
+## Cierre del prototipo
 
-1. Cerrar el prototipo funcional del overview.
-2. Diseñar Movimientos / Kardex y el detalle del movimiento.
-3. Diseñar el detalle de existencia por producto.
-4. Construir el CRUD de proveedores.
-5. Construir el CRUD de marcas.
-6. Diseñar conteos físicos y conciliación de diferencias.
-7. Definir contratos e integración con backend.
+1. Overview y operaciones de stock. ✓
+2. Movimientos / Kardex y diálogo de detalle. ✓
+3. Overview y CRUD de proveedores. ✓
+4. Overview y CRUD de marcas. ✓
+5. Consulta de la existencia desde el diálogo del overview. ✓
+
+El prototipo se considera cerrado porque los flujos visibles del alcance acordado funcionan con estado local y datos mock. Esto no implica que el módulo esté listo para producción: aún requiere QA, contratos de API, persistencia, permisos y reglas de concurrencia.
+
+## Decisiones de alcance
+
+- La selección de sucursal se resuelve fuera del módulo de Inventario.
+- No se crea una ruta individual de existencia: el diálogo del overview concentra el resumen, las acciones y el acceso al historial.
+- Los conteos físicos y la conciliación formal se reservan para una expansión posterior.
+- La administración avanzada de relaciones proveedor–producto se abordará junto con compras o con la integración de backend.
 
 ## Organización de componentes
 
@@ -34,7 +43,6 @@ components/app/inventory/
 │   ├── overview/
 │   ├── details/
 │   └── shared/
-├── products/details/
 ├── suppliers/
 │   ├── overview/
 │   ├── add/
@@ -47,7 +55,6 @@ components/app/inventory/
 │   ├── edit/
 │   ├── details/
 │   └── shared/
-├── counts/
 └── shared/
 ```
 
@@ -62,8 +69,8 @@ components/app/inventory/
 
 - [Overview](./overview.md)
 - [Movimientos / Kardex](./movements.md)
-- `products.md` — se completará al iniciar el detalle de existencia.
-- `suppliers.md` — se completará al iniciar Proveedores.
-- `brands.md` — se completará al iniciar Marcas.
-- `counts.md` — se completará al iniciar Conteos.
+- [Proveedores](./suppliers.md)
+- [Marcas](./brands.md)
+- [Pendientes e issues](./issues.md)
+- `counts.md` — se creará si Conteos físicos entra en un alcance futuro.
 - `backend-contract.md` — se completará antes de la integración.
