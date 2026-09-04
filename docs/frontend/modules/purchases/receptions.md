@@ -29,3 +29,5 @@ Confirmar qué cantidades llegaron realmente y trasladar ese resultado a las exi
 - [x] Incremento de existencias en el store compartido de Inventario.
 - [x] Actualización del costo unitario desde la línea recibida.
 - [x] Movimiento de entrada con orden, proveedor y usuario responsable.
+- [x] Historial independiente de recepciones dentro del detalle de la orden.
+- [x] Desglose de productos y cantidades por cada recepción.

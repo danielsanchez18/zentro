@@ -39,7 +39,8 @@ export type BadgeStatus =
   | "enviada"
   | "parcial"
   | "recibida"
-  | "cancelada";
+  | "cancelada"
+  | "completado";
 
 /**
  * Configuración visual por estado 🎨.
@@ -208,10 +209,19 @@ const STATUS_CONFIG: Record<
     badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
+  completado: {
+    label: "Completado",
+    icon: BadgeCheck,
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
 };
 
 interface StatusBadgeProps {
   status: BadgeStatus;
+  label?: string;
+  className?: string;
 }
 
 /**
@@ -219,18 +229,25 @@ interface StatusBadgeProps {
  * Reemplaza al chip plano: cada estado lleva su propio ícono y paleta de color.
  * Soporta estados de miembros y estados del ciclo de vida de invitaciones.
  */
-export const StatusBadge = ({ status }: StatusBadgeProps) => {
-  const { label, icon: Icon, badge, iconClass } = STATUS_CONFIG[status];
+export const StatusBadge = ({
+  status,
+  label: customLabel,
+  className,
+}: StatusBadgeProps) => {
+  const config = STATUS_CONFIG[status];
+  if (!config) return null;
+  const { label, icon: Icon, badge, iconClass } = config;
 
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-lg px-2.5 py-2 text-[13px] font-medium font-heading",
         badge,
+        className,
       )}
     >
       <Icon className={cn("size-3.5 shrink-0", iconClass)} />
-      <p className="leading-none">{label}</p>
+      <p className="leading-none">{customLabel ?? label}</p>
     </span>
   );
 };

@@ -24,3 +24,7 @@ Este documento concentra decisiones que no bloquean el diseño inicial, pero deb
 - [ ] Probar órdenes con recepciones parciales y múltiples.
 - [ ] Probar formatos monetarios, fechas y zonas horarias.
 - [ ] Ejecutar QA responsive en escritorio y teléfono.
+
+## Refinamientos del overview
+
+- [ ] Hacer que la exportación use paginación y filtros del backend.

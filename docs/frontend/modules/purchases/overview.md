@@ -16,6 +16,11 @@ Ofrecer una lectura rápida del abastecimiento de la sucursal y acceso a las ór
 - [x] Paginación y estado vacío.
 - [x] Vista previa al pulsar una fila o card.
 - [x] Acceso al alta y al detalle de una orden.
+- [x] Menú contextual con acciones válidas según el estado.
+- [x] Envío, recepción, cancelación y eliminación desde el overview.
+- [x] Exportación CSV de órdenes.
+- [x] Filtro por fecha con presets y rango personalizado mediante calendario.
+- [x] Ordenamiento por emisión, entrega estimada e importe.
 
 ## Información de cada orden
 

@@ -2,6 +2,7 @@ import { CalendarDays } from "lucide-react";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import type { PurchaseOrder } from "@/lib/mock/purchases";
 import { formatPurchaseMoney, purchaseProgress } from "@/lib/mock/purchases";
+import { PurchaseActionsMenu } from "./PurchaseActionsMenu";
 
 const date = (value: string) =>
   new Intl.DateTimeFormat("es-PE", {
@@ -13,9 +14,11 @@ const date = (value: string) =>
 export function PurchaseTable({
   orders,
   onOpen,
+  slug,
 }: {
   orders: PurchaseOrder[];
   onOpen: (order: PurchaseOrder) => void;
+  slug?: string;
 }) {
   return (
     <div className="hidden w-full overflow-x-auto md:block">
@@ -37,6 +40,7 @@ export function PurchaseTable({
                 {label}
               </th>
             ))}
+            <th className="px-5 py-3" />
           </tr>
         </thead>
         <tbody className="divide-y divide-border">
@@ -89,6 +93,9 @@ export function PurchaseTable({
               </td>
               <td className="px-5 py-3">
                 <StatusBadge status={order.status} />
+              </td>
+              <td className="px-5 py-3 text-right">
+                <PurchaseActionsMenu slug={slug} order={order} />
               </td>
             </tr>
           ))}

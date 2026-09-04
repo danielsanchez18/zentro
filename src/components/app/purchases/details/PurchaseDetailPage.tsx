@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, PackageCheck, Pencil, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { ReceivePurchaseDialog } from "../receptions/ReceivePurchaseDialog";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import { PurchaseInfo } from "./PurchaseInfo";
 import { PurchaseProducts } from "./PurchaseProducts";
+import { PurchaseReceipts } from "./PurchaseReceipts";
 
 type Confirmation = "send" | "cancel" | "delete" | null;
 export function PurchaseDetailPage({
@@ -29,6 +30,11 @@ export function PurchaseDetailPage({
   );
   const setStatus = usePurchasesStore((state) => state.setStatus);
   const removeOrder = usePurchasesStore((state) => state.removeOrder);
+  const allReceipts = usePurchasesStore((state) => state.receipts);
+  const receipts = useMemo(
+    () => allReceipts.filter((receipt) => receipt.purchaseId === purchaseId),
+    [allReceipts, purchaseId],
+  );
   const href = `/app/${slug}/compras`;
   if (!order)
     return (
@@ -163,8 +169,9 @@ export function PurchaseDetailPage({
 
       <div className="grid items-start gap-5 xl:grid-cols-[auto_1fr]">
         <PurchaseInfo order={order} />
-        <div className="xl:order-2">
+        <div className="flex min-w-0 flex-col gap-5 xl:order-2">
           <PurchaseProducts order={order} />
+          <PurchaseReceipts receipts={receipts} />
         </div>
       </div>
       {!(["recibida", "cancelada"] as string[]).includes(order.status) && (

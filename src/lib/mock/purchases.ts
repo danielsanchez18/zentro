@@ -11,6 +11,23 @@ export interface PurchaseLine {
   unitCost: number;
 }
 
+export interface PurchaseReceiptLine {
+  lineId: string;
+  productName: string;
+  sku: string;
+  quantity: number;
+}
+
+export interface PurchaseReceipt {
+  id: string;
+  purchaseId: string;
+  createdAt: string;
+  responsible: string;
+  documentRef?: string;
+  notes?: string;
+  lines: PurchaseReceiptLine[];
+}
+
 export interface PurchaseOrder {
   id: string;
   number: string;
@@ -68,3 +85,32 @@ export const purchaseOrders: PurchaseOrder[] = purchaseOrderSummaries.map((order
 export const formatPurchaseMoney = (value: number) => new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(value);
 export const purchaseProgress = (order: PurchaseOrder) => order.orderedUnits ? Math.round((order.receivedUnits / order.orderedUnits) * 100) : 0;
 export const purchaseTotal = (lines: PurchaseLine[]) => lines.reduce((sum, line) => sum + line.quantity * line.unitCost, 0);
+
+export const initialPurchaseReceipts: PurchaseReceipt[] = [
+  {
+    id: "rec_1",
+    purchaseId: "pur_2",
+    createdAt: "2026-09-02T16:30:00.000Z",
+    responsible: "Carlos Mendoza",
+    documentRef: "GR-004128",
+    notes: "Primera entrega parcial en almacén central",
+    lines: [
+      { lineId: "pur_2_line_1", productName: "Coca-Cola", sku: "PROD_3", quantity: 12 },
+      { lineId: "pur_2_line_2", productName: "Helado de Vainilla", sku: "PROD_7", quantity: 12 },
+      { lineId: "pur_2_line_3", productName: "Pizza Margarita", sku: "PROD_11", quantity: 12 },
+    ],
+  },
+  {
+    id: "rec_2",
+    purchaseId: "pur_3",
+    createdAt: "2026-08-31T09:15:00.000Z",
+    responsible: "Ana Salazar",
+    documentRef: "GR-003890",
+    notes: "Recepción completa conforme",
+    lines: [
+      { lineId: "pur_3_line_1", productName: "Helado de Vainilla", sku: "PROD_7", quantity: 42 },
+      { lineId: "pur_3_line_2", productName: "Pizza Margarita", sku: "PROD_11", quantity: 42 },
+      { lineId: "pur_3_line_3", productName: "Papas Fritas", sku: "PROD_15", quantity: 42 },
+    ],
+  },
+];

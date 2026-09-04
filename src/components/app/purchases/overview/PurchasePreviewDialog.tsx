@@ -203,7 +203,13 @@ export function PurchasePreviewDialog({
 
         {/* Footer */}
         <DialogFooter>
-          <Button type="button" onClick={onView} className="w-full rounded-full px-3 sm:w-auto">Ver detalle</Button>
+          <Button
+            type="button"
+            onClick={onView}
+            className="w-full rounded-full px-3 sm:w-auto font-sans"
+          >
+            Ver detalle
+          </Button>
           <Button
             type="button"
             variant="outline"

@@ -2,6 +2,7 @@ import { CalendarDays, PackageOpen, Truck } from "lucide-react";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import type { PurchaseOrder } from "@/lib/mock/purchases";
 import { formatPurchaseMoney, purchaseProgress } from "@/lib/mock/purchases";
+import { PurchaseActionsMenu } from "./PurchaseActionsMenu";
 
 const date = (value: string) =>
   new Intl.DateTimeFormat("es-PE", { day: "2-digit", month: "short" }).format(
@@ -11,9 +12,11 @@ const date = (value: string) =>
 export function PurchaseCard({
   order,
   onOpen,
+  slug,
 }: {
   order: PurchaseOrder;
   onOpen: (order: PurchaseOrder) => void;
+  slug?: string;
 }) {
   const progress = purchaseProgress(order);
   return (
@@ -33,7 +36,10 @@ export function PurchaseCard({
             </p>
           </div>
         </div>
-        <StatusBadge status={order.status} />
+        <div className="flex items-center gap-1">
+          <StatusBadge status={order.status} />
+          <PurchaseActionsMenu slug={slug} order={order} />
+        </div>
       </div>
       <div className="my-4 grid grid-cols-2 gap-3 border-y border-border py-3 text-sm">
         <div>

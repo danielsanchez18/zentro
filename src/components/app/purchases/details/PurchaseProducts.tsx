@@ -8,6 +8,7 @@ import { catalogProducts } from "@/lib/mock/catalog";
 import { inventoryItems } from "@/lib/mock/inventory";
 import type { PurchaseOrder } from "@/lib/mock/purchases";
 import { formatPurchaseMoney } from "@/lib/mock/purchases";
+import { StatusBadge } from "@/components/app/shared/StatusBadge";
 
 const INITIAL_VISIBLE_COUNT = 3;
 
@@ -134,15 +135,9 @@ export function PurchaseProducts({ order }: { order: PurchaseOrder }) {
                         {formatPurchaseMoney(line.quantity * line.unitCost)}
                       </p>
                       {isFullyReceived ? (
-                        <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-500">
-                          <Check className="size-3" />
-                          Completo
-                        </span>
+                        <StatusBadge status="completado" label="Completo" />
                       ) : isPartiallyReceived ? (
-                        <span className="inline-flex items-center gap-0.5 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-amber-500">
-                          <Clock className="size-3" />
-                          Parcial
-                        </span>
+                        <StatusBadge status="parcial" label="Parcial" />
                       ) : null}
                     </div>
                   </div>
