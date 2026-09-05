@@ -46,7 +46,7 @@ export function PurchasesList({ slug, orders }: { slug: string; orders: Purchase
   const clearFilters = () => { setStatus("all"); setSupplier("all"); setFrom(""); setTo(""); resetPage(); };
   const sortLabel = SORT_OPTIONS.find((option) => option.id === sort)?.label ?? "Ordenar por";
 
-  return <section className="space-y-5 font-heading sm:rounded-xl sm:border sm:border-border sm:bg-card sm:p-5">
+  return <section className="w-full min-w-0 max-w-full space-y-5 font-heading sm:rounded-xl sm:border sm:border-border sm:bg-card sm:p-5">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <Search value={query} onChange={(event) => { setQuery(event.target.value); resetPage(); }} placeholder="Buscar orden, proveedor o documento" className="min-w-60 w-full flex-1 md:max-w-md" />
       <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ export function PurchasesList({ slug, orders }: { slug: string; orders: Purchase
       </div>
     </div>
     {activeFilterCount > 0 && <div className="flex flex-wrap gap-2">{status !== "all" && <FilterChip label={status} onClear={() => setStatus("all")} />}{supplier !== "all" && <FilterChip label={suppliers.find(([id]) => id === supplier)?.[1] ?? "Proveedor"} onClear={() => setSupplier("all")} />}{(from || to) && <FilterChip label={`${from || "Inicio"} — ${to || "Hoy"}`} onClear={() => { setFrom(""); setTo(""); }} />}</div>}
-    {pageItems.length === 0 ? <div className="rounded-xl border border-dashed border-border"><EmptyState icon={SearchX} title="Sin compras coincidentes" description="Prueba con otra búsqueda o limpia los filtros." /></div> : <>{view === "tabla" ? <><PurchaseTable slug={slug} orders={pageItems} onOpen={setSelected} /><div className="grid gap-3 md:hidden">{pageItems.map((order) => <PurchaseCard key={order.id} slug={slug} order={order} onOpen={setSelected} />)}</div></> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{pageItems.map((order) => <PurchaseCard key={order.id} slug={slug} order={order} onOpen={setSelected} />)}</div>}<Paginator totalResults={filtered.length} pageSize={PAGE_SIZE} currentPage={currentPage} onPageChange={setPage} /></>}
+    {pageItems.length === 0 ? <div className="rounded-xl border border-dashed border-border"><EmptyState icon={SearchX} title="Sin compras coincidentes" description="Prueba con otra búsqueda o limpia los filtros." /></div> : <>{view === "tabla" ? <PurchaseTable slug={slug} orders={pageItems} onOpen={setSelected} /> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{pageItems.map((order) => <PurchaseCard key={order.id} slug={slug} order={order} onOpen={setSelected} />)}</div>}<Paginator totalResults={filtered.length} pageSize={PAGE_SIZE} currentPage={currentPage} onPageChange={setPage} /></>}
     <PurchasePreviewDialog order={selected} open={Boolean(selected)} onOpenChange={(open) => !open && setSelected(null)} onView={() => selected && router.push(`/app/${slug}/compras/${selected.id}`)} />
   </section>;
 }

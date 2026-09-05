@@ -21,8 +21,8 @@ export function PurchaseTable({
   slug?: string;
 }) {
   return (
-    <div className="hidden w-full overflow-x-auto md:block">
-      <table className="min-w-full">
+    <div className="w-full overflow-x-auto">
+      <table className="min-w-200 w-full">
         <thead>
           <tr className="bg-accent">
             {[

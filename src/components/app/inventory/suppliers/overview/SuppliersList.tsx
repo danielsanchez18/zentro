@@ -62,7 +62,7 @@ export function SuppliersList({ slug, suppliers }: { slug: string; suppliers: In
       </div>}
 
       {pageItems.length === 0 ? <div className="rounded-xl border border-dashed border-border"><EmptyState icon={SearchX} title="Sin proveedores coincidentes" description="Prueba con otra búsqueda o limpia los filtros." /></div> : <>
-        {view === "tabla" ? <><SuppliersTable suppliers={pageItems} onOpen={openSupplier} /><div className="grid gap-3 md:hidden">{pageItems.map((supplier) => <SupplierCard key={supplier.id} supplier={supplier} onOpen={openSupplier} />)}</div></> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{pageItems.map((supplier) => <SupplierCard key={supplier.id} supplier={supplier} onOpen={openSupplier} />)}</div>}
+        {view === "tabla" ? <SuppliersTable suppliers={pageItems} onOpen={openSupplier} /> : <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{pageItems.map((supplier) => <SupplierCard key={supplier.id} supplier={supplier} onOpen={openSupplier} />)}</div>}
         <Paginator totalResults={filtered.length} pageSize={PAGE_SIZE} currentPage={currentPage} onPageChange={setPage} />
       </>}
     </section>

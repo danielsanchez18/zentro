@@ -21,17 +21,17 @@ import { Sidebar } from "@/components/app/shared/Sidebar";
  */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar />
 
-      <div className="flex flex-col w-full flex-1">
+      <div className="flex flex-col w-full flex-1 min-w-0">
         <Header />
         
         <div className="lg:hidden">
           <Breadcrumb />
         </div>
 
-        <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
+        <main className="flex min-w-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {children}
         </main>
       </div>

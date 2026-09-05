@@ -9,8 +9,8 @@ export function MovementTable({
   onOpen: (movement: InventoryMovementRecord) => void;
 }) {
   return (
-    <div className="hidden w-full overflow-x-auto md:block">
-      <table className="min-w-full">
+    <div className="w-full overflow-x-auto">
+      <table className="min-w-200 w-full">
         <thead>
           <tr className="bg-accent">
             {[
@@ -44,7 +44,7 @@ export function MovementTable({
               className="cursor-pointer transition-colors hover:bg-accent/50 focus-visible:bg-accent/50 focus-visible:outline-none"
             >
               <td className="px-5 py-3">
-                  <StatusBadge status={movement.type} />
+                <StatusBadge status={movement.type} />
               </td>
               <td className="px-5 py-3">
                 <p className="max-w-56 truncate text-sm font-medium">

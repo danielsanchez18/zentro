@@ -47,16 +47,19 @@ El estado de pago se modelará por separado (`pendiente`, `parcial`, `pagado`) y
 - Los importes se guardan con moneda y costos unitarios históricos.
 - La sucursal activa proviene del layout y no se selecciona dentro del módulo.
 
-## Fases de implementación
+## Fases del prototipo
 
 1. Overview con KPIs, búsqueda, filtros, tabla, cards y vista previa. ✓
 2. Alta de orden con líneas de productos y resumen de importes. ✓
 3. Detalle, edición y transiciones de estado. ✓
 4. Recepciones totales y parciales conectadas al store de Inventario. ✓
-5. Comprobantes, pagos y condiciones comerciales.
-6. Contratos de API, permisos, auditoría y QA.
+El alcance funcional acordado queda cerrado con estas cuatro fases.
 
-Las fases 5 y 6 corresponden a integración y evolución posterior; no bloquean el cierre del prototipo actual.
+## Evolución posterior
+
+- Comprobantes, pagos y cuentas por pagar se abordarán con Finanzas o durante la integración.
+- Contratos de API, permisos, auditoría, persistencia y QA pertenecen a la etapa de producción.
+- Las mejoras posteriores se centralizan en [issues.md](./issues.md) y no bloquean el cierre del prototipo.
 
 ## Organización propuesta
 
@@ -76,3 +79,7 @@ components/app/purchases/
 - [Órdenes de compra](./purchase-orders.md)
 - [Recepciones](./receptions.md)
 - [Pendientes e issues](./issues.md)
+
+## Siguiente módulo
+
+El siguiente módulo planificado es [Promociones](../promotions/README.md), construido sobre productos y categorías de Catálogo.

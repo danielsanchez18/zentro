@@ -5,6 +5,7 @@ import {
   ArrowUpFromLine,
   BadgeCheck,
   Ban,
+  CalendarClock,
   CircleSlash2,
   CheckCheck,
   CheckCircle2,
@@ -13,6 +14,7 @@ import {
   Hourglass,
   PackageCheck,
   PackageX,
+  PauseCircle,
   Send,
   SlidersHorizontal,
   TriangleAlert,
@@ -40,7 +42,11 @@ export type BadgeStatus =
   | "parcial"
   | "recibida"
   | "cancelada"
-  | "completado";
+  | "completado"
+  | "programada"
+  | "activa"
+  | "pausada"
+  | "finalizada";
 
 /**
  * Configuración visual por estado 🎨.
@@ -208,6 +214,30 @@ const STATUS_CONFIG: Record<
     icon: CircleSlash2,
     badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  programada: {
+    label: "Programada",
+    icon: CalendarClock,
+    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    iconClass: "text-sky-600 dark:text-sky-400",
+  },
+  activa: {
+    label: "Activa",
+    icon: BadgeCheck,
+    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  pausada: {
+    label: "Pausada",
+    icon: PauseCircle,
+    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  finalizada: {
+    label: "Finalizada",
+    icon: CheckCheck,
+    badge: "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
+    iconClass: "text-neutral-600 dark:text-neutral-400",
   },
   completado: {
     label: "Completado",

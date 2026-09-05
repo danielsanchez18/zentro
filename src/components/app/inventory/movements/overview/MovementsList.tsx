@@ -265,18 +265,7 @@ export function MovementsList({
       ) : (
         <>
           {view === "table" ? (
-            <>
-              <MovementTable movements={pageItems} onOpen={setSelected} />
-              <div className="grid gap-3 md:hidden">
-                {pageItems.map((movement) => (
-                  <MovementCard
-                    key={movement.id}
-                    movement={movement}
-                    onOpen={setSelected}
-                  />
-                ))}
-              </div>
-            </>
+            <MovementTable movements={pageItems} onOpen={setSelected} />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {pageItems.map((movement) => (

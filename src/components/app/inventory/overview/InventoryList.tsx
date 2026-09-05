@@ -172,14 +172,7 @@ export function InventoryList({
       ) : (
         <>
           {view === "tabla" ? (
-            <>
-              <InventoryTable items={pageItems} {...actionProps} />
-              <div className="grid gap-3 md:hidden">
-                {pageItems.map((item) => (
-                  <InventoryCard key={item.id} item={item} {...actionProps} />
-                ))}
-              </div>
-            </>
+            <InventoryTable items={pageItems} {...actionProps} />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {pageItems.map((item) => (

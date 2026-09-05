@@ -2,6 +2,8 @@
 
 Este documento concentra decisiones que no bloquean el diseño inicial, pero deben resolverse antes de producción.
 
+**Cierre:** Compras está terminado a nivel de prototipo. Los puntos siguientes pertenecen a integración, producción o evolución financiera.
+
 ## Dominio y backend
 
 - [ ] Definir correlativos por organización y sucursal.
