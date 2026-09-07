@@ -49,8 +49,28 @@ export function OrderTimeline({ order }: { order: CustomerOrder }) {
         current: event.current,
       }));
 
+    const courierEvent = order.courier
+      ? [
+          {
+            id: `courier-${order.courier.status}`,
+            title:
+              order.courier.status === "asignado"
+                ? `Repartidor asignado: ${order.courier.name}`
+                : order.courier.status === "recogido"
+                  ? `${order.courier.name} recogió el pedido`
+                  : order.courier.status === "en_camino"
+                    ? "El pedido salió a reparto"
+                    : "Entrega confirmada por el repartidor",
+            time: timeLabel(order.updatedAt),
+            date: order.updatedAt,
+            current: order.courier.status !== "entregado",
+          },
+        ]
+      : [];
+
     return [
       ...comments,
+      ...courierEvent,
       ...statusEvents,
       {
         id: "placed",

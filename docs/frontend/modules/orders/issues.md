@@ -23,7 +23,7 @@ Este documento separa decisiones que no bloquean el prototipo UI/UX.
 ## Evolución posterior
 
 - [ ] Cocina/KDS habilitable para restaurantes.
-- [ ] Asignación de repartidor y tracking de delivery.
+- [ ] Conectar la asignación de repartidor y el tracking ya maquetados con disponibilidad real, geolocalización y eventos del backend.
 - [ ] División de cuentas, propinas y pagos múltiples.
 - [ ] Impresión de comandas y comprobantes.
 - [ ] Pedidos programados y recurrentes.

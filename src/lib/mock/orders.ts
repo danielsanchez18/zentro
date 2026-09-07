@@ -14,6 +14,18 @@ export type OrderPaymentStatus =
 
 export type OrderServiceType = "mesa" | "recojo" | "delivery";
 export type OrderChannel = "pos" | "web" | "marketplace";
+export type CourierStatus = "asignado" | "recogido" | "en_camino" | "entregado";
+
+export interface Courier {
+  id: string;
+  name: string;
+  phone: string;
+  vehicle: string;
+  plate?: string;
+  progress: number;
+  etaMinutes: number;
+  status: CourierStatus;
+}
 
 export interface OrderLine {
   id: string;
@@ -50,7 +62,7 @@ export interface CustomerOrder {
   paymentMethod?: "efectivo" | "tarjeta" | "yape" | "plin" | "transferencia";
   paymentReference?: string;
   payments?: OrderPayment[];
-  courier?: { name: string; phone: string; vehicle: string; plate?: string; progress: number; etaMinutes: number };
+  courier?: Courier;
   lines: OrderLine[];
   subtotal: number;
   discount: number;
@@ -81,6 +93,12 @@ const line = (
   notes,
 });
 
+export const availableCouriers: Courier[] = [
+  { id: "courier_1", name: "José Ramírez", phone: "+51 955 204 861", vehicle: "Motocicleta", plate: "3278-KA", progress: 0, etaMinutes: 25, status: "asignado" },
+  { id: "courier_2", name: "Rosa Huamán", phone: "+51 978 306 245", vehicle: "Bicicleta", progress: 0, etaMinutes: 30, status: "asignado" },
+  { id: "courier_3", name: "Luis Paredes", phone: "+51 914 620 337", vehicle: "Motocicleta", plate: "8914-MT", progress: 0, etaMinutes: 22, status: "asignado" },
+];
+
 export const orders: CustomerOrder[] = [
   {
     id: "ord_1048",
@@ -96,7 +114,6 @@ export const orders: CustomerOrder[] = [
     paymentStatus: "pagado",
     paymentMethod: "tarjeta",
     paymentReference: "VISA ···· 4821",
-    courier: { name: "José Ramírez", phone: "+51 955 204 861", vehicle: "Motocicleta", plate: "3278-KA", progress: 62, etaMinutes: 18 },
     lines: [
       line("ol_1", "prod_cloth_1", "Polo Oversize Algodón Pima", 2, 79.9, 0, "Talla M · Color Negro"),
       line("ol_2", "prod_cloth_2", "Casaca Denim Vintage", 1, 159.0, 15.9),
@@ -199,7 +216,7 @@ export const orders: CustomerOrder[] = [
     paymentStatus: "pagado",
     paymentMethod: "plin",
     paymentReference: "Operación 728415",
-    courier: { name: "Rosa Huamán", phone: "+51 978 306 245", vehicle: "Bicicleta", progress: 100, etaMinutes: 0 },
+    courier: { id: "courier_2", name: "Rosa Huamán", phone: "+51 978 306 245", vehicle: "Bicicleta", progress: 100, etaMinutes: 0, status: "entregado" },
     lines: [
       line("ol_10", "prod_beauty_1", "Sérum Facial Vitamina C 30ml", 1, 85.0),
       line("ol_11", "prod_beauty_2", "Protector Solar Facial SPF 50+", 1, 68.0),

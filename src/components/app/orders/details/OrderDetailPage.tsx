@@ -66,12 +66,12 @@ export function OrderDetailPage({
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,.75fr)] relative">
         <div className="space-y-5">
           <OrderMainCard order={order} />
-          <CourierTracking order={order} />
           <OrderTimeline order={order} />
+          <OrderPaymentInfo order={order} />
+          <CourierTracking order={order} />
         </div>
         <aside className="h-fit space-y-5 xl:sticky xl:top-5">
           <OrderCustomerInfo order={order} />
-          <OrderPaymentInfo order={order} />
         </aside>
       </div>
       <div className="sticky bottom-5 z-40 mx-auto w-fit">

@@ -114,7 +114,7 @@ export function OrderCustomerInfo({ order }: { order: CustomerOrder }) {
         </div>
 
         <div className="px-3">
-          <div className="h-px bg-border w-full" />
+          <div className="h-[0.5px] bg-border w-full" />
         </div>
 
         {/* Shipping address / Ubicación */}
@@ -146,7 +146,7 @@ export function OrderCustomerInfo({ order }: { order: CustomerOrder }) {
         </div>
 
         <div className="px-3">
-          <div className="h-px bg-border w-full" />
+          <div className="h-[0.5px] bg-border w-full" />
         </div>
 
         {/* Payment and Totals */}
