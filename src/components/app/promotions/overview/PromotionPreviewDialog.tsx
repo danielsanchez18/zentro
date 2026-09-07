@@ -76,10 +76,10 @@ export function PromotionPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="font-heading sm:max-w-lg">
+      <DialogContent className="flex max-h-[95dvh] flex-col font-heading sm:max-w-lg">
         {/* Header */}
-        <DialogHeader className="space-y-0">
-          <div className="flex items-start justify-between gap-3 pr-6">
+        <DialogHeader className="shrink-0 space-y-0">
+          <div className="flex flex-wrap items-start justify-between gap-3 pr-6">
             <div className="flex items-center gap-3 min-w-0">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
                 <PromotionIcon type={promotion.type} className="size-4.5" />
@@ -97,8 +97,10 @@ export function PromotionPreviewDialog({
           </div>
         </DialogHeader>
 
-        {/* Benefit & Description (matching card style) */}
-        <div className="border-y border-border py-3.5">
+        {/* Body scrollable */}
+        <div className="flex-1 overflow-y-auto space-y-3.5">
+          {/* Benefit & Description (matching card style) */}
+          <div className="border-y border-border py-3.5">
           <div>
             <p className="text-xs text-muted-foreground">Beneficio</p>
             <div className="flex flex-wrap items-center gap-2 justify-between">
@@ -208,9 +210,10 @@ export function PromotionPreviewDialog({
             En caso de conflicto de descuentos se aplica la de mayor prioridad.
           </span>
         </div>
+        </div>
 
         {/* Footer */}
-        <DialogFooter className="mt-1">
+        <DialogFooter className="shrink-0 mt-1">
           <Button
             type="button"
             onClick={handleViewDetails}

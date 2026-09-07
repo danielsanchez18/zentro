@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams, useRouter } from "next/navigation";
 import {
   Boxes,
   CalendarClock,
@@ -68,6 +69,8 @@ export function OrderPreviewDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const router = useRouter();
+  const { slug } = useParams<{ slug: string }>();
   const transitionOrder = useOrdersStore((state) => state.transitionOrder);
 
   if (!order) return null;
@@ -261,6 +264,14 @@ export function OrderPreviewDialog({
 
         {/* Footer fijo */}
         <DialogFooter className="shrink-0">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push(`/app/${slug}/pedidos/${order.id}`)}
+            className="h-fit w-full cursor-pointer rounded-full font-sans px-3 py-2 leading-none sm:w-auto"
+          >
+            Ver detalle
+          </Button>
           {next && (
             <Button
               type="button"

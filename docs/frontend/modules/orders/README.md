@@ -13,7 +13,7 @@ Pedidos no reemplaza al POS: el POS construye y cobra una venta; Pedidos adminis
 | Sección | Ruta | Estado |
 |---|---|---|
 | Overview | `/app/[slug]/pedidos` | Planeado |
-| Detalle | `/app/[slug]/pedidos/[orderId]` | Planeado |
+| Detalle | `/app/[slug]/pedidos/[orderId]` | Prototipo funcional |
 | Registro | `/app/[slug]/pos` | Pertenece a Punto de venta |
 
 No se creará `/pedidos/agregar` en el alcance inicial para evitar duplicar el constructor de venta del POS.
@@ -64,9 +64,9 @@ El estado de pago será independiente: `pendiente`, `parcial`, `pagado` o `reemb
 
 1. Datos mock, tipos y store con transiciones de estado. ✓
 2. Overview con header, KPIs, filtros, tabla/cards, paginación y preview. ✓
-3. Detalle con cliente, líneas, importes, promociones, pago y entrega.
-4. Acciones para confirmar, preparar, marcar listo, entregar y cancelar.
-5. Historial visual de estados y eventos.
+3. Detalle con cliente, líneas, importes, promociones, pago y entrega. ✓
+4. Acciones para confirmar, preparar, marcar listo, entregar y cancelar. ✓
+5. Historial visual de estados y eventos. ✓
 6. Responsive, estados vacíos y QA técnico.
 7. Cierre documental y separación de pendientes de backend.
 
@@ -92,4 +92,5 @@ components/app/orders/
 
 - [Overview](./overview.md)
 - [Ciclo operativo](./lifecycle.md)
+- [Detalle](./details.md)
 - [Pendientes e issues](./issues.md)
