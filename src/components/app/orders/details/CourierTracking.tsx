@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bike, MapPin, Motorbike, Navigation, ShoppingBag } from "lucide-react";
+import { Bike, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -64,6 +64,11 @@ export function CourierTracking({ order }: { order: CustomerOrder }) {
     : -1;
   const canManage = !["entregado", "cancelado"].includes(order.status);
 
+  const handleOpenAssign = () => {
+    setSelectedCourier(order.courier?.id ?? availableCouriers[0]?.id ?? "");
+    setAssignOpen(true);
+  };
+
   const confirmAssignment = () => {
     const selected = availableCouriers.find(
       (item) => item.id === selectedCourier,
@@ -91,8 +96,8 @@ export function CourierTracking({ order }: { order: CustomerOrder }) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setAssignOpen(true)}
-            className="rounded-full"
+            onClick={handleOpenAssign}
+            className="rounded-full cursor-pointer"
           >
             {courier ? "Cambiar" : "Asignar"}
           </Button>
@@ -203,9 +208,9 @@ export function CourierTracking({ order }: { order: CustomerOrder }) {
             </p>
             {canManage && (
               <Button
-                className="mt-4 rounded-full"
+                className="mt-4 rounded-full cursor-pointer"
                 size="sm"
-                onClick={() => setAssignOpen(true)}
+                onClick={handleOpenAssign}
               >
                 Asignar repartidor
               </Button>

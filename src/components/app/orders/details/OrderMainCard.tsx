@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
+import { Button } from "@/components/ui/button";
 import type { CustomerOrder } from "@/lib/mock/orders";
 import {
   formatOrderMoney,
@@ -31,7 +32,13 @@ const dateTime = (value: string) =>
     minute: "2-digit",
   }).format(new Date(value));
 
-export function OrderMainCard({ order }: { order: CustomerOrder }) {
+export function OrderMainCard({
+  order,
+  onEdit,
+}: {
+  order: CustomerOrder;
+  onEdit?: () => void;
+}) {
   const timeline = orderTimeline(order);
   const currentIndex = timeline.findIndex((event) => event.current);
   const currentEvent =
@@ -197,10 +204,20 @@ export function OrderMainCard({ order }: { order: CustomerOrder }) {
             </article>
           ))}
         </div>
-        <div className="flex items-center gap-2 border-t border-border py-4 text-sm text-muted-foreground">
-          <Store className="size-4" />
-          {order.lines.length}{" "}
-          {order.lines.length === 1 ? "producto" : "productos"} en este pedido
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border py-4 text-sm">
+          <span className="inline-flex items-center gap-2">
+            <Store className="size-4" />
+            {order.lines.length}{" "}
+            {order.lines.length === 1 ? "producto" : "productos"} en este pedido
+          </span>
+          {onEdit &&
+            ["nuevo", "confirmado", "en_preparacion"].includes(
+              order.status,
+            ) && (
+              <Button variant="outline" onClick={onEdit}>
+                Editar pedido
+              </Button>
+            )}
         </div>
       </div>
     </section>

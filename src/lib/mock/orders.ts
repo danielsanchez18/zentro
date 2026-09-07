@@ -46,6 +46,38 @@ export interface OrderPayment {
   createdAt: string;
 }
 
+export interface OrderRefund {
+  id: string;
+  amount: number;
+  reason: string;
+  createdAt: string;
+}
+
+export interface OrderReceipt {
+  type: "boleta" | "factura";
+  number: string;
+  customerDocument?: string;
+  businessName?: string;
+  issuedAt: string;
+}
+
+export interface OrderCancellation {
+  reason: string;
+  note?: string;
+  createdAt: string;
+}
+
+export interface OrderAdjustment {
+  id: string;
+  reason: string;
+  summary: string;
+  beforeLines: OrderLine[];
+  afterLines: OrderLine[];
+  beforeDiscount: number;
+  afterDiscount: number;
+  createdAt: string;
+}
+
 export interface CustomerOrder {
   id: string;
   number: string;
@@ -61,7 +93,13 @@ export interface CustomerOrder {
   paymentStatus: OrderPaymentStatus;
   paymentMethod?: "efectivo" | "tarjeta" | "yape" | "plin" | "transferencia";
   paymentReference?: string;
+  paidAmount?: number;
   payments?: OrderPayment[];
+  refunds?: OrderRefund[];
+  receipt?: OrderReceipt;
+  cancellation?: OrderCancellation;
+  manualDiscount?: number;
+  adjustments?: OrderAdjustment[];
   courier?: Courier;
   lines: OrderLine[];
   subtotal: number;

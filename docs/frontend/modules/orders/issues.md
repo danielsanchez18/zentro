@@ -1,17 +1,19 @@
-# Pedidos — pendientes de integración
+# Pedidos — issues posteriores al prototipo
 
 Este documento separa decisiones que no bloquean el prototipo UI/UX.
 
-## Dominio y backend
+El prototipo visual del módulo está cerrado. No quedan issues de maquetación. Todos los puntos siguientes están marcados como `BACKEND`, `INTEGRACIÓN` o `PRODUCCIÓN` y no bloquean el cierre frontend.
+
+## BACKEND — dominio y persistencia
 
 - [ ] Definir correlativos por organización y sucursal.
 - [ ] Confirmar transiciones permitidas y estrategia de concurrencia.
-- [ ] Definir edición de líneas después de confirmar.
+- [ ] Conectar la edición de líneas ya maquetada con validación transaccional, reserva/liberación de stock y permisos del backend.
 - [ ] Definir impuestos, cargos de delivery, propinas y redondeo.
 - [ ] Definir cancelaciones parciales y devoluciones.
 - [ ] Aplicar permisos por acción y registrar auditoría.
 
-## Integraciones
+## INTEGRACIÓN — otros módulos y servicios
 
 - [ ] Definir contrato de creación desde POS, web y marketplace.
 - [ ] Definir reserva, deducción y liberación de stock con Inventario.
@@ -20,15 +22,15 @@ Este documento separa decisiones que no bloquean el prototipo UI/UX.
 - [ ] Integrar pagos, caja, comprobantes y reembolsos.
 - [ ] Definir notificaciones y actualización en tiempo real.
 
-## Evolución posterior
+## PRODUCCIÓN — evolución posterior
 
 - [ ] Cocina/KDS habilitable para restaurantes.
 - [ ] Conectar la asignación de repartidor y el tracking ya maquetados con disponibilidad real, geolocalización y eventos del backend.
-- [ ] División de cuentas, propinas y pagos múltiples.
+- [ ] División de cuentas y propinas. Los abonos múltiples ya están maquetados; falta su integración transaccional.
 - [ ] Impresión de comandas y comprobantes.
 - [ ] Pedidos programados y recurrentes.
 
-## QA de producción
+## PRODUCCIÓN — QA y resiliencia
 
 - [ ] Probar pérdida de conexión, reintentos e idempotencia.
 - [ ] Probar múltiples operadores actualizando el mismo pedido.

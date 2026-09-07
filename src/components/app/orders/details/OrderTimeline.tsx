@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Check, MessageSquareText, Send, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { CustomerOrder } from "@/lib/mock/orders";
+import type { CustomerOrder, OrderAdjustment } from "@/lib/mock/orders";
 import { orderTimeline } from "@/lib/mock/orders";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,7 @@ type Activity = {
   detail?: string;
   comment?: string;
   current?: boolean;
+  adjustment?: OrderAdjustment;
 };
 
 const dateLabel = (value: string) =>
@@ -68,8 +69,42 @@ export function OrderTimeline({ order }: { order: CustomerOrder }) {
         ]
       : [];
 
+    const cancellationEvent = order.cancellation
+      ? [
+          {
+            id: "cancellation",
+            title: `Pedido cancelado · ${order.cancellation.reason}`,
+            comment: order.cancellation.note,
+            time: timeLabel(order.cancellation.createdAt),
+            date: order.cancellation.createdAt,
+          },
+        ]
+      : [];
+
+    const financialEvents: Activity[] = [
+      ...(order.receipt
+        ? [{ id: "receipt", title: `${order.receipt.type === "factura" ? "Factura" : "Boleta"} ${order.receipt.number} emitida`, time: timeLabel(order.receipt.issuedAt), date: order.receipt.issuedAt }]
+        : []),
+      ...(order.refunds ?? []).map((refund) => ({ id: refund.id, title: `Reembolso registrado · S/ ${refund.amount.toFixed(2)}`, comment: refund.reason, time: timeLabel(refund.createdAt), date: refund.createdAt })),
+    ];
+
+    const adjustmentEvents: Activity[] = (order.adjustments ?? [])
+      .slice()
+      .reverse()
+      .map((adjustment) => ({
+        id: adjustment.id,
+        title: `Pedido editado · ${adjustment.summary}`,
+        comment: adjustment.reason,
+        time: timeLabel(adjustment.createdAt),
+        date: adjustment.createdAt,
+        adjustment,
+      }));
+
     return [
       ...comments,
+      ...adjustmentEvents,
+      ...financialEvents,
+      ...cancellationEvent,
       ...courierEvent,
       ...statusEvents,
       {
@@ -195,6 +230,15 @@ export function OrderTimeline({ order }: { order: CustomerOrder }) {
                           {activity.comment}
                         </p>
                       )}
+                      {activity.adjustment && (
+                        <details className="mt-2 text-xs">
+                          <summary className="cursor-pointer font-medium text-primary">Ver cambios</summary>
+                          <div className="mt-2 grid gap-3 rounded-lg border border-border bg-muted/30 p-3 sm:grid-cols-2">
+                            <AdjustmentSnapshot label="Antes" lines={activity.adjustment.beforeLines} discount={activity.adjustment.beforeDiscount} />
+                            <AdjustmentSnapshot label="Después" lines={activity.adjustment.afterLines} discount={activity.adjustment.afterDiscount} />
+                          </div>
+                        </details>
+                      )}
                       <p className="mt-1 text-xs text-muted-foreground">
                         {activity.time}
                       </p>
@@ -214,4 +258,8 @@ export function OrderTimeline({ order }: { order: CustomerOrder }) {
       </div>
     </section>
   );
+}
+
+function AdjustmentSnapshot({ label, lines, discount }: { label: string; lines: OrderAdjustment["beforeLines"]; discount: number }) {
+  return <div><p className="font-semibold text-foreground">{label}</p><ul className="mt-1.5 space-y-1 text-muted-foreground">{lines.map((line) => <li key={line.id}>{line.quantity} × {line.name}</li>)}</ul><p className="mt-2 text-muted-foreground">Descuento directo: S/ {discount.toFixed(2)}</p></div>;
 }

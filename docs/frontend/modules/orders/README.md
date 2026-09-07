@@ -1,6 +1,8 @@
 # Pedidos
 
-**Estado del módulo:** Planificado; prototipo pendiente.
+**Estado del módulo:** Prototipo UI/UX funcional completo.
+
+**Cierre de prototipo:** 7 de septiembre de 2026. No quedan issues de maquetación abiertos.
 
 ## Objetivo
 
@@ -12,7 +14,7 @@ Pedidos no reemplaza al POS: el POS construye y cobra una venta; Pedidos adminis
 
 | Sección | Ruta | Estado |
 |---|---|---|
-| Overview | `/app/[slug]/pedidos` | Planeado |
+| Overview | `/app/[slug]/pedidos` | Prototipo funcional |
 | Detalle | `/app/[slug]/pedidos/[orderId]` | Prototipo funcional |
 | Registro | `/app/[slug]/pos` | Pertenece a Punto de venta |
 
@@ -67,8 +69,21 @@ El estado de pago será independiente: `pendiente`, `parcial`, `pagado` o `reemb
 3. Detalle con cliente, líneas, importes, promociones, pago y entrega. ✓
 4. Acciones para confirmar, preparar, marcar listo, entregar y cancelar. ✓
 5. Historial visual de estados y eventos. ✓
-6. Responsive, estados vacíos y QA técnico.
-7. Cierre documental y separación de pendientes de backend.
+6. Responsive, estados vacíos y QA técnico. ✓
+7. Cierre documental y separación de pendientes de backend. ✓
+
+## Funcionalidades cerradas en el prototipo
+
+- Consulta, filtros, ordenamiento, tabla, cards y preview responsive.
+- Transiciones del ciclo operativo y cancelación con motivo obligatorio.
+- Registro de pagos parciales, cálculo de saldo e historial de abonos.
+- Reembolsos parciales o totales con motivo.
+- Emisión mock y descarga local de boleta o factura.
+- Asignación de repartidor y avance del recorrido de delivery.
+- Timeline interno con comentarios y eventos operativos y financieros.
+- Edición controlada de líneas antes de marcar el pedido como listo: agregar, quitar, reemplazar y cambiar cantidades.
+- Descuento directo por importe o porcentaje, separado de promociones y registrado en el historial.
+- Historial de ajustes con motivo y snapshot completo antes/después.
 
 ## Organización propuesta
 
@@ -94,3 +109,7 @@ components/app/orders/
 - [Ciclo operativo](./lifecycle.md)
 - [Detalle](./details.md)
 - [Pendientes e issues](./issues.md)
+
+## Siguiente módulo
+
+El flujo continúa en [Punto de venta](../pos/README.md), responsable de construir, cobrar y generar los pedidos que este módulo administra.

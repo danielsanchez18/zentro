@@ -3,17 +3,13 @@ import {
   CreditCard,
   Mail,
   Map,
-  MapPin,
   Phone,
-  ReceiptText,
   ShoppingBag,
 } from "lucide-react";
-import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import type { CustomerOrder } from "@/lib/mock/orders";
 import {
   formatOrderMoney,
   orderChannelLabel,
-  orderPaymentMethodLabel,
   orderServiceLabel,
 } from "@/lib/mock/orders";
 

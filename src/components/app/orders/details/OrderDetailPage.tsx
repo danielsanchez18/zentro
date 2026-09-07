@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ConfirmDialog } from "@/components/app/team/ConfirmDialog";
 import { toastMsg } from "@/components/ui/toast-message";
 import type { OrderStatus } from "@/lib/mock/orders";
 import { useOrdersStore } from "@/stores/orders-store";
 import { CourierTracking } from "./CourierTracking";
+import { CancelOrderDialog } from "./CancelOrderDialog";
+import { EditOrderDialog } from "./EditOrderDialog";
 import { OrderCustomerInfo } from "./OrderCustomerInfo";
 import { OrderDetailActions } from "./OrderDetailActions";
 import { OrderDetailHeader } from "./OrderDetailHeader";
@@ -29,10 +30,13 @@ export function OrderDetailPage({
   orderId: string;
 }) {
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const order = useOrdersStore((state) =>
     state.orders.find((item) => item.id === orderId),
   );
   const transitionOrder = useOrdersStore((state) => state.transitionOrder);
+  const cancelOrder = useOrdersStore((state) => state.cancelOrder);
+  const updateOrderContent = useOrdersStore((state) => state.updateOrderContent);
 
   if (!order) {
     return (
@@ -65,7 +69,7 @@ export function OrderDetailPage({
       <OrderDetailHeader order={order} slug={slug} />
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,.75fr)] relative">
         <div className="space-y-5">
-          <OrderMainCard order={order} />
+          <OrderMainCard order={order} onEdit={() => setEditOpen(true)} />
           <OrderTimeline order={order} />
           <OrderPaymentInfo order={order} />
           <CourierTracking order={order} />
@@ -81,18 +85,30 @@ export function OrderDetailPage({
           onCancel={() => setCancelOpen(true)}
         />
       </div>
-      <ConfirmDialog
+      <CancelOrderDialog
         open={cancelOpen}
         onOpenChange={setCancelOpen}
-        title="Cancelar pedido"
-        description={`${order.number} saldrá del flujo operativo. El pago deberá revisarse por separado.`}
-        confirmLabel="Cancelar pedido"
-        onConfirm={() => {
-          transitionOrder(order.id, "cancelado");
-          toastMsg.info("Pedido cancelado", order.number);
-          setCancelOpen(false);
+        orderNumber={order.number}
+        onConfirm={(reason, note) => {
+          if (cancelOrder(order.id, reason, note)) {
+            toastMsg.info("Pedido cancelado", reason);
+            setCancelOpen(false);
+          }
         }}
       />
+      {editOpen && (
+        <EditOrderDialog
+          order={order}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          onConfirm={(lines, discount, reason) => {
+            if (updateOrderContent(order.id, lines, discount, reason)) {
+              toastMsg.success("Pedido actualizado", "El ajuste fue agregado al historial.");
+              setEditOpen(false);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
