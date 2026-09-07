@@ -46,7 +46,17 @@ export type BadgeStatus =
   | "programada"
   | "activa"
   | "pausada"
-  | "finalizada";
+  | "finalizada"
+  | "nuevo"
+  | "confirmado"
+  | "en_preparacion"
+  | "listo"
+  | "entregado"
+  | "cancelado"
+  | "pago_pendiente"
+  | "pago_parcial"
+  | "pagado"
+  | "reembolsado";
 
 /**
  * Configuración visual por estado 🎨.
@@ -164,79 +174,92 @@ const STATUS_CONFIG: Record<
   entrada: {
     label: "Entrada",
     icon: ArrowDownToLine,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   salida: {
     label: "Salida",
     icon: ArrowUpFromLine,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   merma: {
     label: "Merma",
     icon: PackageX,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   ajuste: {
     label: "Ajuste",
     icon: SlidersHorizontal,
-    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400 dark:ring-yellow-400/20",
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400 dark:ring-yellow-400/20",
     iconClass: "text-yellow-600 dark:text-yellow-400",
   },
   borrador: {
     label: "Borrador",
     icon: FilePenLine,
-    badge: "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
+    badge:
+      "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
     iconClass: "text-neutral-600 dark:text-neutral-400",
   },
   enviada: {
     label: "Enviada",
     icon: Send,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   parcial: {
     label: "Recepción parcial",
     icon: Clock3,
-    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
     iconClass: "text-yellow-600 dark:text-yellow-400",
   },
   recibida: {
     label: "Recibida",
     icon: PackageCheck,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   cancelada: {
     label: "Cancelada",
     icon: CircleSlash2,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   programada: {
     label: "Programada",
     icon: CalendarClock,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   activa: {
     label: "Activa",
     icon: BadgeCheck,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   pausada: {
     label: "Pausada",
     icon: PauseCircle,
-    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
     iconClass: "text-yellow-600 dark:text-yellow-400",
   },
   finalizada: {
     label: "Finalizada",
     icon: CheckCheck,
-    badge: "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
+    badge:
+      "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
     iconClass: "text-neutral-600 dark:text-neutral-400",
   },
   completado: {
@@ -245,6 +268,76 @@ const STATUS_CONFIG: Record<
     badge:
       "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  nuevo: {
+    label: "Nuevo",
+    icon: Clock3,
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    iconClass: "text-sky-600 dark:text-sky-400",
+  },
+  confirmado: {
+    label: "Confirmado",
+    icon: CheckCircle2,
+    badge:
+      "bg-indigo-500/10 text-indigo-600 ring-indigo-500/25 dark:bg-indigo-800/15 dark:text-indigo-400",
+    iconClass: "text-indigo-600 dark:text-indigo-400",
+  },
+  en_preparacion: {
+    label: "En preparación",
+    icon: Hourglass,
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  listo: {
+    label: "Listo",
+    icon: PackageCheck,
+    badge:
+      "bg-violet-500/10 text-violet-600 ring-violet-500/25 dark:bg-violet-800/15 dark:text-violet-400",
+    iconClass: "text-violet-600 dark:text-violet-400",
+  },
+  entregado: {
+    label: "Entregado",
+    icon: CheckCheck,
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  cancelado: {
+    label: "Cancelado",
+    icon: CircleSlash2,
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  pago_pendiente: {
+    label: "Pago pendiente",
+    icon: Clock3,
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  pago_parcial: {
+    label: "Pago parcial",
+    icon: Clock3,
+    badge:
+      "bg-orange-500/10 text-orange-600 ring-orange-500/25 dark:bg-orange-800/15 dark:text-orange-400",
+    iconClass: "text-orange-600 dark:text-orange-400",
+  },
+  pagado: {
+    label: "Pagado",
+    icon: BadgeCheck,
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  reembolsado: {
+    label: "Reembolsado",
+    icon: ArrowUpFromLine,
+    badge:
+      "bg-neutral-500/10 text-neutral-700 ring-neutral-500/25 dark:bg-neutral-800/50 dark:text-neutral-300",
+    iconClass: "text-neutral-600 dark:text-neutral-400",
   },
 };
 
@@ -271,13 +364,13 @@ export const StatusBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-lg px-2.5 py-2 text-[13px] font-medium font-heading",
+        "inline-flex items-center gap-1 text-nowrap rounded-lg px-2.5 py-2 text-[13px] font-medium font-heading",
         badge,
         className,
       )}
     >
       <Icon className={cn("size-3.5 shrink-0", iconClass)} />
-      <p className="leading-none">{customLabel ?? label}</p>
+      <p className="leading-none text-nowrap">{customLabel ?? label}</p>
     </span>
   );
 };

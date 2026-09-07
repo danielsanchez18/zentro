@@ -1,19 +1,18 @@
-import { Download, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function PurchasesHeader({
-  onCreate,
+export function OrdersHeader({
+  onOpenPos,
   onExport,
 }: {
-  onCreate: () => void;
+  onOpenPos: () => void;
   onExport: () => void;
 }) {
   return (
-    <header className="flex items-center justify-between gap-x-5">
+    <header className="flex flex-wrap items-center justify-between gap-5">
       <div>
-        <h1 className="text-lg font-medium">Compras</h1>
+        <h1 className="text-lg font-medium">Pedidos</h1>
         <p className="text-sm text-muted-foreground">
-          Gestiona órdenes a proveedores y su recepción en inventario.
+          Supervisa los pedidos desde su ingreso hasta la entrega.
         </p>
       </div>
       <div className="flex items-center gap-2">
@@ -25,8 +24,8 @@ export function PurchasesHeader({
         >
           Exportar
         </Button>
-        <Button type="button" onClick={onCreate} className="rounded-full px-3">
-          Nueva orden
+        <Button type="button" onClick={onOpenPos} className="rounded-full px-3">
+          Abrir punto de venta
         </Button>
       </div>
     </header>

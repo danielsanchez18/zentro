@@ -89,3 +89,7 @@ components/app/promotions/
 - [Overview](./overview.md)
 - [Reglas y conflictos](./rules.md)
 - [Pendientes e issues](./issues.md)
+
+## Siguiente módulo
+
+El siguiente módulo planificado es [Pedidos](../orders/README.md), que consumirá el catálogo, promociones y disponibilidad de Inventario.
