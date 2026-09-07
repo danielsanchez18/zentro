@@ -1,6 +1,6 @@
 # Promociones
 
-**Estado del módulo:** Overview en primera versión funcional; CRUD pendiente.
+**Estado del módulo:** Prototipo UI/UX completo; integración con backend pendiente.
 
 ## Objetivo
 
@@ -12,10 +12,10 @@ Promociones no gestiona pedidos ni cobros. Su resultado será consumido posterio
 
 | Sección | Ruta | Estado |
 |---|---|---|
-| Overview | `/app/[slug]/promociones` | Primera versión funcional |
-| Nueva promoción | `/app/[slug]/promociones/agregar` | Planeado |
-| Detalle | `/app/[slug]/promociones/[promotionId]` | Planeado |
-| Edición | `/app/[slug]/promociones/[promotionId]/editar` | Planeado |
+| Overview | `/app/[slug]/promociones` | Prototipo funcional |
+| Nueva promoción | `/app/[slug]/promociones/agregar` | Prototipo funcional |
+| Detalle | `/app/[slug]/promociones/[promotionId]` | Prototipo funcional |
+| Edición | `/app/[slug]/promociones/[promotionId]/editar` | Prototipo funcional |
 
 ## Tipos iniciales
 
@@ -59,11 +59,13 @@ La aplicación a variantes, combos dinámicos, clientes o canales específicos q
 
 1. Overview con KPIs, búsqueda, filtros, tabla/cards y acciones. ✓
 2. Store y datos mock para el ciclo de estados. ✓
-3. Alta y edición mediante formulario reutilizable.
-4. Detalle con información, alcance y resumen del beneficio.
-5. Acciones de publicar, pausar, reanudar, cancelar y eliminar borradores.
-6. Vista previa de productos afectados y conflictos de prioridad.
-7. Documentación de integración con Pedidos/Ventas y QA.
+3. Alta y edición mediante formulario reutilizable. ✓
+4. Detalle con información, alcance, resumen del beneficio y rendimiento. ✓
+5. Acciones de publicar, pausar, reanudar, cancelar y eliminar borradores. ✓
+6. Preview comercial, productos afectados y prioridad visible. ✓
+7. Documentación de integración con Pedidos/Ventas y QA técnico. ✓
+
+La detección definitiva de conflictos no forma parte de la maquetación: requiere que el backend evalúe vigencia, alcance, disponibilidad y reglas concurrentes. El frontend ya dispone de los espacios necesarios para mostrar prioridad, productos afectados y estados.
 
 ## Organización propuesta
 

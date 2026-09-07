@@ -9,6 +9,7 @@ import {
   Tag,
   TicketPercent,
 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +23,6 @@ import type { Promotion, PromotionType } from "@/lib/mock/promotions";
 import {
   promotionBenefit,
   promotionTypeLabel,
-  promotionUsageLabel,
   promotionUsageProgress,
 } from "@/lib/mock/promotions";
 import { cn } from "@/lib/utils";
@@ -34,7 +34,13 @@ const formatDate = (value: string) =>
     year: "numeric",
   }).format(new Date(value));
 
-function PromotionIcon({ type, className }: { type: PromotionType; className?: string }) {
+function PromotionIcon({
+  type,
+  className,
+}: {
+  type: PromotionType;
+  className?: string;
+}) {
   switch (type) {
     case "porcentaje":
       return <Percent className={className} />;
@@ -56,9 +62,17 @@ export function PromotionPreviewDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const router = useRouter();
+  const { slug } = useParams<{ slug: string }>();
+
   if (!promotion) return null;
 
   const usageProgress = promotionUsageProgress(promotion);
+
+  const handleViewDetails = () => {
+    onOpenChange(false);
+    router.push(`/app/${slug}/promociones/${promotion.id}`);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -85,16 +99,16 @@ export function PromotionPreviewDialog({
 
         {/* Benefit & Description (matching card style) */}
         <div className="border-y border-border py-3.5">
-          <div className="flex items-center justify-between gap-2">
-            <div>
-              <p className="text-xs text-muted-foreground">Beneficio</p>
+          <div>
+            <p className="text-xs text-muted-foreground">Beneficio</p>
+            <div className="flex flex-wrap items-center gap-2 justify-between">
               <p className="mt-0.5 font-heading text-lg font-medium tracking-tight text-primary">
                 {promotionBenefit(promotion)}
               </p>
+              <span className="inline-flex items-center rounded-md bg-accent px-2 py-1 text-xs font-medium text-foreground/85">
+                {promotionTypeLabel(promotion.type)}
+              </span>
             </div>
-            <span className="inline-flex items-center rounded-md bg-accent px-2 py-1 text-xs font-medium text-foreground/85">
-              {promotionTypeLabel(promotion.type)}
-            </span>
           </div>
           {promotion.description && (
             <p className="mt-2 text-sm text-muted-foreground">
@@ -134,7 +148,9 @@ export function PromotionPreviewDialog({
           <div className="flex items-center justify-between">
             <span className="font-medium text-foreground">Límite de uso</span>
             <span className="font-medium text-primary">
-              {usageProgress !== null ? `${Math.round(usageProgress)}%` : "Ilimitado"}
+              {usageProgress !== null
+                ? `${Math.round(usageProgress)}%`
+                : "Ilimitado"}
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-muted">
@@ -169,11 +185,11 @@ export function PromotionPreviewDialog({
                 ? "Categorías incluidas"
                 : "Productos incluidos"}
             </p>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1">
               {promotion.targetNames.map((name) => (
                 <span
                   key={name}
-                  className="inline-flex items-center rounded-full bg-accent px-2.5 py-2 leading-none text-xs font-medium text-foreground/85"
+                  className="inline-flex items-center rounded-lg bg-accent px-2.5 py-2 leading-none text-xs font-medium text-foreground/85"
                 >
                   {name}
                 </span>
@@ -183,8 +199,8 @@ export function PromotionPreviewDialog({
         )}
 
         {/* Prioridad y nota */}
-        <div className="flex items-center gap-2 rounded-lg bg-accent/40 px-3 py-2.5 text-xs text-muted-foreground">
-          <BadgeAlert className="size-4 shrink-0 text-primary" />
+        <div className="flex gap-2 rounded-lg bg-accent/40 px-3 py-2.5 text-sm text-muted-foreground">
+          <BadgeAlert className="mt-0.5 size-4 shrink-0 text-primary" />
           <span>
             <strong className="font-medium text-foreground">
               Prioridad {promotion.priority}:
@@ -197,9 +213,16 @@ export function PromotionPreviewDialog({
         <DialogFooter className="mt-1">
           <Button
             type="button"
+            onClick={handleViewDetails}
+            className="w-full rounded-full font-sans px-3 py-2 leading-none h-fit sm:w-auto cursor-pointer"
+          >
+            Ver detalles
+          </Button>
+          <Button
+            type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="w-full rounded-full font-sans px-4 py-2 leading-none h-fit sm:w-auto"
+            className="w-full rounded-full font-sans px-3 py-2 leading-none h-fit sm:w-auto cursor-pointer"
           >
             Cerrar
           </Button>

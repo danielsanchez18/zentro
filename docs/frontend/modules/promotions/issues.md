@@ -1,15 +1,17 @@
-# Promociones — pendientes e issues
+# Promociones — pendientes de integración
 
-## Decisiones antes de producción
+**Maquetación:** cerrada para el alcance inicial. Los puntos siguientes requieren contrato de API, reglas de negocio o datos provenientes del backend.
+
+## Backend y Pedidos/Ventas
 
 - [ ] Definir motor de reglas y contrato de evaluación con Pedidos/Ventas.
 - [ ] Definir impuestos y orden de aplicación de descuentos.
-- [ ] Confirmar reglas de prioridad y mejor precio.
+- [ ] Implementar reglas de prioridad, detección de solapamientos y mejor precio.
 - [ ] Definir comportamiento por zona horaria al iniciar o finalizar.
 - [ ] Aplicar permisos para crear, publicar, pausar y cancelar.
 - [ ] Registrar auditoría de cambios de configuración y estado.
 
-## Expansiones futuras
+## Fuera del alcance inicial
 
 - [ ] Promociones por cantidad tipo 2x1 o 3x2.
 - [ ] Cupones y códigos promocionales.

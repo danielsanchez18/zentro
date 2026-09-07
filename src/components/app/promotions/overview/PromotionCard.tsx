@@ -22,16 +22,16 @@ const formatDate = (value: string) =>
     new Date(value),
   );
 
-function getPromotionIcon(type: PromotionType) {
+function PromotionIcon({ type, className }: { type: PromotionType; className?: string }) {
   switch (type) {
     case "porcentaje":
-      return Percent;
+      return <Percent className={className} />;
     case "monto_fijo":
-      return TicketPercent;
+      return <TicketPercent className={className} />;
     case "precio_fijo":
-      return Tag;
+      return <Tag className={className} />;
     default:
-      return Sparkles;
+      return <Sparkles className={className} />;
   }
 }
 
@@ -42,7 +42,6 @@ export function PromotionCard({
   promotion: Promotion;
   onOpen: (promotion: Promotion) => void;
 }) {
-  const Icon = getPromotionIcon(promotion.type);
   const usageProgress = promotionUsageProgress(promotion);
 
   return (
@@ -55,7 +54,7 @@ export function PromotionCard({
         <div className="flex items-start justify-between gap-2.5">
           <div className="flex items-center gap-3 min-w-0">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-colors">
-              <Icon className="size-4.5" />
+              <PromotionIcon type={promotion.type} className="size-4.5" />
             </span>
             <div className="min-w-0">
               <h3 className="font-heading text-sm font-semibold truncate text-foreground group-hover:text-primary transition-colors">
@@ -168,4 +167,3 @@ export function PromotionCard({
     </article>
   );
 }
-

@@ -1,7 +1,11 @@
 # Promociones — Overview
 
 **Ruta:** `/app/[slug]/promociones`  
-**Estado:** Primera versión funcional; pendiente del CRUD
+**Estado:** Prototipo UI/UX completo
+
+La ruta `/app/[slug]/promociones/agregar` ya permite crear borradores mediante el formulario reutilizable del módulo.
+La ruta `/app/[slug]/promociones/[promotionId]/editar` reutiliza el formulario para borradores, programadas y pausadas.
+La ruta `/app/[slug]/promociones/[promotionId]` muestra información operativa, preview comercial, alcance y rendimiento mock de usos y ventas atribuidas.
 
 ## Objetivo
 
@@ -20,6 +24,11 @@ Permitir encontrar promociones rápidamente, entender su vigencia y ejecutar las
 - [x] Paginación y estado vacío.
 - [x] Vista previa al pulsar una fila o card.
 - [x] Menú contextual con acciones según el estado.
+- [x] Alta, edición y detalle mediante rutas funcionales.
+- [x] Preview comercial y cards de productos o categorías afectadas.
+- [x] Rendimiento mock de usos y ventas atribuidas.
+
+No quedan issues de maquetación abiertos para el alcance inicial.
 
 ## Información visible
 
