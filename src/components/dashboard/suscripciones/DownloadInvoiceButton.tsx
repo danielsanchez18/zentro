@@ -31,7 +31,7 @@ export const DownloadInvoiceButton = ({
       return;
     }
 
-    // Modo mock: simula la generación/descarga del PDF.
+    // Prototipo local: simula la generación y descarga del PDF.
     setDownloading(true);
     window.setTimeout(() => {
       setDownloading(false);

@@ -1,14 +1,23 @@
+"use client"
+
 import { ThemeToggle } from "@/components/landing/shared/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MockBadge } from "@/components/ui/mock-badge"
 import { Bell, CreditCard, LogOut, User } from "lucide-react"
 import Link from "next/link"
-
-// TODO(0.2): leer pendientes desde GET /invitations
-const MOCK_PENDING_INVITATIONS = 2;
+import { getPendingInvitationSummaries } from "@/lib/mock/dashboard"
+import { useAuthStore } from "@/stores/auth-store"
+import { useRouter } from "next/navigation"
 
 export const Header = () => {
+  const pendingInvitations = getPendingInvitationSummaries().length;
+  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/ingresar");
+  };
   return (
     <header className="w-full border-b border-border bg-background">
         <div className="w-full max-w-350 mx-auto px-5 py-2 md:px-7 xl:px-10 flex items-center gap-x-5">
@@ -19,8 +28,6 @@ export const Header = () => {
             </Link>
 
             <div className="ml-auto flex items-center gap-x-1">
-                
-                <MockBadge />
                 
                 <ThemeToggle />
 
@@ -42,9 +49,9 @@ export const Header = () => {
                                     <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" />
                                 </g>
                             </svg>
-                            {MOCK_PENDING_INVITATIONS > 0 && (
+                            {pendingInvitations > 0 && (
                                 <span className="absolute -top-0.5 -right-0.5 text-white flex size-4 items-center justify-center rounded-full bg-red-500 dark:bg-destructive text-[0.6rem] font-semibold text-destructive-foreground ring-2 ring-background">
-                                    {MOCK_PENDING_INVITATIONS}
+                                    {pendingInvitations}
                                 </span>
                             )}
                     </DropdownMenuTrigger>
@@ -71,7 +78,7 @@ export const Header = () => {
                             Cambiar de tenant
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer px-3 py-2">
+                        <DropdownMenuItem className="cursor-pointer px-3 py-2" onClick={handleLogout}>
                             <LogOut className="size-4" />
                             Cerrar sesión
                         </DropdownMenuItem>

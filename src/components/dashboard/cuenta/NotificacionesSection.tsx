@@ -1,66 +1,37 @@
 "use client";
 
-import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import type { NotificationPreferenceKey } from "@/types/dashboard";
 
-interface Preference {
-  key: string;
-  label: string;
-  description: string;
-  enabled: boolean;
-}
-
-// TODO(0.2): leer/guardar desde GET/PATCH /users/me/notifications
-const DEFAULT_PREFERENCES: Preference[] = [
-  {
-    key: "invitations",
-    label: "Invitaciones",
-    description: "Cuando alguien te invite a una organización",
-    enabled: true,
-  },
-  {
-    key: "billing",
-    label: "Facturación y pagos",
-    description: "Próximos cobros, facturas y cambios de plan",
-    enabled: true,
-  },
-  {
-    key: "recovery",
-    label: "Recuperación",
-    description: "Restablecimiento de contraseña y códigos de recuperación",
-    enabled: true,
-  },
-  {
-    key: "security",
-    label: "Seguridad",
-    description: "Nuevos inicios de sesión y cambios de dispositivo",
-    enabled: true,
-  },
-  {
-    key: "marketing",
-    label: "Novedades y marketing",
-    description: "Nuevas funciones y avisos de producto",
-    enabled: false,
-  },
-];
+const PREFERENCE_COPY: Record<NotificationPreferenceKey, { label: string; description: string }> = {
+  INVITATIONS: { label: "Invitaciones", description: "Cuando alguien te invite a una organización" },
+  BILLING: { label: "Facturación y pagos", description: "Próximos cobros, facturas y cambios de plan" },
+  RECOVERY: { label: "Recuperación", description: "Restablecimiento de contraseña y códigos de recuperación" },
+  SECURITY: { label: "Seguridad", description: "Nuevos inicios de sesión y cambios de dispositivo" },
+  PRODUCT_UPDATES: { label: "Novedades y marketing", description: "Nuevas funciones y avisos de producto" },
+};
 
 interface SwitchProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label: string;
+  disabled?: boolean;
 }
 
-const Switch = ({ checked, onChange, label }: SwitchProps) => {
+const Switch = ({ checked, onChange, label, disabled = false }: SwitchProps) => {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
       aria-label={label}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
         "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors",
         checked ? "bg-primary" : "bg-muted-foreground/30",
+        disabled && "cursor-not-allowed opacity-60",
       )}
     >
       <span
@@ -74,16 +45,7 @@ const Switch = ({ checked, onChange, label }: SwitchProps) => {
 };
 
 export const NotificacionesSection = () => {
-  const [preferences, setPreferences] =
-    useState<Preference[]>(DEFAULT_PREFERENCES);
-
-  const toggle = (key: string) => {
-    setPreferences((prev) =>
-      prev.map((pref) =>
-        pref.key === key ? { ...pref, enabled: !pref.enabled } : pref,
-      ),
-    );
-  };
+  const { notificationPreferences: preferences, toggleEmailPreference } = useDashboardStore();
 
   return (
     <div className="w-full space-y-6">
@@ -100,15 +62,16 @@ export const NotificacionesSection = () => {
               className="flex items-center justify-between gap-3 py-5"
             >
               <div>
-                <p className="text-sm font-medium">{pref.label}</p>
+                <p className="text-sm font-medium">{PREFERENCE_COPY[pref.key].label}</p>
                 <p className="text-sm text-muted-foreground">
-                  {pref.description}
+                  {PREFERENCE_COPY[pref.key].description}
                 </p>
               </div>
               <Switch
-                checked={pref.enabled}
-                onChange={() => toggle(pref.key)}
-                label={pref.label}
+                checked={pref.emailEnabled}
+                onChange={() => toggleEmailPreference(pref.key)}
+                label={PREFERENCE_COPY[pref.key].label}
+                disabled={pref.required}
               />
             </li>
           ))}

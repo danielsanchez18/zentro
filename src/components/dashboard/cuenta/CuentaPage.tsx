@@ -8,6 +8,8 @@ import { AccesoSection } from "@/components/dashboard/cuenta/AccesoSection";
 import { NotificacionesSection } from "@/components/dashboard/cuenta/NotificacionesSection";
 import { PagosSection } from "@/components/dashboard/cuenta/PagosSection";
 import { Bell, CreditCard, KeyRound, Lock, LogOut, User } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
+import { useRouter } from "next/navigation";
 
 const TABS = [
   { id: "perfil", label: "Información Personal", icon: User },
@@ -45,6 +47,13 @@ const getButtonClasses = (isActive: boolean, variant: "sidebar" | "tabs") => {
 
 export const CuentaPage = () => {
   const [activeTab, setActiveTab] = useState<TabId>("perfil");
+  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/ingresar");
+  };
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
@@ -69,6 +78,7 @@ export const CuentaPage = () => {
           <div className="pt-3 mt-3 border-t border-border">
             <button
               type="button"
+              onClick={handleLogout}
               className="w-full px-4 py-2.5 text-sm rounded-lg text-muted-foreground hover:bg-accent hover:text-primary flex items-center gap-x-2.5 font-medium"
             >
               <LogOut className="size-4" />

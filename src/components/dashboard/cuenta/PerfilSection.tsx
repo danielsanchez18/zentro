@@ -5,20 +5,24 @@ import { BadgeAlert, BadgeCheck, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { VerifyEmailDialog } from "@/components/dashboard/cuenta/VerifyEmailDialog";
-
-// TODO(0.2): leer desde GET /users/me y PATCH /users/me
-const PROFILE = {
-  name: "Daniel Sánchez",
-  email: "dsanchez151r@gmail.com",
-  emailVerified: false,
-  phone: "936245721",
-};
+import { useDashboardStore } from "@/stores/dashboard-store";
 
 export const PerfilSection = () => {
-  const [phone, setPhone] = useState(PROFILE.phone);
+  const { currentUser, updateProfile, verifyEmail } = useDashboardStore();
+  const [phone, setPhone] = useState(currentUser.phone ?? "");
   const [isEditing, setIsEditing] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(PROFILE.emailVerified);
   const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
+  const emailVerified = currentUser.emailVerifiedAt !== null;
+
+  const handleCancelPhone = () => {
+    setPhone(currentUser.phone ?? "");
+    setIsEditing(false);
+  };
+
+  const handleSavePhone = () => {
+    updateProfile({ phone: phone.trim() || null, avatarUrl: currentUser.avatarUrl });
+    setIsEditing(false);
+  };
 
   return (
     <div className="flex flex-col w-full lg:pl-5">
@@ -46,7 +50,7 @@ export const PerfilSection = () => {
 
         <div className="space-y-1">
           <p className="text-sm font-medium">Nombres Completos</p>
-          <p className="text-muted-foreground text-sm">{PROFILE.name}</p>
+          <p className="text-muted-foreground text-sm">{currentUser.name}</p>
         </div>
 
       </div>
@@ -58,7 +62,7 @@ export const PerfilSection = () => {
           <p className="text-sm font-medium">Correo electrónico</p>
           
           <div className="flex items-center gap-x-3 flex-wrap">
-            <p className="text-muted-foreground text-sm">{PROFILE.email}</p>
+            <p className="text-muted-foreground text-sm">{currentUser.email}</p>
             {emailVerified ? (
               <div className="h-fit flex items-center gap-x-1 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 text-xs rounded-full px-2 py-1 uppercase font-medium border border-emerald-700 w-fit">
                 <BadgeCheck className="size-4" />
@@ -105,14 +109,14 @@ export const PerfilSection = () => {
                   size="sm"
                   variant="outline"
                   className="text-sm rounded-full h-fit px-3 py-1.5"
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleCancelPhone}
                 >
                   Cancelar
                 </Button>
                 <Button
                   size="sm"
                   className="text-sm rounded-full h-fit px-3 py-1.5"
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleSavePhone}
                 >
                   Guardar
                 </Button>
@@ -140,8 +144,8 @@ export const PerfilSection = () => {
       <VerifyEmailDialog
         open={verifyDialogOpen}
         onOpenChange={setVerifyDialogOpen}
-        email={PROFILE.email}
-        onVerified={() => setEmailVerified(true)}
+        email={currentUser.email}
+        onVerified={verifyEmail}
       />
 
     </div>

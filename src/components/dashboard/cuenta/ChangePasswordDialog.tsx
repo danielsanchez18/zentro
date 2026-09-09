@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -12,10 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-// TODO(0.2): validar contra el backend (POST /auth/change-password).
-// En modo mock la contraseña actual del usuario es "123456".
-const MOCK_CURRENT_PASSWORD = "123456";
+import { useDashboardStore } from "@/stores/dashboard-store";
 
 type Step = "current" | "new" | "success";
 
@@ -34,26 +31,25 @@ export const ChangePasswordDialog = ({
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const changePassword = useDashboardStore((state) => state.changePassword);
 
-  // Reinicia el flujo cada vez que se abre el modal.
-  useEffect(() => {
-    if (open) {
-      setStep("current");
-      setCurrent("");
-      setNext("");
-      setConfirm("");
-      setError("");
-      setLoading(false);
-    }
-  }, [open]);
+  const reset = () => {
+    setStep("current");
+    setCurrent("");
+    setNext("");
+    setConfirm("");
+    setError("");
+    setLoading(false);
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) reset();
+    onOpenChange(nextOpen);
+  };
 
   const handleVerifyCurrent = () => {
     setError("");
-    if (current === MOCK_CURRENT_PASSWORD) {
-      setStep("new");
-    } else {
-      setError("La contraseña actual es incorrecta.");
-    }
+    setStep("new");
   };
 
   const handleSave = () => {
@@ -66,6 +62,12 @@ export const ChangePasswordDialog = ({
       setError("Las contraseñas no coinciden.");
       return;
     }
+    const result = changePassword(current, next);
+    if (!result.ok) {
+      setStep("current");
+      setError("La contraseña actual es incorrecta.");
+      return;
+    }
     setLoading(true);
     // Simulación de guardado
     setTimeout(() => {
@@ -75,7 +77,7 @@ export const ChangePasswordDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent showCloseButton={step !== "success"}>
         <DialogHeader className="sm:px-1 gap-y-0">
           <DialogTitle className="font-sans text-lg font-medium">
@@ -166,7 +168,7 @@ export const ChangePasswordDialog = ({
         <DialogFooter className="mt-2">
           {step === "current" && (
             <>
-              <Button variant="outline" onClick={() => onOpenChange(false)} className="px-3 text-sm rounded-full">
+              <Button variant="outline" onClick={() => handleOpenChange(false)} className="px-3 text-sm rounded-full">
                 Cancelar
               </Button>
               <Button onClick={handleVerifyCurrent} disabled={!current} className="px-3 text-sm rounded-full">
@@ -198,7 +200,7 @@ export const ChangePasswordDialog = ({
             </>
           )}
           {step === "success" && (
-            <Button onClick={() => onOpenChange(false)} className="px-3 text-sm rounded-full">Listo</Button>
+            <Button onClick={() => handleOpenChange(false)} className="px-3 text-sm rounded-full">Listo</Button>
           )}
         </DialogFooter>
       </DialogContent>

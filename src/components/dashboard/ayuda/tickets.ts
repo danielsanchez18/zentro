@@ -2,7 +2,7 @@ import type { SupportTicket } from "@/components/dashboard/ayuda/types";
 import { TICKETS_STORAGE_KEY } from "@/components/dashboard/ayuda/types";
 
 /**
- * Historial de tickets de soporte (modo mock).
+ * Historial local de tickets de soporte para el prototipo.
  * TODO(0.2): leer desde `GET /support-tickets` y crear con `POST /support-tickets`.
  */
 export const SEED_TICKETS: SupportTicket[] = [

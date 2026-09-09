@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 
-export type SubscriptionStatus = "TRIAL" | "ACTIVE" | "PAST_DUE" | "CANCELED";
+import type { SubscriptionStatus } from "@/types/dashboard";
+
+export type { SubscriptionStatus } from "@/types/dashboard";
 
 const STYLES: Record<SubscriptionStatus, string> = {
   TRIAL: "bg-primary/10 text-primary",

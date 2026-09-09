@@ -20,8 +20,12 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  organization?: string;
-  branch?: string;
+  status: "ACTIVE" | "DISABLED" | "PENDING_VERIFICATION";
+  emailVerifiedAt: string | null;
+  phone: string | null;
+  avatarUrl: string | null;
+  locale: string;
+  timezone: string;
   createdAt: string;
   updatedAt: string;
 }

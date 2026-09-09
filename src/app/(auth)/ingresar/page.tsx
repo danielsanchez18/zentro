@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { MockBadge } from "@/components/ui/mock-badge";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,10 +19,6 @@ export default async function IngresarPage({
 
   return (
     <main className="min-h-dvh py-20 flex flex-col items-center justify-center gap-y-10">
-      <div className="absolute top-4 right-4">
-        <MockBadge />
-      </div>
-
       <AuthHeader
         title={hasEmail ? "Continúa con tu correo" : "Iniciar sesión"}
         description={

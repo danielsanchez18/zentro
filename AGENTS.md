@@ -16,12 +16,10 @@
 | **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/dashboard/layout.tsx`, `src/app/layout.tsx`, `src/hooks/use-require-auth.ts` |
 | **Catálogo / Productos** | Notion 04 + docs | `src/app/dashboard/catalog/*` |
 | **UI / Componentes globales** | — | `src/components/ui/*`, `src/app/layout.tsx` |
-| **Modo Mock / Datos de prueba** | `docs/mock-mode.md` | `src/lib/mock/data.ts`, `src/components/ui/mock-help-button.tsx`, `src/components/ui/mock-badge.tsx` |
 | **Arquitectura general** | `docs/02-ARCHITECTURE.md`, Notion 06 | — |
 
-> **Modo Mock:** la app puede correr con datos de prueba sin backend. Fuente de datos:
-> `src/lib/mock/data.ts`. Botón "?" flotante (solo mock): `src/components/ui/mock-help-button.tsx`.
-> Para QUITAR el mock cuando el backend esté listo, sigue `docs/mock-mode.md`.
+> **Etapa de prototipado:** el frontend trabaja únicamente con datos locales en `src/lib/mock/`.
+> No existe alternancia de modo ni conexión automática con el backend. La integración API se planificará después de cerrar y auditar los flujos del frontend.
 
 ## 🚫 Reglas
 

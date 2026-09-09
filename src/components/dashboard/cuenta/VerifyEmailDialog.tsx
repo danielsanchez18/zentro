@@ -40,18 +40,20 @@ export const VerifyEmailDialog = ({
   const [cooldown, setCooldown] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Al abrir el diálogo se limpia el estado anterior; al desmontar se corta
-  // el contador de reenvío.
   useEffect(() => {
-    if (open) {
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current);
+    };
+  }, []);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
       setCode("");
       setError("");
       setVerifying(false);
     }
-    return () => {
-      if (cooldownRef.current) clearInterval(cooldownRef.current);
-    };
-  }, [open]);
+    onOpenChange(nextOpen);
+  };
 
   const startCooldown = () => {
     setCooldown(RESEND_COOLDOWN_SECONDS);
@@ -82,7 +84,7 @@ export const VerifyEmailDialog = ({
     setTimeout(() => {
       setVerifying(false);
       onVerified();
-      onOpenChange(false);
+      handleOpenChange(false);
     }, 600);
   };
 
@@ -97,7 +99,7 @@ export const VerifyEmailDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader className="sm:px-1">
           <DialogTitle className="font-sans">Verificar correo electrónico</DialogTitle>
@@ -154,7 +156,7 @@ export const VerifyEmailDialog = ({
         <DialogFooter>
           <Button
             variant="outline"
-            onClick={() => onOpenChange(false)}
+            onClick={() => handleOpenChange(false)}
             className="h-fit rounded-full px-3 py-1.5 text-sm"
           >
             Cancelar

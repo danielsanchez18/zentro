@@ -1,38 +1,17 @@
 "use client";
 
-import { ArrowUpRight, Building2, Plus } from "lucide-react";
+import { ArrowUpRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import {
-  StatusChip,
-  type SubscriptionStatus,
-} from "@/components/dashboard/overview/StatusChip";
+import { StatusChip } from "@/components/dashboard/overview/StatusChip";
+import { getUserOrganizationSummaries } from "@/lib/mock/dashboard";
 
 /**
  * Mis organizaciones — grid de tenants del usuario.
  * TODO(0.2): leer desde `GET /orgs` (rol, plan, estado de suscripción).
  */
-interface Organization {
-  id: string;
-  name: string;
-  slug: string;
-  plan: string;
-  role: string;
-  status: SubscriptionStatus;
-}
-
-const ORGS: Organization[] = [
-  {
-    id: "org_001",
-    name: "Las Rocas Restaurante",
-    slug: "las-rocas",
-    plan: "Esencial",
-    role: "Owner",
-    status: "TRIAL",
-  },
-];
-
 export const OrganizationsGrid = () => {
+  const organizations = getUserOrganizationSummaries();
   const header = (
     <div className="flex items-center justify-between gap-3">
       <h2 id="orgs-title" className="text-base font-medium">
@@ -44,7 +23,7 @@ export const OrganizationsGrid = () => {
     </div>
   );
 
-  if (ORGS.length === 0) {
+  if (organizations.length === 0) {
     return (
       <section data-demo="organizations" aria-labelledby="orgs-title">
         {header}
@@ -65,7 +44,7 @@ export const OrganizationsGrid = () => {
     <section data-demo="organizations" aria-labelledby="orgs-title">
       {header}
       <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {ORGS.map((org) => (
+        {organizations.map((org) => (
           <li key={org.id}>
             <article className="rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/40">
               <div className="flex items-start justify-between gap-3">

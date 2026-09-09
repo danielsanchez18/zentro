@@ -6,16 +6,8 @@ import { useAuthStore } from '@/stores/auth-store';
 import { validateSessionService } from '@/lib/services/auth.service';
 
 /**
- * Guard para rutas protegidas (dashboard).
- *
- * Flujo:
- * - Sin sesión (isAuthenticated/token ausente) → redirige a /ingresar.
- * - Con sesión en modo MOCK → confía en el store (el token mock no es un JWT real).
- * - Con sesión en modo API → valida el token contra GET /auth/me.
- *   - 200 → refresca el usuario del store y permite el acceso.
- *   - 401/error → cierra sesión y redirige a /ingresar.
- *
- * Devuelve `{ checking }`. Mientras sea true, la UI debe mostrar un spinner.
+ * Guard local para las rutas protegidas de dashboard y app.
+ * Durante el prototipado valida la sesión persistida y restaura el usuario de prueba.
  */
 export function useRequireAuth(): { checking: boolean } {
   const router = useRouter();
@@ -39,7 +31,7 @@ export function useRequireAuth(): { checking: boolean } {
         const { user: freshUser } = await validateSessionService(token);
         if (cancelled) return;
 
-        // Refresca la información del usuario con la data fresca del backend.
+        // Mantiene sincronizado el usuario persistido con el escenario local.
         if (freshUser && (!user || user.email !== freshUser.email)) {
           setUser(freshUser);
         }
