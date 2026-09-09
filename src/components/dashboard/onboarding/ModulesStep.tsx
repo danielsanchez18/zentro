@@ -1,4 +1,4 @@
-import { AlertTriangle, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   MODULES,
@@ -14,8 +14,7 @@ interface ModulesStepProps {
 }
 
 /**
- * Paso 3 — Selección de módulos. Sugeridos pre-marcados con etiqueta "Recomendado";
- * los indispensables muestran ⚠️ y requieren confirmación para desactivarse.
+ * Capacidades sugeridas por actividad. Ninguna recomendación es obligatoria.
  */
 export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => {
   const currentRubro = rubro ? RUBROS_BY_CODE[rubro] : undefined;
@@ -25,7 +24,7 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
   return (
     <section className="space-y-7">
       <div>
-        <h2 className="text-lg font-medium tracking-tight">¿Qué módulos quieres activar?</h2>
+        <h2 className="text-lg font-medium tracking-tight">¿Qué quieres hacer con Zentro?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {currentRubro ? (
             <>
@@ -43,7 +42,6 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
         {MODULES.map((m) => {
           const Icon = m.icon;
           const isRecomendado = currentRubro?.suggested.includes(m.key);
-          const isIndispensable = currentRubro?.indispensable.includes(m.key);
           const checked = selected[m.key];
           return (
             <li key={m.key}>
@@ -89,12 +87,6 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="flex items-center gap-2 text-sm font-medium">
                         {m.label}
-                        {isIndispensable && (
-                          <AlertTriangle
-                            className="size-3.5 shrink-0 text-foreground/50"
-                            aria-hidden="true"
-                          />
-                        )}
                       </span>
                       <span className="text-sm text-muted-foreground">{m.descripcion}</span>
                     </span>
@@ -118,7 +110,7 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                     ))}
                   </ul>
 
-                  {(isRecomendado || isIndispensable) && (
+                  {isRecomendado && (
                     <span className="mt-0.5 flex shrink-0 items-center gap-3">
                       {isRecomendado && (
                         <span
@@ -132,11 +124,6 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
                           Recomendado
                         </span>
                       )}
-                      {isIndispensable && (
-                        <span className="text-sm text-muted-foreground">
-                          Esencial para tu rubro
-                        </span>
-                      )}
                     </span>
                   )}
                 </span>
@@ -148,7 +135,7 @@ export const ModulesStep = ({ rubro, selected, onToggle }: ModulesStepProps) => 
       </ul>
 
       <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-primary/10 px-4 py-2">
-        <span className="text-sm text-foreground">Módulos activos</span>
+        <span className="text-sm text-foreground">Capacidades seleccionadas</span>
         <span className="text-sm tabular-nums text-foreground px-3 py-1 rounded-lg bg-background/50 border border-border">
           {selectedCount}
           <span className="text-foreground/70"> de {total}</span>

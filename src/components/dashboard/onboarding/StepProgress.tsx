@@ -4,6 +4,7 @@ import { STEPS, type StepId } from "./constants";
 
 interface StepProgressProps {
   step: StepId;
+  steps?: typeof STEPS;
 }
 
 /**
@@ -12,9 +13,9 @@ interface StepProgressProps {
  * Línea editorial monocromo: los pasos completados se rellenan en charcoal,
  * el paso activo lleva aro y la línea avanza con el color hasta el punto actual.
  */
-export const StepProgress = ({ step }: StepProgressProps) => {
-  const activeStepIndex = STEPS.findIndex((s) => s.id === step);
-  const currentLabel = STEPS[activeStepIndex]?.label;
+export const StepProgress = ({ step, steps = STEPS }: StepProgressProps) => {
+  const activeStepIndex = steps.findIndex((s) => s.id === step);
+  const currentLabel = steps[activeStepIndex]?.label;
 
   return (
     <div className="space-y-3">
@@ -22,11 +23,9 @@ export const StepProgress = ({ step }: StepProgressProps) => {
         aria-label="Progreso de configuración"
         className="flex items-center"
       >
-        {STEPS.map((s, index) => {
+        {steps.map((s, index) => {
           const isCompleted = index < activeStepIndex;
           const isActive = s.id === step;
-          const isReached = index <= activeStepIndex;
-
           return (
             <li
               key={s.id}
@@ -68,7 +67,7 @@ export const StepProgress = ({ step }: StepProgressProps) => {
               </span>
 
               {/* Línea conectora */}
-              {index < STEPS.length - 1 && (
+              {index < steps.length - 1 && (
                 <span
                   aria-hidden="true"
                   className="mx-3 h-px min-w-6 flex-1"
@@ -88,7 +87,7 @@ export const StepProgress = ({ step }: StepProgressProps) => {
 
       {/* Indicador contextual (mobile) */}
       <p className="text-sm text-muted-foreground md:hidden" aria-live="polite">
-        Paso {activeStepIndex + 1} de {STEPS.length} · {currentLabel}
+        Paso {activeStepIndex + 1} de {steps.length} · {currentLabel}
       </p>
     </div>
   );

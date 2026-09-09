@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { toastMsg } from "@/components/ui/toast-message";
 
 interface NewOrganizationDialogProps {
   open: boolean;
@@ -21,8 +23,8 @@ interface NewOrganizationDialogProps {
 
 /**
  * Paso 1 de la creación de organización: modal con nombre + slug (auto-sugerido).
- * Al confirmar navega a `/dashboard/onboarding` (paso 2: rubro, sucursal, módulos).
- * TODO(0.2): POST /orgs { name, slug } antes de navegar.
+ * Crea un borrador local y navega al onboarding contextual de esa organización.
+ * La persistencia autoritativa se mantiene documentada como issue de backend.
  */
 const slugify = (value: string) =>
   value
@@ -42,6 +44,8 @@ export const NewOrganizationDialog = ({
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
   const [saving, setSaving] = useState(false);
+  const createOrganizationDraft = useDashboardStore((state) => state.createOrganizationDraft);
+  const isSlugAvailable = useDashboardStore((state) => state.isSlugAvailable);
 
   const handleNameChange = (value: string) => {
     setName(value);
@@ -49,15 +53,24 @@ export const NewOrganizationDialog = ({
   };
 
   const handleCreate = () => {
+    const normalizedSlug = slugify(slug);
+    if (!normalizedSlug) {
+      toastMsg.error("El enlace no es válido", "Usa al menos una letra o un número.");
+      return;
+    }
+    if (!isSlugAvailable(normalizedSlug)) {
+      toastMsg.error("Ese enlace ya está en uso", "Prueba con otro slug para tu organización.");
+      return;
+    }
     setSaving(true);
-    // TODO(0.2): llamar POST /orgs { name, slug } → obtiene orgId
     setTimeout(() => {
+      const organizationId = createOrganizationDraft({ name: name.trim(), slug: normalizedSlug });
       setSaving(false);
       setName("");
       setSlug("");
       setSlugTouched(false);
       onOpenChange(false);
-      router.push("/dashboard/onboarding");
+      router.push(`/dashboard/organizaciones/${organizationId}/onboarding`);
     }, 500);
   };
 
@@ -69,8 +82,8 @@ export const NewOrganizationDialog = ({
             <Building2 className="size-4 text-primary" /> Crea tu organización
           </DialogTitle>
           <DialogDescription className="text-sm">
-            Sólo nombre y slug para arrancar. El resto (rubro, tu local y módulos)
-            lo configuramos a continuación.
+            Empieza con lo esencial. Después podrás elegir cómo operará tu negocio;
+            no crearemos una sucursal automáticamente.
           </DialogDescription>
         </DialogHeader>
 

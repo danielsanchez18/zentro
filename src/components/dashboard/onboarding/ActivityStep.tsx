@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MODULE_MAP, RUBROS, type IndustryCode } from "./constants";
+import { RUBROS, type IndustryCode } from "./constants";
 
 interface ActivityStepProps {
   rubro: IndustryCode | null;
@@ -16,7 +16,7 @@ export const ActivityStep = ({ rubro, onSelect }: ActivityStepProps) => {
       <div>
         <h2 className="text-lg font-medium tracking-tight">¿A qué se dedica tu negocio?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Elige la opción que mejor lo describa y te sugeriremos los módulos ideales.
+          Elige la opción que mejor lo describa. Solo usaremos esta elección para sugerirte capacidades.
         </p>
       </div>
 
@@ -33,7 +33,6 @@ export const ActivityStep = ({ rubro, onSelect }: ActivityStepProps) => {
             <button
               key={r.code}
               type="button"
-              role="gridcell"
               aria-pressed={isActive}
               onClick={() => onSelect(r.code)}
               className={cn(
@@ -71,14 +70,6 @@ export const ActivityStep = ({ rubro, onSelect }: ActivityStepProps) => {
               </span>
 
               <span className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
-                {r.indispensable.length > 0 && (
-                  <span className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-1 text-xs font-medium text-foreground">
-                    {r.indispensable
-                      .map((k) => MODULE_MAP[k].label)
-                      .join(" · ")}{" "}
-                    incluidos
-                  </span>
-                )}
                 <span className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-1 text-xs font-medium text-foreground">
                   {moduleCount} módulo{moduleCount === 1 ? "" : "s"} recomendado
                   {moduleCount === 1 ? "" : "s"}

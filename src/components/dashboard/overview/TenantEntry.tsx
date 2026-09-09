@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowUpRight, Building2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { useTenantStore } from "@/stores/tenant-store";
 import type { Organization } from "@/components/dashboard/organizaciones/types";
 
@@ -14,7 +14,8 @@ const REDIRECT_FLAG = "zentro-hub-redirected";
 export const TenantEntry = () => {
   const router = useRouter();
   const { setActiveTenant } = useTenantStore();
-  const orgs = MOCK_ORGANIZATIONS;
+  const dashboard = useDashboardStore();
+  const orgs = dashboard.getOrganizationSummaries().filter((organization) => organization.setupStatus !== "DRAFT");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Si el usuario tiene EXACTAMENTE 1 tenant → pasar por el hub y redirigir

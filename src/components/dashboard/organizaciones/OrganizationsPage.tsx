@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, Plus } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { OrganizationCard } from "@/components/dashboard/organizaciones/OrganizationCard";
 import { NewOrganizationDialog } from "@/components/dashboard/organizaciones/NewOrganizationDialog";
-import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
+import { useDashboardStore } from "@/stores/dashboard-store";
 
 export const OrganizationsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const ORGS = MOCK_ORGANIZATIONS;
+  const dashboard = useDashboardStore();
+  const ORGS = dashboard.getOrganizationSummaries();
 
   return (
     <div className="space-y-8">

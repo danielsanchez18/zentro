@@ -12,16 +12,10 @@ import {
   LineChart,
   type LucideIcon,
 } from "lucide-react";
+import type { BusinessIndustry, CapabilityKey } from "@/types/dashboard";
 
-export type IndustryCode = "RESTAURANT" | "RETAIL" | "SERVICE" | "HEALTH" | "OTHER";
-
-export type ModuleKey =
-  | "ventas"
-  | "catalogo"
-  | "clientes"
-  | "inventario"
-  | "presencia"
-  | "finanzas";
+export type IndustryCode = BusinessIndustry;
+export type ModuleKey = CapabilityKey;
 
 export interface Module {
   key: ModuleKey;
@@ -37,7 +31,7 @@ export interface Rubro {
   description: string;
   icon: LucideIcon;
   suggested: ModuleKey[];
-  indispensable: ModuleKey[];
+  physicalSetupHelpful: boolean;
 }
 
 export interface LocalData {
@@ -153,7 +147,7 @@ export const RUBROS: Rubro[] = [
     description: "Negocio de comidas y bebidas para servir en el local o para llevar.",
     icon: Utensils,
     suggested: ["ventas", "catalogo", "clientes"],
-    indispensable: ["ventas"],
+    physicalSetupHelpful: true,
   },
   {
     code: "RETAIL",
@@ -161,7 +155,7 @@ export const RUBROS: Rubro[] = [
     description: "Venta de productos físicos al por menor, con stock por controlar.",
     icon: ShoppingBag,
     suggested: ["ventas", "catalogo", "clientes", "inventario"],
-    indispensable: ["ventas", "inventario"],
+    physicalSetupHelpful: true,
   },
   {
     code: "SERVICE",
@@ -169,7 +163,7 @@ export const RUBROS: Rubro[] = [
     description: "Consultorías, agencias o servicios por hora o por proyecto.",
     icon: Briefcase,
     suggested: ["clientes", "finanzas"],
-    indispensable: ["clientes"],
+    physicalSetupHelpful: false,
   },
   {
     code: "HEALTH",
@@ -177,7 +171,7 @@ export const RUBROS: Rubro[] = [
     description: "Clínicas, spas o centros deportivos que atienden por turnos.",
     icon: HeartPulse,
     suggested: ["clientes", "ventas", "inventario"],
-    indispensable: ["clientes", "ventas"],
+    physicalSetupHelpful: true,
   },
   {
     code: "OTHER",
@@ -185,7 +179,7 @@ export const RUBROS: Rubro[] = [
     description: "Un giro distinto. Adaptaremos los módulos a tu caso.",
     icon: Sparkles,
     suggested: ["catalogo", "clientes"],
-    indispensable: [],
+    physicalSetupHelpful: false,
   },
 ];
 
@@ -197,10 +191,11 @@ export const RUBROS_BY_CODE = RUBROS.reduce<Record<IndustryCode, Rubro>>(
   {} as Record<IndustryCode, Rubro>
 );
 
-export type StepId = "actividad" | "local" | "modulos";
+export type StepId = "actividad" | "modulos" | "local" | "resumen";
 
 export const STEPS: { id: StepId; label: string }[] = [
   { id: "actividad", label: "Actividad" },
-  { id: "local", label: "Tu local" },
-  { id: "modulos", label: "Módulos" },
+  { id: "modulos", label: "Capacidades" },
+  { id: "local", label: "Ubicación" },
+  { id: "resumen", label: "Resumen" },
 ];

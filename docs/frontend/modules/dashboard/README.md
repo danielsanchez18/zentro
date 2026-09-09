@@ -1,6 +1,6 @@
 # Dashboard — Hub personal
 
-> Estado de auditoría: en curso · actualizado 08/09/2026
+> Estado de auditoría: en curso · actualizado 09/09/2026
 
 ## Responsabilidad
 
@@ -12,11 +12,12 @@
 |---|---|---|
 | `/dashboard` | Resumen personal y entrada a organizaciones | Centralizado |
 | `/dashboard/cuenta` | Perfil, seguridad, identidades, notificaciones y pagos | Centralizado y auditado |
-| `/dashboard/organizaciones` | Membresías y creación de organizaciones | Listado centralizado; creación local pendiente |
-| `/dashboard/invitaciones` | Invitaciones pendientes e historial | Pendiente de migrar |
-| `/dashboard/suscripciones` | Suscripciones y facturas por organización | Pendiente de migrar |
-| `/dashboard/ayuda` | FAQ, tickets y contacto | Pendiente de migrar |
-| `/dashboard/onboarding` | Configuración inicial de una organización | Requiere rediseño por sucursal opcional |
+| `/dashboard/organizaciones` | Membresías y creación de organizaciones | Prototipo local funcional y auditado |
+| `/dashboard/invitaciones` | Invitaciones pendientes e historial | Estado local funcional y auditado |
+| `/dashboard/suscripciones` | Suscripciones y facturas por organización | Prototipo UI auditado; integración pendiente |
+| `/dashboard/ayuda` | FAQ, tickets y contacto | Prototipo local auditado |
+| `/dashboard/organizaciones/[organizationId]/onboarding` | Configuración contextual de una organización | Prototipo local funcional y auditado |
+| `/dashboard/onboarding` | Ruta antigua | Redirige a Organizaciones |
 
 ## Fuente local
 
@@ -29,17 +30,30 @@
 
 1. El modelo anterior mezclaba usuario, organización y sucursal en `User`.
 2. Overview, organizaciones, invitaciones, header y suscripciones tenían datasets contradictorios.
-3. El onboarding obliga actualmente a configurar “Tu local”; contradice organizaciones sin sucursal.
+3. El onboarding ya permite terminar sin sucursal y solo muestra el paso de ubicación cuando puede aportar valor.
 4. Acceso presenta Password, Google y Facebook; Apple debe definirse antes de añadirlo a la UI.
-5. Varias acciones son solo visuales: aceptar/rechazar invitación, cerrar sesión desde algunos botones, copiar enlace, alta de organización y persistencia del onboarding.
+5. La creación y el onboarding funcionan con estado local persistente. Las integraciones y reglas de servidor están separadas en `issues.md`.
 
 ## Orden de auditoría
 
 1. Overview y shared.
 2. Cuenta. ✅
-3. Organizaciones y onboarding.
-4. Invitaciones.
-5. Suscripciones y facturas.
-6. Ayuda y soporte.
+3. Organizaciones y onboarding. ✅
+4. Invitaciones. ✅
+5. Suscripciones y facturas. ✅ para prototipo
+6. Ayuda y soporte. ✅ para prototipo
 
 Cada bloque se considera terminado cuando usa el modelo central, sus acciones de prototipo funcionan y sus reglas/contratos quedan documentados.
+
+## Flujo de organización validado
+
+1. El usuario abre el diálogo desde Overview u Organizaciones.
+2. Nombre y slug crean un borrador local y una membresía Owner de prototipo.
+3. La ruta del onboarding incluye el ID de la organización.
+4. Actividad solo produce recomendaciones; no impone capacidades.
+5. El usuario elige capacidades antes de decidir si agrega una ubicación.
+6. La ubicación empieza desactivada y nunca se crea implícitamente.
+7. Un resumen confirma actividad, capacidades y presencia o ausencia de ubicación.
+8. Al finalizar, la organización pasa de `DRAFT` a `READY`; al omitir, conserva estado pendiente y puede retomarse.
+
+Los puntos que requieren persistencia autoritativa, permisos o transacciones están en [issues.md](./issues.md).

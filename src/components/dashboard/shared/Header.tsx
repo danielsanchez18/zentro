@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Bell, CreditCard, LogOut, User } from "lucide-react"
 import Link from "next/link"
-import { getPendingInvitationSummaries } from "@/lib/mock/dashboard"
+import { useDashboardStore } from "@/stores/dashboard-store"
 import { useAuthStore } from "@/stores/auth-store"
 import { useRouter } from "next/navigation"
 
 export const Header = () => {
-  const pendingInvitations = getPendingInvitationSummaries().length;
+  const dashboard = useDashboardStore();
+  const pendingInvitations = dashboard.getInvitationSummaries().filter((invitation) => invitation.status === "PENDING").length;
   const logout = useAuthStore((state) => state.logout);
   const router = useRouter();
 
@@ -35,6 +36,8 @@ export const Header = () => {
                     variant="ghost"
                     size="icon"
                     aria-label="Notificaciones"
+                    nativeButton={false}
+                    render={<Link href="/dashboard/invitaciones" />}
                 >
                     <Bell />  
                 </Button>

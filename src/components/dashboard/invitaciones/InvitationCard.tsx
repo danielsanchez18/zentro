@@ -4,7 +4,7 @@ import { Check, Clock3, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Invitation } from "@/components/dashboard/invitaciones/types";
 
-export const InvitationCard = ({ invitation }: { invitation: Invitation }) => {
+export const InvitationCard = ({ invitation, onAccept, onDecline }: { invitation: Invitation; onAccept: () => void; onDecline: () => void }) => {
   return (
     <li className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4">
       <div className="flex gap-3">
@@ -23,10 +23,10 @@ export const InvitationCard = ({ invitation }: { invitation: Invitation }) => {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button type="button" variant="outline" className="px-3 rounded-full text-sm">
+        <Button type="button" variant="outline" className="px-3 rounded-full text-sm" onClick={onDecline}>
           <X /> Rechazar
         </Button>
-        <Button type="button" className="px-3 rounded-full text-sm">
+        <Button type="button" className="px-3 rounded-full text-sm" onClick={onAccept}>
           <Check /> Aceptar
         </Button>
       </div>

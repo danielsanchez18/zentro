@@ -1,16 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Building2,
-  Copy,
-  LogOut,
-  MapPin,
-  MoreHorizontal,
-  Settings,
-  Users,
-} from "lucide-react";
+import { ArrowUpRight, Building2, Copy, LogOut, MapPin, MoreHorizontal, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,7 +22,13 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
         </div>
 
         <div className="flex items-center gap-2">
-          <StatusChip status={org.status} />
+          {org.setupStatus === "DRAFT" ? (
+            <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+              Configuración pendiente
+            </span>
+          ) : (
+            <StatusChip status={org.status} />
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -45,28 +42,22 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
               <MoreHorizontal />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem render={<Link href={`/app/${org.slug}`} />}>
+              <DropdownMenuItem render={<Link href={org.setupStatus === "DRAFT" ? `/dashboard/organizaciones/${org.id}/onboarding` : `/app/${org.slug}`} />}>
                 <ArrowUpRight />
-                Abrir workspace
+                {org.setupStatus === "DRAFT" ? "Continuar configuración" : "Abrir workspace"}
               </DropdownMenuItem>
-              <DropdownMenuItem
-                render={<Link href={`/app/${org.slug}/configuracion`} />}
-              >
+              <DropdownMenuItem disabled>
                 <Settings /> Configuración
               </DropdownMenuItem>
-              <DropdownMenuItem
-                render={
-                  <Link href={`/app/${org.slug}/configuracion/miembros`} />
-                }
-              >
+              <DropdownMenuItem disabled>
                 <Users /> Miembros
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <Copy /> Copiar link de invitación
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
+              <DropdownMenuItem variant="destructive" disabled>
                 <LogOut /> Salir de la organización
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -100,12 +91,12 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
         </div>
       </dl>
 
-      <a
-        href={`/app/${org.slug}`}
+      <Link
+        href={org.setupStatus === "DRAFT" ? `/dashboard/organizaciones/${org.id}/onboarding` : `/app/${org.slug}`}
         className="mt-auto inline-flex items-center gap-1 pt-4 text-sm w-fit font-medium hover:underline"
       >
-        Abrir <ArrowUpRight className="size-3.5" />
-      </a>
+        {org.setupStatus === "DRAFT" ? "Continuar configuración" : "Abrir"} <ArrowUpRight className="size-3.5" />
+      </Link>
     </article>
   );
 };

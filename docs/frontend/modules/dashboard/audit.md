@@ -45,21 +45,38 @@
 - Definir política de invalidación de otras sesiones al cambiar contraseña.
 - Incorporar sesión móvil para cerrar sesión desde la vista compacta de cuenta.
 
-## Organizaciones/onboarding — por auditar
+## Organizaciones/onboarding — auditado
 
-- Crear organización y slug.
-- Configurar actividad, ubicación y capacidades.
-- Abrir, configurar, copiar invitación y abandonar organización.
-- Conflicto conocido: ubicación obligatoria en el wizard.
+- El diálogo se abre desde Overview y Organizaciones.
+- Nombre y slug crean un borrador local asociado al usuario actual.
+- El onboarding usa una ruta contextual por `organizationId`.
+- El orden es actividad → capacidades → ubicación condicional → resumen.
+- Las sugerencias por rubro dejaron de ser obligaciones.
+- La ubicación inicia desactivada; finalizar sin ella produce cero sucursales.
+- Los borradores quedan visibles y pueden retomarse desde sus cards.
+- El estado mock del dashboard persiste en almacenamiento local.
 
-## Invitaciones — por auditar
+### Pendiente fuera del prototipo
 
-- Pendientes, aceptar, rechazar e historial.
+- Configuración avanzada, invitación y abandono dependen de rutas/permisos del workspace o backend.
+- Validación autoritativa de slug, creación transaccional de Owner e idempotencia.
+- Ver [issues.md](./issues.md).
 
-## Suscripciones — por auditar
+## Invitaciones — auditadas
 
-- Planes, uso, facturas, detalle y descarga.
+- Overview, página e indicador del header consumen el mismo estado local.
+- Aceptar agrega la membresía mock de forma idempotente y mueve la invitación al historial.
+- Rechazar conserva la invitación en historial.
+- La campana dirige a la bandeja de invitaciones mientras no exista una entidad general de notificaciones.
 
-## Ayuda — por auditar
+## Suscripciones — auditadas para prototipo
 
-- FAQ, formulario de soporte, persistencia e historial de tickets.
+- Planes, uso, facturas y detalle tienen estados completos de presentación.
+- La descarga sin PDF real se identifica como simulada.
+- Definiciones comerciales, permisos, cobros y archivos reales permanecen como issues de integración.
+
+## Ayuda — auditada para prototipo
+
+- FAQ, búsqueda visual, contacto, formulario e historial están maquetados.
+- Los tickets persisten localmente y las organizaciones del formulario provienen del estado central.
+- Correlativos, respuestas y adjuntos quedan para backend.

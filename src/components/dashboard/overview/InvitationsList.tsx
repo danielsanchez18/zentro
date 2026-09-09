@@ -3,14 +3,20 @@
 import { Check, Clock3, MailOpen, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { getPendingInvitationSummaries } from "@/lib/mock/dashboard";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { toastMsg } from "@/components/ui/toast-message";
 
 /**
  * Invitaciones pendientes del usuario.
  * TODO(0.2): leer desde `GET /invitations` y manejar aceptar/declinar.
  */
 export const InvitationsList = () => {
-  const invitations = getPendingInvitationSummaries();
+  const dashboard = useDashboardStore();
+  const invitations = dashboard.getInvitationSummaries().filter((invitation) => invitation.status === "PENDING");
+  const respond = (id: string, response: "ACCEPTED" | "DECLINED") => {
+    dashboard.respondToInvitation(id, response);
+    toastMsg.success(response === "ACCEPTED" ? "Invitación aceptada" : "Invitación rechazada", response === "ACCEPTED" ? "La organización ya aparece en tu hub." : "La invitación se movió al historial.");
+  };
   return (
     <section data-demo="invitations" aria-labelledby="invitaciones-title">
       <div className="flex items-center gap-2">
@@ -52,10 +58,10 @@ export const InvitationsList = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button type="button" variant="outline" className="text-sm px-3 rounded-full">
+                <Button type="button" variant="outline" className="text-sm px-3 rounded-full" onClick={() => respond(invitation.id, "DECLINED")}>
                   <X /> Rechazar
                 </Button>
-                <Button type="button" className="text-sm px-3 rounded-full">
+                <Button type="button" className="text-sm px-3 rounded-full" onClick={() => respond(invitation.id, "ACCEPTED")}>
                   <Check /> Aceptar
                 </Button>
               </div>

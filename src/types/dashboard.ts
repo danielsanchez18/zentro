@@ -7,6 +7,9 @@ export type MembershipStatus = "ACTIVE" | "SUSPENDED" | "LEFT";
 export type OrganizationStatus = "ACTIVE" | "ARCHIVED";
 export type SubscriptionStatus = "TRIAL" | "ACTIVE" | "PAST_DUE" | "CANCELED";
 export type InvitationStatus = "PENDING" | "ACCEPTED" | "DECLINED" | "EXPIRED" | "REVOKED";
+export type OrganizationSetupStatus = "DRAFT" | "READY";
+export type BusinessIndustry = "RESTAURANT" | "RETAIL" | "SERVICE" | "HEALTH" | "OTHER";
+export type CapabilityKey = "ventas" | "catalogo" | "clientes" | "inventario" | "presencia" | "finanzas";
 
 export interface DashboardUser {
   id: EntityId;
@@ -91,6 +94,9 @@ export interface OrganizationBranch {
   name: string;
   status: "ACTIVE" | "INACTIVE";
   isPrimary: boolean;
+  address?: string | null;
+  phone?: string | null;
+  openingHours?: string | null;
 }
 
 export interface OrganizationInvitation {
@@ -140,6 +146,16 @@ export interface OnboardingProgress {
   }>;
 }
 
+export interface OrganizationSetup {
+  organizationId: EntityId;
+  status: OrganizationSetupStatus;
+  industry: BusinessIndustry | null;
+  capabilities: CapabilityKey[];
+  skippedAt: string | null;
+  completedAt: string | null;
+  updatedAt: string;
+}
+
 export interface DashboardOrganizationSummary {
   id: EntityId;
   name: string;
@@ -149,6 +165,7 @@ export interface DashboardOrganizationSummary {
   status: SubscriptionStatus;
   members: number;
   branches: number;
+  setupStatus?: OrganizationSetupStatus;
 }
 
 export interface DashboardInvitationSummary {

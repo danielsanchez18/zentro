@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeCheck, Loader2, MessageSquare, Search } from "lucide-react";
+import { BadgeCheck, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toastMsg } from "@/components/ui/toast-message";
-import { MOCK_ORGANIZATIONS } from "@/lib/mock/organizations";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { saveTicket } from "@/components/dashboard/ayuda/tickets";
 import type { SupportTicket } from "@/components/dashboard/ayuda/types";
 
@@ -24,16 +24,16 @@ const CATEGORY_OPTIONS = CATEGORIES.map((category) => ({
   value: category,
 }));
 
-const TENANT_OPTIONS = [
-  { label: "Ninguna (consulta general)", value: "none" },
-  ...MOCK_ORGANIZATIONS.map((org) => ({ label: org.name, value: org.id })),
-];
-
 /**
  * Formulario de contacto con soporte.
  * TODO(0.2): POST /support-tickets (v1: ticket interno).
  */
 export const SupportForm = () => {
+  const dashboard = useDashboardStore();
+  const tenantOptions = [
+    { label: "Ninguna (consulta general)", value: "none" },
+    ...dashboard.getOrganizationSummaries().map((organization) => ({ label: organization.name, value: organization.id })),
+  ];
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
   const [tenantId, setTenantId] = useState("none");
   const [subject, setSubject] = useState("");
@@ -46,7 +46,7 @@ export const SupportForm = () => {
     setSending(true);
     const nextReference = `ZNT-${Math.floor(100000 + Math.random() * 900000)}`;
     setTimeout(() => {
-      const orgOption = TENANT_OPTIONS.find((option) => option.value === tenantId);
+      const orgOption = tenantOptions.find((option) => option.value === tenantId);
       const ticket: SupportTicket = {
         id: `ticket_${Date.now()}`,
         reference: nextReference,
@@ -159,7 +159,7 @@ export const SupportForm = () => {
             <Select
               value={tenantId}
               onValueChange={(value) => setTenantId(String(value))}
-              items={TENANT_OPTIONS}
+              items={tenantOptions}
             >
               <SelectTrigger
                 id="support-tenant"
@@ -169,7 +169,7 @@ export const SupportForm = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {TENANT_OPTIONS.map((option) => (
+                  {tenantOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>

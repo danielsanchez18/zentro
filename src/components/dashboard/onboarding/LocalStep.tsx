@@ -1,10 +1,13 @@
 import { Clock, MapPin, Phone, Store } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import type { LocalData } from "./constants";
 
 interface LocalStepProps {
   local: LocalData;
   onChange: (field: keyof LocalData, value: string) => void;
+  enabled: boolean;
+  onEnabledChange: (enabled: boolean) => void;
 }
 
 const FIELDS: {
@@ -13,24 +16,23 @@ const FIELDS: {
   placeholder: string;
   icon: typeof MapPin;
 }[] = [
-  { key: "nombre", label: "Nombre", placeholder: "Sucursal principal", icon: Store },
+  { key: "nombre", label: "Nombre", placeholder: "Ej: Sede Miraflores", icon: Store },
   { key: "direccion", label: "Dirección", placeholder: "Ej: Av. Larco 1234", icon: MapPin },
   { key: "telefono", label: "Teléfono", placeholder: "+51 999 999 999", icon: Phone },
   { key: "horario", label: "Horario", placeholder: "Lun-Vie 09:00-18:00", icon: Clock },
 ];
 
 /**
- * Paso 2 — Datos de la sucursal principal (opcional).
+ * Ubicación opcional. El switch explícito evita crear una sucursal implícita.
  */
-export const LocalStep = ({ local, onChange }: LocalStepProps) => {
+export const LocalStep = ({ local, onChange, enabled, onEnabledChange }: LocalStepProps) => {
   return (
     <section className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-medium tracking-tight">Tu local</h2>
+          <h2 className="text-lg font-medium tracking-tight">¿Quieres agregar una ubicación?</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Los datos del establecimiento principal. Puedes completarlos o editarlos
-            después desde el panel.
+            Una ubicación puede representar una tienda, consultorio, almacén o punto de atención.
           </p>
         </div>
         <span className="mt-0.5 inline-flex shrink-0 items-center rounded-full border border-border bg-muted px-2.5 py-1.5 text-xs font-medium uppercase text-foreground">
@@ -39,7 +41,15 @@ export const LocalStep = ({ local, onChange }: LocalStepProps) => {
       </div>
 
       <div className="rounded-xl border border-border bg-card p-5">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="add-location" className="text-sm font-medium">Agregar una ubicación ahora</label>
+            <p className="text-sm text-muted-foreground">Si la omites, tu organización se creará sin sucursales.</p>
+          </div>
+          <Switch id="add-location" checked={enabled} onCheckedChange={onEnabledChange} />
+        </div>
+
+        {enabled && <div className="mt-5 grid grid-cols-1 gap-4 border-t border-border pt-5 sm:grid-cols-2">
           {FIELDS.map(({ key, label, placeholder, icon: Icon }) => (
             <div
               key={key}
@@ -66,11 +76,10 @@ export const LocalStep = ({ local, onChange }: LocalStepProps) => {
               </div>
             </div>
           ))}
-        </div>
+        </div>}
 
         <p className="mt-5 border-t border-border pt-4 text-sm text-muted-foreground">
-          Solo el nombre se guarda junto a tu organización; el resto puedes dejarlo vacío
-          y completarlo cuando quieras.
+          Nada se crea hasta que actives esta opción y confirmes el resumen.
         </p>
       </div>
     </section>

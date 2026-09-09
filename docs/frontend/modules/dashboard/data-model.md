@@ -11,10 +11,13 @@ El modelo local representa el contrato objetivo entre frontend y backend. Las en
 - `DashboardOrganization`: tenant; no contiene al usuario ni requiere sucursal.
 - `Membership`: relación usuario-organización con rol y estado.
 - `OrganizationBranch`: ubicación opcional de una organización.
+- `OrganizationSetup`: configuración de una organización en estado `DRAFT` o `READY`, con actividad y capacidades elegidas.
 - `OrganizationInvitation`: invitación dirigida a un correo y vinculada a organización, invitador y rol.
 - `PlanDefinition`: definición comercial provisional y límites.
 - `OrganizationSubscription`: suscripción de una organización a un plan.
-- `OnboardingProgress`: progreso personal/configuracional explícito.
+- `OnboardingProgress`: guía general del hub para el usuario.
+
+El onboarding operativo pertenece a `OrganizationSetup`, no al usuario. Esto permite que una misma persona configure varias organizaciones de manera independiente.
 
 ## Proyecciones para UI
 
@@ -43,6 +46,7 @@ Las vistas pueden recibir modelos como `DashboardOrganizationSummary`, pero esto
 - `GET /me/invitations`
 - `GET /me/subscriptions`
 - `GET /me/invoices`
-- `GET/PUT /me/onboarding`
+- `GET/PUT /me/onboarding` para la guía personal del hub.
+- `GET/PUT /organizations/:organizationId/setup` para la configuración de cada organización.
 
 Los nombres finales pueden cambiar al diseñar la API, pero las fronteras y relaciones deben conservarse.

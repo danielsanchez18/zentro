@@ -4,58 +4,18 @@ import { Building2, MailOpen } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { InvitationCard } from "@/components/dashboard/invitaciones/InvitationCard";
 import { InvitationStatusChip } from "@/components/dashboard/invitaciones/InvitationStatusChip";
-import type { Invitation } from "@/components/dashboard/invitaciones/types";
-
-// TODO(0.2): leer desde GET /invitations
-const PENDING: Invitation[] = [
-  {
-    id: "inv_001",
-    orgName: "La Fonda del Chef",
-    invitedBy: "Lucía Torres",
-    role: "Miembro",
-    status: "PENDING",
-    expiresIn: "6 días",
-    receivedAt: "hace 1 día",
-  },
-  {
-    id: "inv_002",
-    orgName: "Panadería El Trigal",
-    invitedBy: "Marco Silva",
-    role: "Admin",
-    status: "PENDING",
-    expiresIn: "2 días",
-    receivedAt: "hace 5 días",
-  },
-];
-
-const HISTORY: Invitation[] = [
-  {
-    id: "inv_003",
-    orgName: "Café del Valle",
-    invitedBy: "Valeria Ríos",
-    role: "Admin",
-    status: "ACCEPTED",
-    receivedAt: "hace 3 semanas",
-  },
-  {
-    id: "inv_004",
-    orgName: "Chifa Unión",
-    invitedBy: "José Huamán",
-    role: "Miembro",
-    status: "DECLINED",
-    receivedAt: "hace 1 mes",
-  },
-  {
-    id: "inv_005",
-    orgName: "Bodega Don Pepe",
-    invitedBy: "Pepe Lozano",
-    role: "Miembro",
-    status: "EXPIRED",
-    receivedAt: "hace 2 meses",
-  },
-];
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { toastMsg } from "@/components/ui/toast-message";
 
 export const InvitationsPage = () => {
+  const dashboard = useDashboardStore();
+  const invitations = dashboard.getInvitationSummaries();
+  const pending = invitations.filter((invitation) => invitation.status === "PENDING");
+  const history = invitations.filter((invitation) => invitation.status !== "PENDING");
+  const respond = (id: string, response: "ACCEPTED" | "DECLINED") => {
+    dashboard.respondToInvitation(id, response);
+    toastMsg.success(response === "ACCEPTED" ? "Invitación aceptada" : "Invitación rechazada", response === "ACCEPTED" ? "Ya puedes entrar a la organización desde tu hub." : "La invitación quedó registrada en el historial.");
+  };
   return (
     <div className="space-y-10">
       <div className="space-y-1">
@@ -71,14 +31,14 @@ export const InvitationsPage = () => {
           className="flex items-center gap-2 text-base font-medium"
         >
           Pendientes
-          {PENDING.length > 0 && (
+          {pending.length > 0 && (
             <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">
-              {PENDING.length}
+              {pending.length}
             </span>
           )}
         </h2>
 
-        {PENDING.length === 0 ? (
+        {pending.length === 0 ? (
           <div className="mt-4 rounded-xl border border-dashed border-border">
             <EmptyState
               icon={MailOpen}
@@ -88,8 +48,8 @@ export const InvitationsPage = () => {
           </div>
         ) : (
           <ul className="mt-4 space-y-3">
-            {PENDING.map((invitation) => (
-              <InvitationCard key={invitation.id} invitation={invitation} />
+            {pending.map((invitation) => (
+              <InvitationCard key={invitation.id} invitation={invitation} onAccept={() => respond(invitation.id, "ACCEPTED")} onDecline={() => respond(invitation.id, "DECLINED")} />
             ))}
           </ul>
         )}
@@ -100,13 +60,13 @@ export const InvitationsPage = () => {
           Historial
         </h2>
 
-        {HISTORY.length === 0 ? (
+        {history.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">
             Aún no hay historial de invitaciones.
           </p>
         ) : (
           <ul className="mt-4 space-y-3">
-            {HISTORY.map((invitation) => (
+            {history.map((invitation) => (
               <li
                 key={invitation.id}
                 className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
