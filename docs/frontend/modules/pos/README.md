@@ -20,6 +20,7 @@ POS sí se encarga de:
 - Emitir comprobante cuando corresponda y crear el pedido.
 - Configurar, agrupar y asignar un punto de atención.
 - Suspender una venta y recuperarla durante la sesión.
+- Buscar y preparar múltiples productos mediante SKU, código de barras, QR, cámara o lector conectado.
 
 POS no se encarga de:
 
@@ -34,7 +35,8 @@ POS no se encarga de:
 | Superficie | Ruta | Propósito |
 |---|---|---|
 | Terminal POS | `/app/[slug]/pos` | Catálogo, carrito y cobro en una sola pantalla |
-| Venta suspendida | Dialog dentro de POS | Recuperar una operación no confirmada |
+| Carrito en pausa | Dialog dentro de POS | Recuperar una operación que aún no es pedido |
+| Sesión de escaneo | Dialog dentro de POS | Buscar, escanear, revisar cantidades y agregar varios productos |
 | Cobro | Dialog o panel dentro de POS | Registrar un pago sin exigir cubrir el total |
 | Resultado | Dialog dentro de POS | Confirmación, comprobante y acceso al pedido |
 
@@ -82,7 +84,7 @@ components/app/pos/
 - Las mesas disponibles pueden agruparse temporalmente; el punto resultante suma sus capacidades y puede volver a separarse.
 - Abrir o cobrar crea un pedido en el store mock y limpia el carrito.
 - Un pedido abierto puede editarse posteriormente desde Pedidos, conservando historial de cambios.
-- Una venta suspendida no reserva stock en el prototipo.
+- Un carrito en pausa no reserva stock en el prototipo.
 
 ## Fases de implementación
 

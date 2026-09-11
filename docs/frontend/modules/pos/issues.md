@@ -7,7 +7,7 @@ Estos puntos no bloquean la maqueta, pero deben resolverse antes de producción.
 - [ ] Definir entidad de sesión/terminal POS y relación con usuario, sucursal y caja.
 - [ ] Crear una venta, pagos, comprobante y pedido dentro de una transacción atómica.
 - [ ] Definir idempotency key para evitar cobros o pedidos duplicados.
-- [ ] Persistir ventas suspendidas y definir expiración.
+- [ ] Persistir carritos en pausa y definir expiración.
 - [ ] Definir correlativos por organización, sucursal, terminal y tipo de comprobante.
 - [ ] Registrar auditoría inmutable de descuentos, anulaciones y cambios de precio.
 - [ ] Permitir reabrir y modificar pedidos conservando versiones e historial de líneas.
@@ -53,5 +53,7 @@ Estos puntos no bloquean la maqueta, pero deben resolverse antes de producción.
 - [ ] Permisos para descuento manual, cambio de precio, anulación y venta a crédito.
 - [ ] Estrategia offline, sincronización y resolución de conflictos.
 - [ ] Navegación por teclado, lector de código de barras e impresión térmica.
+- [ ] Evaluar una librería de decodificación por cámara como fallback para navegadores sin `BarcodeDetector`.
+- [ ] Definir protocolos soportados para lectores RFID/NFC que no emulen teclado.
 - [ ] Pruebas de doble clic, pérdida de conexión y recuperación tras fallos.
 - [ ] QA de accesibilidad, teléfono, tablet y terminal táctil.

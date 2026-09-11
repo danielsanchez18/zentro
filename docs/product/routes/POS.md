@@ -17,6 +17,7 @@
 - Emisión mock de comprobante.
 - Confirmar crea un pedido con canal POS y ubicación de la terminal.
 - Suspender y recuperar ventas durante la sesión.
+- Sesión de escaneo múltiple por SKU, código, cámara o lector conectado.
 
 ### Restricciones
 

@@ -18,6 +18,7 @@ import { CheckoutDialog } from "../checkout/CheckoutDialog";
 import { SaleResultDialog } from "../checkout/SaleResultDialog";
 import { SuspendedSalesDialog } from "../suspended/SuspendedSalesDialog";
 import { ServicePointDialog } from "../service-points/ServicePointDialog";
+import { BarcodeScannerDialog, type ScannedProduct } from "../scanner/BarcodeScannerDialog";
 
 export function PosModule({ slug }: { slug: string }) {
   const store = usePosStore();
@@ -62,6 +63,7 @@ export function PosModule({ slug }: { slug: string }) {
   const [discountOpen, setDiscountOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [suspendedOpen, setSuspendedOpen] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
   const [result, setResult] = useState<{
     id: string;
     number: string;
@@ -76,7 +78,7 @@ export function PosModule({ slug }: { slug: string }) {
   const selectedPoint = servicePoints.find(
     (point) => point.id === servicePointId,
   );
-  const addProduct = (productId: string, variant?: ProductVariant) => {
+  const addProduct = (productId: string, variant?: ProductVariant, stock = 24) => {
     const product = catalogProducts.find((item) => item.id === productId);
     if (!product) return;
     store.addLine({
@@ -85,8 +87,34 @@ export function PosModule({ slug }: { slug: string }) {
       variantId: variant?.id,
       variantLabel: variant?.label,
       unitPrice: (variant?.priceOverride ?? product.basePrice) / 100,
-      stock: 24,
+      stock,
     });
+  };
+  const resolveScannedProduct = (rawCode: string): Omit<ScannedProduct, "quantity"> | undefined => {
+    const code = rawCode.trim().toUpperCase();
+    const matches = (item: { barcode?: string; qrCode?: string; sku?: string }) => [item.barcode, item.qrCode, item.sku].some((value) => value?.toUpperCase() === code);
+    const product = catalogProducts.find((item) => matches(item) || item.variants?.some(matches));
+    const variant = product?.variants?.find(matches);
+    if (!product) {
+      toastMsg.error("Código no encontrado", `No existe un producto asociado a ${rawCode}.`);
+      return undefined;
+    }
+    const productIndex = catalogProducts.findIndex((item) => item.id === product.id);
+    const stock = productIndex === 4 ? 0 : 8 + productIndex * 3;
+    if (product.status !== "activo" || variant?.status === "inactivo" || stock === 0) {
+      toastMsg.error("Producto no disponible", `${product.name} no puede agregarse en esta ubicación.`);
+      return undefined;
+    }
+    return { key: `${product.id}:${variant?.id ?? "base"}`, productId: product.id, productName: product.name, variantId: variant?.id, variantLabel: variant?.label, code: rawCode, price: variant?.priceOverride ?? product.basePrice, stock };
+  };
+  const addScannedProducts = (products: ScannedProduct[]) => {
+    products.forEach((item) => {
+      const product = catalogProducts.find((entry) => entry.id === item.productId);
+      const variant = product?.variants?.find((entry) => entry.id === item.variantId);
+      for (let index = 0; index < item.quantity; index += 1) addProduct(item.productId, variant, item.stock);
+    });
+    const units = products.reduce((sum, item) => sum + item.quantity, 0);
+    toastMsg.success("Productos agregados", `${units} unidades se incorporaron al carrito.`);
   };
   const validAttention =
     serviceType === "mesa"
@@ -221,6 +249,7 @@ export function PosModule({ slug }: { slug: string }) {
         location={activeLocation.name}
         suspendedCount={store.suspended.length}
         onSuspended={() => setSuspendedOpen(true)}
+        onScanner={() => setScannerOpen(true)}
       />
       <div className="mt-7 flex flex-col gap-6 lg:flex-row lg:items-start">
         <ProductBrowser
@@ -306,6 +335,7 @@ export function PosModule({ slug }: { slug: string }) {
         onPointsChange={setServicePoints}
         onSelect={setServicePointId}
       />
+      <BarcodeScannerDialog open={scannerOpen} onOpenChange={setScannerOpen} onResolve={resolveScannedProduct} onConfirm={addScannedProducts} />
       <SuspendedSalesDialog
         open={suspendedOpen}
         sales={store.suspended}

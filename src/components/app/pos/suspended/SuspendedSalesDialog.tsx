@@ -48,7 +48,7 @@ export function SuspendedSalesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg font-sans">
         <DialogHeader>
-          <DialogTitle>Ventas suspendidas</DialogTitle>
+          <DialogTitle>Carritos en pausa</DialogTitle>
           <DialogDescription>
             No reservan stock ni registran cobros.
           </DialogDescription>
@@ -136,7 +136,7 @@ export function SuspendedSalesDialog({
             </div>
             <div>
               <p className="font-medium text-base text-foreground">
-                No hay ventas suspendidas
+                No hay carritos en pausa
               </p>
               <p className="text-sm text-muted-foreground">
                 Las ventas que pauses en el POS aparecerán aquí.

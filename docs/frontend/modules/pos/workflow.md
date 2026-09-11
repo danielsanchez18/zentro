@@ -63,6 +63,12 @@ Abrir el pedido requiere datos de atención válidos, pero no un pago. La ubicac
 
 El resultado muestra número de pedido, total, monto pagado, saldo y acciones para abrir el pedido o iniciar otra operación.
 
-## Ventas suspendidas
+## Carritos en pausa
 
-Una venta puede guardarse temporalmente con nombre o referencia. Puede recuperarse o descartarse, pero no se considera pedido, cobro ni reserva de inventario hasta confirmarse.
+Un carrito puede guardarse temporalmente con nombre o referencia. Puede recuperarse o descartarse, pero no se considera pedido, cobro ni reserva de inventario hasta abrirse.
+
+## Escaneo de productos
+
+La sesión de escaneo admite dos entradas: un campo único para SKU, código o lector conectado que emule teclado, y la cámara del dispositivo. Cada lectura resuelve producto y variante, valida estado y stock, y se acumula en una bandeja temporal. El operador puede aumentar, reducir o quitar resultados antes de enviarlos juntos al carrito.
+
+La cámara usa `getUserMedia` y `BarcodeDetector`, por lo que requiere HTTPS o localhost, permiso del usuario y un navegador compatible. Los lectores USB, Bluetooth, RFID o NFC funcionan cuando entregan el identificador como teclado y finalizan con Enter. Web NFC directo tiene soporte limitado y queda como integración posterior.

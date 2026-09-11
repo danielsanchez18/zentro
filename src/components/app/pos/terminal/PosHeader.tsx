@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 export function PosHeader({
   suspendedCount,
   onSuspended,
+  onScanner,
 }: {
   location: string;
   suspendedCount: number;
   onSuspended: () => void;
+  onScanner: () => void;
 }) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4">
@@ -17,15 +19,15 @@ export function PosHeader({
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" className="px-3 rounded-full">
-          Escanear codigo
+        <Button variant="outline" className="px-3 rounded-full" onClick={onScanner}>
+          Escanear código
         </Button>
         <Button
           variant="outline"
           onClick={onSuspended}
           className="px-3 rounded-full"
         >
-          Suspendidas {suspendedCount > 0 && `(${suspendedCount})`}
+          Carritos en pausa {suspendedCount > 0 && `(${suspendedCount})`}
         </Button>
       </div>
     </header>

@@ -56,6 +56,9 @@ export interface ProductVariant {
   label: string;
   priceOverride?: number;
   status: "activo" | "inactivo";
+  barcode?: string;
+  qrCode?: string;
+  sku?: string;
 }
 
 export interface CatalogProduct {
@@ -68,6 +71,9 @@ export interface CatalogProduct {
   status: "activo" | "inactivo";
   image?: string;
   variants?: ProductVariant[];
+  barcode?: string;
+  qrCode?: string;
+  sku?: string;
 }
 
 export const catalogProducts: CatalogProduct[] = [
@@ -80,8 +86,8 @@ export const catalogProducts: CatalogProduct[] = [
     basePrice: 2500,
     status: "activo",
     variants: [
-      { id: "var_1a", label: "300ml", priceOverride: 2500, status: "activo" },
-      { id: "var_1b", label: "500ml", priceOverride: 3500, status: "activo" },
+      { id: "var_1a", label: "300ml", priceOverride: 2500, status: "activo", barcode: "7750001000301", sku: "JUG-NAR-300" },
+      { id: "var_1b", label: "500ml", priceOverride: 3500, status: "activo", barcode: "7750001000509", sku: "JUG-NAR-500" },
     ],
   },
   {
@@ -105,6 +111,8 @@ export const catalogProducts: CatalogProduct[] = [
     subcategoryId: "sub_2",
     basePrice: 1800,
     status: "activo",
+    barcode: "7750002000355",
+    sku: "BEB-COCA-350",
   },
   {
     id: "prod_4",
@@ -114,6 +122,8 @@ export const catalogProducts: CatalogProduct[] = [
     subcategoryId: "sub_2",
     basePrice: 1800,
     status: "activo",
+    barcode: "7750002000356",
+    sku: "BEB-SPRITE-350",
   },
   {
     id: "prod_5",
@@ -145,6 +155,8 @@ export const catalogProducts: CatalogProduct[] = [
     subcategoryId: "sub_4",
     basePrice: 2200,
     status: "activo",
+    qrCode: "ZENTRO-PROD-007",
+    sku: "POS-HEL-VAI",
   },
   {
     id: "prod_8",
