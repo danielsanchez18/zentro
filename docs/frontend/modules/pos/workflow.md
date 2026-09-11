@@ -34,8 +34,8 @@ El resumen distingue subtotal, promociones, descuento directo, delivery, impuest
 
 ## Atención y cliente
 
-- `mesa`: requiere un punto de atención.
-- `recojo`: requiere nombre o cliente y hora estimada.
+- `mesa`: requiere un punto de atención; el cliente es opcional.
+- `recojo`: requiere un nombre libre o un cliente registrado; la hora estimada es opcional.
 - `delivery`: requiere cliente, teléfono y dirección.
 - `servicio/cita`: crea el pedido y una reserva en Agenda; puede abrirse sin pago, con adelanto o con pago parcial.
 
@@ -44,6 +44,8 @@ Los puntos de atención pertenecen a una ubicación y no tienen tipos rígidos: 
 El selector muestra los puntos como cards operativas. La creación y edición usan un formulario modal separado. Cada punto puede habilitarse, deshabilitarse, editarse o eliminarse; si está ocupado, permite abrir el pedido asociado.
 
 El cliente puede ser invitado. Los datos capturados desde POS no se convertirán automáticamente en un registro CRM hasta definir el contrato de integración.
+
+Las tres modalidades permiten buscar un cliente por nombre o correo. Al seleccionar un perfil se muestra como ficha no editable y, en Delivery, se autocompletan el teléfono y la dirección guardados. Quitar la selección limpia todos los datos vinculados; escribir un nombre libre mantiene la operación como invitado.
 
 ## Descuentos
 

@@ -20,6 +20,8 @@ export interface PosCustomer {
   name: string;
   email: string;
   avatar?: string;
+  phone?: string;
+  address?: string;
 }
 
 export const posServicePoints: PosServicePoint[] = [
@@ -39,8 +41,8 @@ export const posStaff = [
 ];
 
 export const posCustomers: PosCustomer[] = [
-  { id: "customer_1", name: "Amanda Harvey", email: "amanda.harvey@correo.pe", avatar: "https://i.pravatar.cc/120?img=47" },
-  { id: "customer_2", name: "Lucía Fernández", email: "lucia.fernandez@correo.pe", avatar: "https://i.pravatar.cc/120?img=32" },
-  { id: "customer_3", name: "Renato Chávez", email: "renato.chavez@correo.pe", avatar: "https://i.pravatar.cc/120?img=12" },
-  { id: "customer_4", name: "Milagros Salazar", email: "milagros.salazar@correo.pe", avatar: "https://i.pravatar.cc/120?img=45" },
+  { id: "customer_1", name: "Amanda Harvey", email: "amanda.harvey@correo.pe", avatar: "https://i.pravatar.cc/120?img=47", phone: "+51 987 245 610", address: "Av. Balta 825, Chiclayo" },
+  { id: "customer_2", name: "Lucía Fernández", email: "lucia.fernandez@correo.pe", avatar: "https://i.pravatar.cc/120?img=32", phone: "+51 945 381 227", address: "Calle Los Pinos 184, La Victoria" },
+  { id: "customer_3", name: "Renato Chávez", email: "renato.chavez@correo.pe", avatar: "https://i.pravatar.cc/120?img=12", phone: "+51 976 402 115", address: "Av. Grau 1240, Chiclayo" },
+  { id: "customer_4", name: "Milagros Salazar", email: "milagros.salazar@correo.pe", avatar: "https://i.pravatar.cc/120?img=45", phone: "+51 933 718 604", address: "Jr. San José 456, Lambayeque" },
 ];

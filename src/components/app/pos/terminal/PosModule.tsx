@@ -51,6 +51,8 @@ export function PosModule({ slug }: { slug: string }) {
   const [customer, setCustomer] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState<PosCustomer>();
   const [reference, setReference] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [servicePointId, setServicePointId] = useState("");
   const [servicePoints, setServicePoints] = useState(() =>
     posServicePoints.map((point) => ({ ...point })),
@@ -90,8 +92,8 @@ export function PosModule({ slug }: { slug: string }) {
     serviceType === "mesa"
       ? Boolean(servicePointId)
       : serviceType === "delivery"
-        ? customer.trim() && reference.trim()
-        : true;
+        ? Boolean(customer.trim() && customerPhone.trim() && deliveryAddress.trim())
+        : Boolean(customer.trim());
   const suspend = () => {
     const name = window.prompt("Nombre o referencia de la venta");
     if (name && store.suspend(name)) {
@@ -121,13 +123,13 @@ export function PosModule({ slug }: { slug: string }) {
       number,
       customerName: customer.trim() || point?.name || reference.trim() || "Cliente invitado",
       customerEmail: selectedCustomer?.email,
-      customerPhone: serviceType === "delivery" ? reference : undefined,
+      customerPhone: serviceType === "delivery" ? customerPhone : selectedCustomer?.phone,
       serviceType,
       channel: "pos",
       tableName: serviceType === "mesa" ? point?.name : undefined,
       servicePointId: point?.id,
       servicePointName: point?.name,
-      deliveryAddress: serviceType === "delivery" ? reference : undefined,
+      deliveryAddress: serviceType === "delivery" ? deliveryAddress : undefined,
       status: "confirmado",
       paymentStatus: paidAmount <= 0 ? "pago_pendiente" : paidAmount >= total ? "pagado" : "pago_parcial",
       paymentMethod: payments.at(-1)?.method,
@@ -175,6 +177,8 @@ export function PosModule({ slug }: { slug: string }) {
     setCustomer("");
     setSelectedCustomer(undefined);
     setReference("");
+    setCustomerPhone("");
+    setDeliveryAddress("");
     setDiscount(0);
     setServiceType("mesa");
     setServicePointId("");
@@ -231,8 +235,11 @@ export function PosModule({ slug }: { slug: string }) {
           serviceType={serviceType}
           customer={customer}
           reference={reference}
+          phone={customerPhone}
+          address={deliveryAddress}
           discount={discount}
           selectedPoint={selectedPoint}
+          selectedCustomer={selectedCustomer}
           onServiceType={setServiceType}
           onCustomer={(value) => {
             setCustomer(value);
@@ -241,21 +248,31 @@ export function PosModule({ slug }: { slug: string }) {
           onCustomerSelect={(value) => {
             setSelectedCustomer(value);
             setCustomer(value.name);
+            setCustomerPhone(value.phone ?? "");
+            setDeliveryAddress(value.address ?? "");
+          }}
+          onCustomerClear={() => {
+            setSelectedCustomer(undefined);
+            setCustomer("");
+            setCustomerPhone("");
+            setDeliveryAddress("");
           }}
           onReference={setReference}
+          onPhone={setCustomerPhone}
+          onAddress={setDeliveryAddress}
           onQuantity={store.setQuantity}
           onNote={store.setNote}
           onRemove={store.removeLine}
           onDiscount={() => setDiscountOpen(true)}
           onSelectPoint={() => setServicePointOpen(true)}
           onSuspend={suspend}
-          onOpenOrder={() => validAttention ? openOrder() : toastMsg.error("Completa la atención", "Selecciona el punto de atención.")}
+          onOpenOrder={() => validAttention ? openOrder() : toastMsg.error("Completa la atención", serviceType === "mesa" ? "Selecciona el punto de atención." : serviceType === "delivery" ? "Completa cliente, teléfono y dirección." : "Ingresa o selecciona el cliente del recojo.")}
           onCheckout={() =>
             validAttention
               ? setCheckoutOpen(true)
               : toastMsg.error(
                   "Completa la atención",
-                  "Selecciona el punto de atención.",
+                  serviceType === "mesa" ? "Selecciona el punto de atención." : serviceType === "delivery" ? "Completa cliente, teléfono y dirección." : "Ingresa o selecciona el cliente del recojo.",
                 )
           }
         />

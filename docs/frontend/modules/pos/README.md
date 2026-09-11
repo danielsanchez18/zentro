@@ -13,6 +13,7 @@ POS sí se encarga de:
 - Explorar y buscar productos disponibles.
 - Construir el carrito y personalizar líneas.
 - Seleccionar cliente y tipo de atención.
+- Buscar clientes registrados y autocompletar sus datos de entrega.
 - Aplicar promociones y descuentos manuales autorizados.
 - Abrir un pedido sin exigir pago.
 - Registrar uno o varios pagos, incluido un adelanto o pago parcial.
