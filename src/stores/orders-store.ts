@@ -21,6 +21,7 @@ const transitions: Record<OrderStatus, OrderStatus[]> = {
 
 interface OrdersStore {
   orders: CustomerOrder[];
+  addOrder: (order: CustomerOrder) => void;
   transitionOrder: (id: string, status: OrderStatus) => boolean;
   registerPayment: (id: string, payment: Omit<OrderPayment, "id" | "createdAt">) => boolean;
   assignCourier: (id: string, courier: Courier) => boolean;
@@ -35,6 +36,7 @@ export const canTransitionOrder = (current: OrderStatus, next: OrderStatus) => t
 
 export const useOrdersStore = create<OrdersStore>((set) => ({
   orders: initialOrders,
+  addOrder: (order) => set((state) => ({ orders: [order, ...state.orders] })),
   transitionOrder: (id, status) => {
     let changed = false;
     set((state) => ({ orders: state.orders.map((order) => {

@@ -10,6 +10,8 @@ Estos puntos no bloquean la maqueta, pero deben resolverse antes de producción.
 - [ ] Persistir ventas suspendidas y definir expiración.
 - [ ] Definir correlativos por organización, sucursal, terminal y tipo de comprobante.
 - [ ] Registrar auditoría inmutable de descuentos, anulaciones y cambios de precio.
+- [ ] Permitir reabrir y modificar pedidos conservando versiones e historial de líneas.
+- [ ] Modelar estados independientes de pedido, atención, preparación, pago y comprobante.
 
 ## INTEGRACIÓN — catálogo, stock y promociones
 
@@ -26,6 +28,8 @@ Estos puntos no bloquean la maqueta, pero deben resolverse antes de producción.
 - [ ] Definir estados asíncronos, reversos y conciliación de pagos electrónicos.
 - [ ] Integrar facturación electrónica, impresión y notas de crédito.
 - [ ] Definir tratamiento fiscal de descuentos, delivery, propinas y redondeo.
+- [ ] Registrar cada pago parcial con cobrador, caja, turno, referencia y reversos independientes.
+- [ ] Definir cuándo se emite comprobante en pedidos abiertos o con pagos parciales.
 
 ## INTEGRACIÓN — clientes y pedidos
 
@@ -33,6 +37,16 @@ Estos puntos no bloquean la maqueta, pero deben resolverse antes de producción.
 - [ ] Validar direcciones y cobertura de delivery.
 - [ ] Publicar el pedido confirmado para el módulo Pedidos/KDS.
 - [ ] Definir notificaciones al cliente y tiempos prometidos.
+- [ ] Integrar reservas de servicios con Agenda, disponibilidad, duración, recursos y adelantos.
+
+## INTEGRACIÓN — local, puntos de atención y equipo
+
+- [ ] CRUD de puntos de atención por ubicación: mesa, mostrador, cabina, silla, box u otro.
+- [ ] Estados en tiempo real: disponible, ocupado, reservado e inactivo.
+- [ ] Agrupar y separar mesas temporalmente sin perder identidad ni historial.
+- [ ] Evitar doble asignación concurrente de un punto de atención.
+- [ ] Vincular responsable de atención y cobrador con miembros activos de Equipo y sus permisos.
+- [ ] Registrar cambios de responsable durante la vida del pedido.
 
 ## PRODUCCIÓN — permisos y resiliencia
 

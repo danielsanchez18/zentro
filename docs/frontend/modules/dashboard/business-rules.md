@@ -49,3 +49,62 @@
 31. Configurar sucursal es opcional salvo que una capacidad elegida tenga esa dependencia dura, por ejemplo POS.
 32. Omitir onboarding no bloquea el dashboard y puede retomarse.
 33. “Indispensable para tu rubro” es recomendación de producto, no obligación técnica.
+
+## Workspace y contexto operativo
+
+34. La organización es el contexto raíz del workspace; una ubicación operativa es opcional.
+35. El rol define acciones permitidas y la asignación de ubicación define dónde pueden ejecutarse.
+36. Sin ubicaciones se abre el contexto general; con una única ubicación permitida se selecciona directamente.
+37. Con varias ubicaciones se puede recordar la última selección válida y ofrecer “Todas” solo en módulos compatibles y con permiso global.
+38. POS, caja y otras capacidades estrictamente locales requieren una ubicación concreta.
+39. Recordar una ubicación nunca concede acceso; el contexto debe revalidarse contra la membresía y asignaciones vigentes.
+40. La interfaz oculta selectores innecesarios a negocios pequeños y muestra controles adicionales conforme aumenta su complejidad.
+
+## Presencia y canales
+
+41. Crear una organización genera una ficha pública en borrador, pero no la publica automáticamente.
+42. Publicar o retirar una ficha del Marketplace requiere una decisión explícita y permiso suficiente.
+43. CMS, Marketplace, POS y canales externos son canales independientes de las ubicaciones operativas.
+44. Todo pedido conserva su canal de origen aunque se normalice en la bandeja central de Zentro.
+45. La ubicación que atiende un pedido puede elegirse después de recibirlo mediante reglas de cobertura, disponibilidad o selección manual.
+
+## Catálogo y acceso por ubicación
+
+46. Los productos y servicios pertenecen al catálogo maestro de la organización; las ubicaciones definen surtido, precio, disponibilidad e inventario sin duplicar el producto base.
+47. Crear una ubicación permite copiar otro surtido, seleccionar productos existentes o comenzar vacío.
+48. Canal de origen y ubicación de atención son dimensiones independientes de cada pedido.
+49. Un Member limitado a una ubicación no puede descubrir ni consultar datos de otras ubicaciones o de la vista consolidada.
+50. Un Member con alcance global puede cambiar de ubicación y acceder a vistas consolidadas únicamente para permisos concedidos.
+
+## Propiedad y administración delegada
+
+51. El creador de una organización se convierte inicialmente en Owner.
+52. Owner representa titularidad; Administrador es un perfil amplio de permisos asignable a un Member.
+53. Transferir propiedad, modificar Owners y cerrar o eliminar definitivamente la organización son acciones exclusivas de Owner.
+54. Facturación, equipo, capacidades, canales e integraciones pueden delegarse mediante permisos explícitos.
+55. Ninguna operación puede dejar una organización activa sin al menos un Owner.
+
+## Perfiles y permisos
+
+56. Los perfiles sugeridos son plantillas editables de permisos para Members; no crean nuevas categorías de propiedad.
+57. Invitar un Member requiere definir perfil de acceso y alcance antes de confirmar.
+58. La personalización básica usa niveles por módulo: sin acceso, ver, operar y administrar.
+59. Acciones sensibles requieren permisos atómicos explícitos aunque el módulo tenga acceso general.
+60. Las plantillas personalizadas pertenecen a la organización y pueden reutilizarse.
+
+## Enrutamiento de pedidos
+
+## Ubicaciones operativas
+
+67. `Ubicación` es una entidad única y flexible; sus capacidades no se modelan mediante un tipo exclusivo.
+68. Una ubicación puede atender público, operar POS, almacenar inventario, preparar pedidos, ofrecer recojo, realizar delivery, gestionar citas y/o publicarse.
+69. Una ubicación puede cambiar o combinar funciones sin migrar a otra entidad.
+70. La publicación, dirección visible y aparición en el mapa son opciones explícitas e independientes de su uso operativo.
+71. Una organización puede operar sin ubicaciones cuando su modelo sea digital, publicitario o de servicios sin atención física.
+
+61. En la primera versión, un pedido solo puede tener una ubicación de atención activa y no se divide entre ubicaciones.
+62. Cada canal utiliza asignación automática, elección del cliente o asignación manual.
+63. POS hereda la ubicación de la terminal; recojo utiliza la elegida por el cliente; delivery considera cobertura, horario, surtido, disponibilidad y prioridad.
+64. Un pedido sin coincidencia válida queda `UNASSIGNED` y debe permanecer visible con alerta.
+65. Organizaciones sin ubicaciones pueden procesar pedidos con `fulfillmentLocationId` nulo.
+66. Toda reasignación requiere permiso, motivo e historial de la ubicación anterior y nueva.

@@ -44,6 +44,7 @@ export interface OrderPayment {
   method: NonNullable<CustomerOrder["paymentMethod"]>;
   reference?: string;
   createdAt: string;
+  collectedBy?: string;
 }
 
 export interface OrderRefund {
@@ -88,6 +89,9 @@ export interface CustomerOrder {
   serviceType: OrderServiceType;
   channel: OrderChannel;
   tableName?: string;
+  servicePointId?: string;
+  servicePointName?: string;
+  attendedBy?: string;
   deliveryAddress?: string;
   status: OrderStatus;
   paymentStatus: OrderPaymentStatus;

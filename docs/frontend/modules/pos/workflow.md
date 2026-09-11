@@ -4,13 +4,13 @@
 
 ```text
 sesión disponible
-  → elegir atención y cliente
+  → elegir punto de atención y cliente
   → agregar productos
   → revisar stock, variantes y notas
   → aplicar promociones/descuento autorizado
-  → cobrar
-  → emitir comprobante
-  → crear pedido
+  → abrir pedido sin pago o registrar cobro
+  → emitir comprobante cuando corresponda
+  → continuar el pedido o cerrarlo
   → abrir Pedidos o iniciar una nueva venta
 ```
 
@@ -34,9 +34,14 @@ El resumen distingue subtotal, promociones, descuento directo, delivery, impuest
 
 ## Atención y cliente
 
-- `mesa`: requiere mesa o identificador de atención.
+- `mesa`: requiere un punto de atención.
 - `recojo`: requiere nombre o cliente y hora estimada.
 - `delivery`: requiere cliente, teléfono y dirección.
+- `servicio/cita`: crea el pedido y una reserva en Agenda; puede abrirse sin pago, con adelanto o con pago parcial.
+
+Los puntos de atención pertenecen a una ubicación y no tienen tipos rígidos: pueden representar mesas, mostradores, cabinas, sillas o boxes. Pueden estar disponibles, ocupados, reservados o inactivos. Agrupar mesas es una operación temporal con historial, no una modificación destructiva de su configuración.
+
+El selector muestra los puntos como cards operativas. La creación y edición usan un formulario modal separado. Cada punto puede habilitarse, deshabilitarse, editarse o eliminarse; si está ocupado, permite abrir el pedido asociado.
 
 El cliente puede ser invitado. Los datos capturados desde POS no se convertirán automáticamente en un registro CRM hasta definir el contrato de integración.
 
@@ -48,13 +53,13 @@ El pedido conserva por separado el snapshot de promociones y el descuento manual
 
 ## Cobro
 
-El operador agrega uno o varios pagos hasta cubrir el total. Efectivo calcula vuelto; medios electrónicos admiten referencia. Se puede retirar un pago antes de confirmar.
+El operador puede abrir el pedido sin cobrar, registrar un adelanto, combinar pagos o cubrir el total. Efectivo calcula vuelto cuando se cubre el saldo; medios electrónicos admiten referencia. Se puede retirar un pago antes de registrarlo.
 
-La venta solo se confirma cuando los datos de atención son válidos y el monto recibido cubre el total. Al confirmar se crea el pedido, se registra el movimiento de caja futuro y se solicita el comprobante.
+Abrir el pedido requiere datos de atención válidos, pero no un pago. La ubicación exacta del responsable y del cajero dentro de la interfaz se definirá en la siguiente iteración. Cada cobro generará un movimiento de Caja; el comprobante fiscal se emite según el momento y las reglas fiscales configuradas, no necesariamente al abrir el pedido.
 
 ## Resultado
 
-La confirmación muestra número de pedido, total, pagos, comprobante y acciones para imprimir/descargar, abrir el pedido o iniciar otra venta.
+El resultado muestra número de pedido, total, monto pagado, saldo y acciones para abrir el pedido o iniciar otra operación.
 
 ## Ventas suspendidas
 

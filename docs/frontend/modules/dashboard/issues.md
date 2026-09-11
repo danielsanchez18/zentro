@@ -29,6 +29,17 @@
 - [ ] Obtener suscripciones, límites, facturas y permisos de facturación por organización.
 - [ ] Generar descargas de comprobantes desde URLs firmadas o endpoints autorizados.
 
+## Workspace, permisos y ubicaciones
+
+- [ ] Resolver un `WorkspaceContext` autorizado con organización, membresía, capacidades, permisos y ubicaciones accesibles.
+- [ ] Revalidar la última ubicación recordada; el almacenamiento local no puede ser fuente de autorización.
+- [ ] Soportar alcance de ubicación `ALL` o `SELECTED` para las asignaciones de miembros.
+- [ ] Proteger rutas y operaciones además de ocultar enlaces del sidebar.
+- [ ] Exigir una ubicación concreta para POS, caja y operaciones estrictamente locales.
+- [ ] Modelar canales de venta y normalizar referencias externas sin perder trazabilidad.
+- [ ] Crear fichas públicas como borrador y exigir publicación explícita.
+- [ ] Definir conectores, webhooks, idempotencia y sincronización para canales sociales y plataformas externas.
+
 ## Soporte
 
 - [ ] Persistir tickets, respuestas, adjuntos e historial de estados.

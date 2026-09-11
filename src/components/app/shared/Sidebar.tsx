@@ -4,13 +4,16 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
+  Building2,
   Boxes,
   CalendarDays,
+  Check,
   ChevronDown,
   ChevronsUpDownIcon,
   ClipboardList,
   Gift,
   Globe,
+  House,
   LayoutDashboard,
   Megaphone,
   Newspaper,
@@ -29,7 +32,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { useWorkspaceContext } from "@/stores/workspace-context-store";
 import { useWorkspaceNav } from "@/stores/workspace-nav-store";
 
 /**
@@ -134,6 +145,43 @@ const SidebarContent = () => {
     return segments[1] ?? "org";
   }, [pathname]);
 
+  const organizations = useDashboardStore((state) => state.organizations);
+  const memberships = useDashboardStore((state) => state.memberships);
+  const branches = useDashboardStore((state) => state.branches);
+  const currentUser = useDashboardStore((state) => state.currentUser);
+  const activeLocationByOrganization = useWorkspaceContext(
+    (state) => state.activeLocationByOrganization,
+  );
+  const setActiveLocation = useWorkspaceContext(
+    (state) => state.setActiveLocation,
+  );
+
+  const organization = organizations.find((item) => item.slug === slug);
+  const membership = memberships.find(
+    (item) =>
+      item.organizationId === organization?.id &&
+      item.userId === currentUser.id &&
+      item.status === "ACTIVE",
+  );
+  const availableLocations = branches.filter(
+    (item) =>
+      item.organizationId === organization?.id && item.status === "ACTIVE",
+  );
+  const canUseGeneralView = membership?.roleKey === "OWNER" || membership?.roleKey === "ADMIN";
+  const storedLocationId = organization
+    ? activeLocationByOrganization[organization.id]
+    : null;
+  const activeLocation = availableLocations.find(
+    (item) => item.id === storedLocationId,
+  );
+  const activeContextLabel = activeLocation?.name ?? "Vista general";
+
+  useEffect(() => {
+    if (!organization || canUseGeneralView || activeLocation) return;
+    const firstLocation = availableLocations[0];
+    if (firstLocation) setActiveLocation(organization.id, firstLocation.id);
+  }, [activeLocation, availableLocations, canUseGeneralView, organization, setActiveLocation]);
+
   // Detección del ítem activo: la raíz del workspace (/app/:slug) activa
   // solamente «Resumen». El resto activa para sí mismo y sus sub-rutas.
   const isActive = (href: string) =>
@@ -153,18 +201,6 @@ const SidebarContent = () => {
       .map((g) => g.label);
     return new Set(closed);
   });
-
-  // Si la navegación cambia a otra sección, se despliega su grupo automáticamente.
-  useEffect(() => {
-    const active = navGroups.find(groupActive);
-    if (!active) return;
-    setCollapsed((prev) => {
-      if (!prev.has(active.label)) return prev;
-      const next = new Set(prev);
-      next.delete(active.label);
-      return next;
-    });
-  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleGroup = (label: string) => {
     setCollapsed((prev) => {
@@ -200,7 +236,7 @@ const SidebarContent = () => {
 
         {/* Grupo de secciones */}
         {navGroups.map((group) => {
-          const opened = !collapsed.has(group.label);
+          const opened = groupActive(group) || !collapsed.has(group.label);
           return (
             <div key={group.label} className="">
               <button
@@ -259,16 +295,92 @@ const SidebarContent = () => {
         })}
       </div>
 
-      {/* Tenant */}
+      {/* Organización y contexto operativo */}
       <div className="border-t border-border p-5">
-        <button className="flex items-center gap-x-2 w-full text-start font-heading cursor-pointer">
-          <div className="h-9 w-9 bg-accent rounded-md" />
-          <div>
-            <p className="text-sm font-medium">Las Rocas</p>
-            <p className="text-xs text-muted-foreground">Cambiar organización</p>
-          </div>
-          <ChevronsUpDownIcon className="ml-auto size-4 text-muted-foreground" />
-        </button>
+        <Popover>
+          <PopoverTrigger
+            className="flex w-full cursor-pointer items-center gap-x-2 rounded-lg p-1 text-start font-heading outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
+              <Building2 className="size-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium">
+                {organization?.name ?? "Organización"}
+              </p>
+              <p className="truncate text-xs text-muted-foreground">
+                {activeContextLabel}
+              </p>
+            </div>
+            <ChevronsUpDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground" />
+          </PopoverTrigger>
+
+          <PopoverContent
+            side="top"
+            align="start"
+            sideOffset={10}
+            className="w-64 p-2"
+          >
+            <div className="px-2 pb-2 pt-1">
+              <p className="truncate text-sm font-medium">
+                {organization?.name ?? "Organización"}
+              </p>
+              <p className="text-xs text-muted-foreground">Contexto de trabajo</p>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              {canUseGeneralView && organization && (
+                <PopoverClose
+                  className="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-left text-sm hover:bg-secondary"
+                  onClick={() => setActiveLocation(organization.id, null)}
+                >
+                  <House className="size-4 text-muted-foreground" />
+                  <span>Vista general</span>
+                  {!activeLocation && <Check className="ml-auto size-4 text-primary" />}
+                </PopoverClose>
+              )}
+
+              {availableLocations.map((location) => (
+                <PopoverClose
+                  key={location.id}
+                  className="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-left text-sm hover:bg-secondary"
+                  onClick={() =>
+                    organization && setActiveLocation(organization.id, location.id)
+                  }
+                >
+                  <Store className="size-4 text-muted-foreground" />
+                  <span className="truncate">{location.name}</span>
+                  {activeLocation?.id === location.id && (
+                    <Check className="ml-auto size-4 text-primary" />
+                  )}
+                </PopoverClose>
+              ))}
+            </div>
+
+            <div className="my-2 border-t border-border" />
+
+            <div className="flex flex-col gap-0.5">
+              <PopoverClose
+                render={<Link href={`/app/${slug}/configuracion`} />}
+                nativeButton={false}
+                onClick={closeMobile}
+                className="flex items-center gap-x-2 rounded-md px-2 py-2 text-sm hover:bg-secondary"
+              >
+                <Settings className="size-4 text-muted-foreground" />
+                Configuración del negocio
+              </PopoverClose>
+              <PopoverClose
+                render={<Link href="/dashboard/organizaciones" />}
+                nativeButton={false}
+                onClick={closeMobile}
+                className="flex items-center gap-x-2 rounded-md px-2 py-2 text-sm hover:bg-secondary"
+              >
+                <Building2 className="size-4 text-muted-foreground" />
+                Cambiar organización
+              </PopoverClose>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

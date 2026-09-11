@@ -31,6 +31,8 @@ export type BadgeStatus =
   | "activo"
   | "inactivo"
   | "disponible"
+  | "ocupado"
+  | "reservado"
   | "bajo"
   | "agotado"
   | "entrada"
@@ -156,6 +158,20 @@ const STATUS_CONFIG: Record<
     badge:
       "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  ocupado: {
+    label: "Ocupado",
+    icon: Clock3,
+    badge:
+      "bg-amber-500/10 text-amber-600 ring-amber-500/25 dark:bg-amber-500/15 dark:text-amber-400 dark:ring-amber-400/20",
+    iconClass: "text-amber-600 dark:text-amber-400",
+  },
+  reservado: {
+    label: "Reservado",
+    icon: CalendarClock,
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    iconClass: "text-sky-600 dark:text-sky-400",
   },
   bajo: {
     label: "Stock bajo",
