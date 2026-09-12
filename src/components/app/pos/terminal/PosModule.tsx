@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { catalogProducts, type ProductVariant } from "@/lib/mock/catalog";
 import { posServicePoints, type PosCustomer } from "@/lib/mock/pos";
+import { customerPrimaryAddress } from "@/lib/mock/crm";
 import type { CustomerOrder } from "@/lib/mock/orders";
 import { useOrdersStore } from "@/stores/orders-store";
 import { usePosStore } from "@/stores/pos-store";
@@ -275,10 +276,11 @@ export function PosModule({ slug }: { slug: string }) {
             setSelectedCustomer(undefined);
           }}
           onCustomerSelect={(value) => {
+            const primaryAddress = customerPrimaryAddress(value);
             setSelectedCustomer(value);
             setCustomer(value.name);
-            setCustomerPhone(value.phone ?? "");
-            setDeliveryAddress(value.address ?? "");
+            setCustomerPhone(value.phone);
+            setDeliveryAddress(primaryAddress ? `${primaryAddress.address}, ${primaryAddress.district}` : "");
           }}
           onCustomerClear={() => {
             setSelectedCustomer(undefined);

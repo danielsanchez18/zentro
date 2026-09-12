@@ -4,10 +4,9 @@
 
 ## Próxima entrega
 
-1. Definir `WorkspaceContext` mock.
-2. Añadir capacidades, permisos y alcance de ubicaciones al modelo central.
-3. Convertir el sidebar en navegación dinámica.
-4. Adaptar Equipo y permisos al modelo Owner/Member con perfiles sugeridos.
-5. Construir el Centro de configuración y Ubicaciones.
-6. Empezar el prototipo de Punto de venta.
-
+1. Definir alcance, rutas y contrato mock de Agenda.
+2. Diseñar vistas de calendario y disponibilidad.
+3. Construir alta, edición y detalle de citas.
+4. Relacionar cita con cliente, servicio, responsable y ubicación.
+5. Manejar estados, reprogramación, cancelación, no-show e historial.
+6. Conectar adelantos y cobros con Pedidos/POS sin forzar pago inmediato.

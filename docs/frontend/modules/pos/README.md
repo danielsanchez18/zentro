@@ -1,6 +1,6 @@
 # Punto de venta
 
-**Estado del módulo:** Prototipo funcional completo; integración con backend pendiente.
+**Estado del módulo:** Prototipo principal cerrado; integraciones con Equipo, Caja, Agenda y backend pendientes.
 
 ## Objetivo
 
@@ -51,23 +51,25 @@ components/app/pos/
 │   ├── PosHeader.tsx
 │   ├── ProductBrowser.tsx
 │   ├── ProductCard.tsx
-│   ├── ProductFilters.tsx
-│   └── CartPanel.tsx
 ├── cart/
 │   ├── CartLine.tsx
-│   ├── CustomerSelector.tsx
-│   ├── ServiceTypeSelector.tsx
+│   ├── CartPanel.tsx
+│   ├── CustomerSearchDialog.tsx
+│   ├── SelectedCustomerBadge.tsx
 │   └── DiscountDialog.tsx
 ├── checkout/
 │   ├── CheckoutDialog.tsx
-│   ├── PaymentEntry.tsx
-│   ├── ReceiptFields.tsx
 │   └── SaleResultDialog.tsx
 ├── suspended/
 │   └── SuspendedSalesDialog.tsx
 ├── service-points/
-│   └── ServicePointDialog.tsx
+│   ├── ServicePointDialog.tsx
+│   ├── ServicePointCard.tsx
+│   └── AddEditPointDialog.tsx
+├── scanner/
+│   └── BarcodeScannerDialog.tsx
 └── shared/
+    └── types.ts
 ```
 
 ## Reglas del prototipo
@@ -99,8 +101,13 @@ components/app/pos/
 9. Empty states, responsive móvil y QA técnico inicial. ✓
 10. Cierre documental y separación de issues de backend. ✓
 11. Configuración, selección, agrupación y acciones mock de puntos de atención. ✓
-12. Ubicación en la UI de responsable de atención y cajero. Pendiente
-13. Reserva de servicios integrada con Agenda y disponibilidad real. Pendiente
+12. Responsable de atención y cajero, integrado con Equipo y Caja. Diferido a esos módulos
+13. Reserva de servicios y disponibilidad real. Diferido a Agenda
+14. Escaneo múltiple por SKU, código, cámara o lector conectado. ✓
+
+## Criterio de cierre
+
+POS queda cerrado como prototipo porque permite construir, pausar, abrir y cobrar pedidos, gestionar la atención local, seleccionar clientes y escanear productos. Las tareas diferidas requieren contratos de módulos que aún no existen y se retomarán al integrar Equipo/Caja y Agenda; no representan pantallas faltantes del terminal actual.
 
 ## Dependencias
 

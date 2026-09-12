@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { posCustomers, type PosCustomer } from "@/lib/mock/pos";
+import type { PosCustomer } from "@/lib/mock/pos";
+import { useCrmStore } from "@/stores/crm-store";
 
 const initials = (name: string) =>
   name
@@ -31,15 +32,17 @@ export function CustomerSearchDialog({
   onSelect: (customer: PosCustomer) => void;
 }) {
   const [query, setQuery] = useState("");
+  const customers = useCrmStore((state) => state.customers);
   const results = useMemo(() => {
     const value = query.trim().toLocaleLowerCase("es");
-    if (!value) return posCustomers;
-    return posCustomers.filter(
+    const available = customers.filter((customer) => customer.status === "activo");
+    if (!value) return available;
+    return available.filter(
       (customer) =>
         customer.name.toLocaleLowerCase("es").includes(value) ||
         customer.email.toLocaleLowerCase("es").includes(value),
     );
-  }, [query]);
+  }, [customers, query]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

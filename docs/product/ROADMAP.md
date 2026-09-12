@@ -35,12 +35,18 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
 12. **Compras** — completo en prototipo.
 13. **Promociones** — completo en prototipo.
 14. **Pedidos** — completo en prototipo.
-15. **POS** — prototipo funcional completo; conexión autoritativa a WorkspaceContext pendiente.
+15. **POS** — prototipo principal cerrado.
+   - Equipo/Caja aportarán responsable, cobrador, turno y movimiento financiero.
+   - Agenda aportará reservas de servicios y disponibilidad.
+   - La persistencia autoritativa permanece documentada como issue de backend.
 
 ## Fase 5 — Relación con clientes y servicios
 
-16. **CRM** — planificado.
-17. **Agenda** — planificada para citas presenciales u online.
+16. **CRM** — completo en prototipo.
+   - Fuente única de clientes compartida con POS.
+   - Overview, detalle, alta, edición, direcciones, etiquetas, pedidos e historial.
+   - Persistencia, consentimientos, deduplicación e identidad autoritativa documentados como issues.
+17. **Agenda** — siguiente módulo; planificada para citas presenciales u online.
 18. **Formularios** — planificados para captación y flujos de canales.
 
 ## Fase 6 — Finanzas

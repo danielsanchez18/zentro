@@ -2,7 +2,7 @@
 
 ## `/app/[slug]/pos`
 
-**Estado:** prototipo funcional completo; integración pendiente.
+**Estado:** prototipo principal cerrado; integraciones transversales y backend pendientes.
 
 ### Alcance
 

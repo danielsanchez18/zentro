@@ -4,12 +4,14 @@
 
 ## En curso
 
-Workspace dinámico, fase 2:
+CRM cerrado como prototipo:
 
-- el selector inferior de organización y ubicación ya está implementado;
-- falta resolver capacidades activas, permisos efectivos y ubicaciones permitidas;
-- falta derivar desde ese contexto los grupos y enlaces visibles del sidebar;
-- debe validarse con Owner, Member global, Member local y organización sin ubicaciones.
+- fuente única mock para clientes y POS;
+- overview con KPIs, filtros, tabla y tarjetas;
+- alta, edición y detalle;
+- direcciones, etiquetas, métricas, pedidos e historial;
+- pendientes de backend separados en docs/frontend/modules/crm/issues.md.
+
+La siguiente tarea activa es planificar y construir Agenda.
 
 No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.
-

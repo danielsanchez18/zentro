@@ -15,14 +15,8 @@ export interface PosServicePoint {
   associatedOrderId?: string;
 }
 
-export interface PosCustomer {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  phone?: string;
-  address?: string;
-}
+import type { CrmCustomer } from "@/lib/mock/crm";
+export type PosCustomer = CrmCustomer;
 
 export const posServicePoints: PosServicePoint[] = [
   { id: "point_1", name: "Mesa 01", kind: "mesa", status: "disponible", capacity: 4 },
@@ -38,11 +32,4 @@ export const posStaff = [
   { id: "staff_1", name: "Daniel Sánchez", role: "Administrador" },
   { id: "staff_2", name: "María Torres", role: "Atención" },
   { id: "staff_3", name: "Luis Mendoza", role: "Caja" },
-];
-
-export const posCustomers: PosCustomer[] = [
-  { id: "customer_1", name: "Amanda Harvey", email: "amanda.harvey@correo.pe", avatar: "https://i.pravatar.cc/120?img=47", phone: "+51 987 245 610", address: "Av. Balta 825, Chiclayo" },
-  { id: "customer_2", name: "Lucía Fernández", email: "lucia.fernandez@correo.pe", avatar: "https://i.pravatar.cc/120?img=32", phone: "+51 945 381 227", address: "Calle Los Pinos 184, La Victoria" },
-  { id: "customer_3", name: "Renato Chávez", email: "renato.chavez@correo.pe", avatar: "https://i.pravatar.cc/120?img=12", phone: "+51 976 402 115", address: "Av. Grau 1240, Chiclayo" },
-  { id: "customer_4", name: "Milagros Salazar", email: "milagros.salazar@correo.pe", avatar: "https://i.pravatar.cc/120?img=45", phone: "+51 933 718 604", address: "Jr. San José 456, Lambayeque" },
 ];
