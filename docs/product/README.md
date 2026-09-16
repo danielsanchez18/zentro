@@ -15,7 +15,7 @@ La documentación detallada de cada dominio continúa en `docs/frontend/modules/
 - [PROGRESS.md](./PROGRESS.md): fotografía breve del estado actual.
 - [routes/](./routes/): contrato funcional de cada página, exista o no todavía.
 
-Catálogo de rutas: [Landing](./routes/LANDING.md), [Auth](./routes/AUTH.md), [Hub](./routes/HUB.md), [Workspace](./routes/WORKSPACE.md), [Catálogo](./routes/CATALOG.md), [Inventario y compras](./routes/INVENTORY.md), [Promociones](./routes/PROMOTIONS.md), [Pedidos](./routes/ORDERS.md), [POS](./routes/POS.md) y [módulos planificados](./routes/PLANNED.md).
+Catálogo de rutas: [Landing](./routes/LANDING.md), [Auth](./routes/AUTH.md), [Hub](./routes/HUB.md), [Workspace](./routes/WORKSPACE.md), [Catálogo](./routes/CATALOG.md), [Inventario y compras](./routes/INVENTORY.md), [Promociones](./routes/PROMOTIONS.md), [Pedidos](./routes/ORDERS.md), [POS](./routes/POS.md), [CRM](./routes/CRM.md), [Agenda](./routes/AGENDA.md) y [módulos planificados](./routes/PLANNED.md).
 
 ## Estados utilizados
 

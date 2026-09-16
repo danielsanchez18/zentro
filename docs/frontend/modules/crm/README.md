@@ -12,7 +12,8 @@ CRM es la fuente única de clientes del workspace. Sus perfiles se reutilizan en
 - Perfil para personas o empresas, documento, contacto, estado, canal preferido, etiquetas y notas.
 - Dirección principal estructurada para autocompletar delivery.
 - Detalle con información, métricas, direcciones, pedidos relacionados e historial.
-- Acciones para editar, habilitar/deshabilitar y eliminar dentro del prototipo.
+- Acciones rápidas funcionales en tabla y tarjetas para ver, editar, habilitar/deshabilitar y eliminar.
+- Toast flotante del detalle alineado con la paleta común: edición verde, cambio de estado neutro y eliminación roja.
 - POS consulta los clientes activos del store de CRM; ya no mantiene una lista paralela.
 
 ## Reglas del prototipo
@@ -32,3 +33,7 @@ CRM es la fuente única de clientes del workspace. Sus perfiles se reutilizan en
 - Consumidor compartido: src/components/app/pos/cart/CustomerSearchDialog.tsx
 
 Ver [issues pendientes](./issues.md).
+
+## Estado del módulo
+
+**Cerrado como prototipo frontend.** Los puntos abiertos de `issues.md` requieren backend, integraciones o decisiones posteriores y no bloquean el cierre de maquetación.

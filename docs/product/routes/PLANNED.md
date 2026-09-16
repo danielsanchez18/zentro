@@ -4,16 +4,6 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 ## Clientes y servicios
 
-### `/app/[slug]/clientes` — CRM
-
-- Perfil unificado del cliente, contacto, direcciones, consentimientos, pedidos, pagos, citas y actividad por canal.
-- Vista global con filtrado por alcance; los miembros locales solo ven relaciones autorizadas.
-
-### `/app/[slug]/agenda`
-
-- Calendario de citas, disponibilidad, profesionales, recursos y ubicaciones.
-- Debe funcionar para citas presenciales u online y para negocios sin inventario.
-
 ### `/app/[slug]/formularios`
 
 - Formularios de captación, contacto, reservas y solicitudes.
@@ -72,4 +62,3 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 - Historial de cambios con actor, acción, entidad, contexto, fecha y motivo.
 - Vista global o filtrada según alcance; registros inmutables en backend.
-

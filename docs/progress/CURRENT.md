@@ -4,14 +4,13 @@
 
 ## En curso
 
-CRM cerrado como prototipo:
+Agenda en desarrollo:
 
-- fuente única mock para clientes y POS;
-- overview con KPIs, filtros, tabla y tarjetas;
-- alta, edición y detalle;
-- direcciones, etiquetas, métricas, pedidos e historial;
-- pendientes de backend separados en docs/frontend/modules/crm/issues.md.
+- capacidad opcional para negocios de servicios o mixtos;
+- citas presenciales, online o a domicilio;
+- integración prevista con CRM, Equipo, Catálogo y Pedidos/POS;
+- primer bloque activo: contrato mock y overview.
 
-La siguiente tarea activa es planificar y construir Agenda.
+La tarea activa es construir Agenda según docs/frontend/modules/agenda/README.md.
 
 No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.

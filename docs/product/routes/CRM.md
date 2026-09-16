@@ -2,7 +2,7 @@
 
 ## /app/[slug]/clientes
 
-Overview del CRM con KPIs, búsqueda, filtros, tabla, tarjetas y acceso al alta y detalle.
+Overview del CRM con KPIs, búsqueda, filtros, tabla, tarjetas y acciones rápidas para ver, editar, cambiar estado o eliminar.
 
 ## /app/[slug]/clientes/agregar
 
