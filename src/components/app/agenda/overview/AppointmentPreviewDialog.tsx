@@ -148,13 +148,13 @@ export function AppointmentPreviewDialog({
               <span className="font-mono text-[13px] leading-none font-semibold px-2.5 py-2 rounded-lg bg-muted">
                 {appointment.number}
               </span>
-              <span className="inline-flex items-center gap-1 text-[13px] leading-none font-medium px-2.5 py-2 rounded-lg bg-muted capitalize">
+              <span className="inline-flex items-center gap-1 text-[13px] leading-none font-medium px-2.5 py-1.5 rounded-lg bg-muted capitalize">
                 {appointment.modality === "online" ? (
-                  <Video className="size-3" />
+                  <Video className="size-4" />
                 ) : appointment.modality === "presencial" ? (
-                  <MapPin className="size-3" />
+                  <MapPin className="size-4" />
                 ) : (
-                  <Home className="size-3" />
+                  <Home className="size-4" />
                 )}
                 {appointmentModalityLabel(appointment.modality)}
               </span>
@@ -166,13 +166,17 @@ export function AppointmentPreviewDialog({
               {appointment.serviceName}
             </DialogTitle>
             <div className="font-heading flex flex-wrap items-center gap-2 text-sm text-muted-foreground capitalize">
-              <Calendar className="size-3.5 shrink-0 text-primary" />
-              <span>{formatFullDate(appointment.startsAt)}</span>
+              <div className="flex items-center gap-2">
+                <Calendar className="size-3.5 shrink-0 text-primary" />
+                <span>{formatFullDate(appointment.startsAt)}</span>
+              </div>
               <span>·</span>
-              <Clock3 className="size-3.5 shrink-0 text-muted-foreground" />
-              <span className="normal-case font-medium text-foreground">
-                {formatTimeRange(appointment.startsAt, appointment.endsAt)}
-              </span>
+              <div className="flex items-center gap-2">
+                <Clock3 className="size-3.5 shrink-0 text-muted-foreground" />
+                <span className="normal-case font-medium text-foreground">
+                  {formatTimeRange(appointment.startsAt, appointment.endsAt)}
+                </span>
+              </div>
               <span className="text-[13px] bg-muted px-2 py-2 rounded-md leading-none font-mono normal-case">
                 {appointment.durationMinutes} min
               </span>
@@ -184,14 +188,14 @@ export function AppointmentPreviewDialog({
         <div className="overflow-y-auto font-heading">
           {/* Card de Videollamada (Google Meet / Online) */}
           {appointment.modality === "online" && appointment.meetingUrl && (
-            <div className="mb-4 flex items-center justify-between gap-3 p-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
+            <div className="mb-4 flex items-center justify-between flex-wrap gap-3 p-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
               <div className="flex gap-3 min-w-0">
                 <Video className="size-5" />
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 text-xs font-medium ">
+                  <div className="flex items-center gap-1.5 text-sm font-medium ">
                     Reunión Virtual · Google Meet
                   </div>
-                  <p className="text-xs text-muted-foreground font-mono truncate select-all">
+                  <p className="text-sm text-muted-foreground font-mono truncate select-all">
                     {appointment.meetingUrl}
                   </p>
                 </div>
