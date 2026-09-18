@@ -4,9 +4,6 @@
 
 ## Próxima entrega
 
-1. Definir alcance, rutas y contrato mock de Agenda.
-2. Diseñar vistas de calendario y disponibilidad.
-3. Construir alta, edición y detalle de citas.
-4. Relacionar cita con cliente, servicio, responsable y ubicación.
-5. Manejar estados, reprogramación, cancelación, no-show e historial.
-6. Conectar adelantos y cobros con Pedidos/POS sin forzar pago inmediato.
+1. Elegir el siguiente módulo funcional del roadmap.
+2. Mantener los pendientes de integración de Agenda registrados en `docs/frontend/modules/agenda/issues.md`.
+3. Continuar con QA responsive y accesibilidad como trabajo transversal.

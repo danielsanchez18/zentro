@@ -8,6 +8,22 @@ export type AppointmentStatus =
 export type AppointmentModality = "presencial" | "domicilio" | "online";
 export type AppointmentOrigin = "manual" | "pos" | "web" | "marketplace" | "whatsapp";
 export type AppointmentPaymentStatus = "sin_pago" | "adelanto" | "pagado";
+export type AppointmentRepeat = "none" | "daily" | "weekly" | "monthly" | "yearly";
+export type AppointmentHistoryKind =
+  | "created"
+  | "updated"
+  | "rescheduled"
+  | "status_changed"
+  | "payment_changed";
+
+export interface AppointmentHistoryEntry {
+  id: string;
+  kind: AppointmentHistoryKind;
+  title: string;
+  detail?: string;
+  createdAt: string;
+  actorName: string;
+}
 
 export interface AgendaService {
   id: string;
@@ -52,6 +68,14 @@ export interface Appointment {
   startsAt: string;
   endsAt: string;
   notes?: string;
+  allDay?: boolean;
+  repeat?: AppointmentRepeat;
+  reminderMinutes?: number;
+  notifyByEmail?: boolean;
+  allowGuests?: boolean;
+  showParticipantList?: boolean;
+  cancellationReason?: string;
+  history?: AppointmentHistoryEntry[];
   createdAt: string;
   updatedAt: string;
 }

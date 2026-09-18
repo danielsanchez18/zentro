@@ -14,14 +14,29 @@ import {
   Mail,
   MapPin,
   MessageSquare,
+  MoreHorizontal,
+  Pencil,
   Phone,
+  Play,
   Share2,
   Tag,
+  Trash2,
   UserCheck,
   UserRound,
+  UserX,
   Video,
   Wallet,
+  XCircle,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ConfirmDialog } from "@/components/app/team/ConfirmDialog";
+import { AppointmentReasonDialog } from "./AppointmentReasonDialog";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +53,7 @@ import {
   appointmentModalityLabel,
   appointmentPaymentLabel,
   type Appointment,
+  type AppointmentStatus,
 } from "@/lib/mock/agenda";
 import { teamMembers } from "@/lib/mock/team";
 import { useCrmStore } from "@/stores/crm-store";
@@ -46,6 +62,14 @@ interface AppointmentPreviewDialogProps {
   appointment: Appointment | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onEdit?: (appointment: Appointment) => void;
+  onTransition?: (
+    appointment: Appointment,
+    status: AppointmentStatus,
+    reason?: string,
+  ) => void;
+  onDelete?: (appointment: Appointment) => void;
+  onPayment?: (appointment: Appointment) => void;
 }
 
 const formatFullDate = (isoStr: string) => {
@@ -82,9 +106,15 @@ export function AppointmentPreviewDialog({
   appointment,
   open,
   onOpenChange,
+  onEdit,
+  onTransition,
+  onDelete,
+  onPayment,
 }: AppointmentPreviewDialogProps) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedSummary, setCopiedSummary] = useState(false);
+  const [reasonAction, setReasonAction] = useState<AppointmentStatus | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const customers = useCrmStore((state) => state.customers);
 
@@ -137,9 +167,25 @@ export function AppointmentPreviewDialog({
   const isPaid = appointment.paymentStatus === "pagado";
   const isPartial = appointment.paymentStatus === "adelanto";
 
+  const nextAction:
+    | { status: AppointmentStatus; label: string; icon: typeof Play }
+    | undefined =
+    appointment.status === "pendiente_confirmacion"
+      ? { status: "confirmada", label: "Confirmar cita", icon: BadgeCheck }
+      : appointment.status === "confirmada"
+        ? { status: "en_curso", label: "Iniciar atención", icon: Play }
+        : appointment.status === "en_curso"
+          ? { status: "completada", label: "Completar cita", icon: BadgeCheck }
+          : undefined;
+
+  const canDelete =
+    appointment.paymentStatus === "sin_pago" &&
+    !["completada", "en_curso"].includes(appointment.status);
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[95dvh] flex flex-col sm:max-w-xl">
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-h-[95dvh] flex flex-col sm:max-w-xl rounded-2xl">
         {/* Cabecera estilizada con Estado, Código y Modalidad */}
         <DialogHeader className="pr-6">
           <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -442,31 +488,153 @@ export function AppointmentPreviewDialog({
         </div>
 
         {/* Footer con Botones de Acción */}
-        <DialogFooter className="">
-          <Button
-            type="button"
-            onClick={copySummary}
-            variant="outline"
-            className="rounded-full cursor-pointer"
-            title="Copiar resumen de la cita"
-          >
-            {copiedSummary ? (
-              <BadgeCheck className="text-emerald-500" />
-            ) : (
-              <Share2 />
+        <DialogFooter className="flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 border-t border-border">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="cursor-pointer gap-1.5 rounded-full"
+                />
+              }
+            >
+              <MoreHorizontal />
+              Más acciones
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56 font-heading">
+              {onEdit && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    onOpenChange(false);
+                    onEdit(appointment);
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Pencil /> Editar o reprogramar
+                </DropdownMenuItem>
+              )}
+              {onPayment && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    onOpenChange(false);
+                    onPayment(appointment);
+                  }}
+                  className="cursor-pointer"
+                >
+                  <Wallet /> Gestionar pago
+                </DropdownMenuItem>
+              )}
+              {onTransition && appointment.status !== "cancelada" && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setReasonAction("cancelada")}
+                    className="cursor-pointer"
+                  >
+                    <XCircle /> Cancelar cita
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={() => setReasonAction("no_asistio")}
+                    className="cursor-pointer"
+                  >
+                    <UserX /> Marcar no asistencia
+                  </DropdownMenuItem>
+                </>
+              )}
+              {onDelete && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    disabled={!canDelete}
+                    onClick={() => setDeleteOpen(true)}
+                    className="cursor-pointer"
+                  >
+                    <Trash2 /> Eliminar registro
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button
+              type="button"
+              onClick={copySummary}
+              variant="outline"
+              title="Copiar resumen de la cita"
+              className="rounded-full cursor-pointer"
+            >
+              {copiedSummary ? (
+                <BadgeCheck className="text-emerald-500" />
+              ) : (
+                <Share2 />
+              )}
+              Compartir
+            </Button>
+            {nextAction && onTransition && (
+              <Button
+                type="button"
+                onClick={() => onTransition(appointment, nextAction.status)}
+                className="rounded-full cursor-pointer"
+              >
+                <nextAction.icon />
+                {nextAction.label}
+              </Button>
             )}
-            Compartir
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="rounded-full cursor-pointer"
-          >
-            Cerrar
-          </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="rounded-full cursor-pointer"
+            >
+              Cerrar
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    <AppointmentReasonDialog
+      open={Boolean(reasonAction)}
+      onOpenChange={(nextOpen) => !nextOpen && setReasonAction(null)}
+      title={
+        reasonAction === "cancelada"
+          ? "Cancelar cita"
+          : "Registrar no asistencia"
+      }
+      description="La cita se conservará y el motivo quedará visible en su historial."
+      confirmLabel={
+        reasonAction === "cancelada" ? "Cancelar cita" : "Registrar"
+      }
+      onConfirm={(reason) => {
+        if (!reasonAction) return;
+        onTransition?.(appointment, reasonAction, reason);
+        setReasonAction(null);
+        onOpenChange(false);
+      }}
+    />
+
+    <ConfirmDialog
+      open={deleteOpen}
+      onOpenChange={setDeleteOpen}
+      title="Eliminar registro"
+      description={
+        canDelete
+          ? `${appointment.number} se eliminará del prototipo. Usa cancelar si necesitas conservar trazabilidad.`
+          : "No se puede eliminar una cita iniciada, completada o con pagos. Cancélala para conservar la trazabilidad."
+      }
+      confirmLabel="Eliminar"
+      onConfirm={() => {
+        if (!canDelete) return;
+        onDelete?.(appointment);
+        setDeleteOpen(false);
+        onOpenChange(false);
+      }}
+    />
+  </>
   );
 }

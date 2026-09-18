@@ -46,9 +46,11 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
    - Fuente única de clientes compartida con POS.
    - Overview, detalle, alta, edición, direcciones, etiquetas, pedidos e historial.
    - Persistencia, consentimientos, deduplicación e identidad autoritativa documentados como issues.
-17. **Agenda** — en desarrollo.
-   - Planeamiento, reglas, rutas y contratos definidos.
-   - Primer bloque: overview, calendario y operaciones mock.
+17. **Agenda** — prototipo frontend cerrado.
+   - Overview con KPIs y vistas día, semana, mes y lista.
+   - Alta, edición/reprogramación, preview, estados, historial y pagos mock.
+   - Configuración visual de disponibilidad, recursos y bloqueos; conflictos mock por responsable o recurso.
+   - Persistencia autoritativa e integraciones externas documentadas como issues.
 18. **Formularios** — planificados para captación y flujos de canales.
 
 ## Fase 6 — Finanzas

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { es } from "date-fns/locale";
 import { Search } from "@/components/app/shared/Search";
-import { FilterPopover } from "@/components/app/shared/FilterPopover";
+import { FilterSheet } from "@/components/app/shared/FilterSheet";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,7 +13,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import type { AppointmentStatus } from "@/lib/mock/agenda";
+import {
+  agendaServices,
+  type AppointmentModality,
+  type AppointmentStatus,
+} from "@/lib/mock/agenda";
+import { teamMembers } from "@/lib/mock/team";
 
 export type AgendaView = "day" | "week" | "month" | "list";
 
@@ -22,6 +27,12 @@ interface AgendaToolbarProps {
   onQuery: (value: string) => void;
   status: AppointmentStatus | "all";
   onStatus: (value: AppointmentStatus | "all") => void;
+  service: string;
+  onService: (value: string) => void;
+  responsible: string;
+  onResponsible: (value: string) => void;
+  modality: AppointmentModality | "all";
+  onModality: (value: AppointmentModality | "all") => void;
   date: string;
   onDate: (value: string) => void;
   view: AgendaView;
@@ -101,6 +112,12 @@ export function AgendaToolbar({
   onQuery,
   status,
   onStatus,
+  service,
+  onService,
+  responsible,
+  onResponsible,
+  modality,
+  onModality,
   date,
   onDate,
   view,
@@ -245,7 +262,7 @@ export function AgendaToolbar({
                   type="button"
                   variant="outline"
                   onClick={() => {
-                    onDate("2026-09-12");
+                    onDate(dateKey(new Date()));
                     setCalendarOpen(false);
                   }}
                   className="rounded-full"
@@ -292,37 +309,37 @@ export function AgendaToolbar({
           {formattedDate}
         </h2>
 
-        {/* Navegación agrupada < Hoy > */}
-        {/* <div className="inline-flex items-center p-1 rounded-lg border border-border">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onMove(view === "week" ? -7 : -1)}
-            className="cursor-pointer hover:bg-primary/5!"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="size-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => onDate("2026-09-12")}
-            className="cursor-pointer hover:bg-primary/5! py-2 h-fit! text-sm leading-none!"
-          >
-            Hoy
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onMove(view === "week" ? 7 : 1)}
-            className="cursor-pointer hover:bg-primary/5!"
-            aria-label="Siguiente"
-          >
-            <ChevronRight className="size-4" />
-          </Button>
-        </div> */}
+        {/* Navegación agrupada < Hoy >
+        // <div className="inline-flex items-center rounded-lg border border-border p-1">
+        //   <Button
+        //     type="button"
+        //     variant="ghost"
+        //     size="icon"
+        //     onClick={() => onMove(view === "week" ? -7 : -1)}
+        //     className="cursor-pointer hover:bg-primary/5!"
+        //     aria-label="Anterior"
+        //   >
+        //     <ChevronLeft className="size-4" />
+        //   </Button>
+        //   <Button
+        //     type="button"
+        //     variant="secondary"
+        //     onClick={() => onDate(dateKey(new Date()))}
+        //     className="cursor-pointer hover:bg-primary/5! py-2 h-fit! text-sm leading-none!"
+        //   >
+        //     Hoy
+        //   </Button>
+        //   <Button
+        //     type="button"
+        //     variant="ghost"
+        //     size="icon"
+        //     onClick={() => onMove(view === "week" ? 7 : 1)}
+        //     className="cursor-pointer hover:bg-primary/5!"
+        //     aria-label="Siguiente"
+        //   >
+        //     <ChevronRight className="size-4" />
+        //   </Button>
+        // </div> */}
       </div>
 
       {/* Fila de Filtros: Buscador y Botón Filtros estándar de Zentro */}
@@ -336,9 +353,23 @@ export function AgendaToolbar({
         </div>
 
         <div className="flex items-center gap-2">
-          <FilterPopover
-            activeCount={status !== "all" ? 1 : 0}
-            onClear={() => onStatus("all")}
+          <FilterSheet
+            activeCount={
+              [
+                status !== "all",
+                service !== "all",
+                responsible !== "all",
+                modality !== "all",
+              ].filter(Boolean).length
+            }
+            onClear={() => {
+              onStatus("all");
+              onService("all");
+              onResponsible("all");
+              onModality("all");
+            }}
+            title="Filtros de Agenda"
+            description="Filtra las citas por estado, servicio, especialista y modalidad."
             groups={[
               {
                 label: "Estado de cita",
@@ -353,6 +384,45 @@ export function AgendaToolbar({
                   { label: "Completada", value: "completada" },
                   { label: "Cancelada", value: "cancelada" },
                   { label: "No asistió", value: "no_asistio" },
+                ],
+              },
+              {
+                label: "Servicio",
+                selected: service,
+                onSelect: onService,
+                options: [
+                  { label: "Todos", value: "all" },
+                  ...agendaServices.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })),
+                ],
+              },
+              {
+                label: "Responsable",
+                selected: responsible,
+                onSelect: onResponsible,
+                options: [
+                  { label: "Todos", value: "all" },
+                  { label: "Sin asignar", value: "unassigned" },
+                  ...teamMembers
+                    .filter((member) => member.status === "activo")
+                    .map((member) => ({
+                      label: member.name,
+                      value: member.id,
+                    })),
+                ],
+              },
+              {
+                label: "Modalidad",
+                selected: modality,
+                onSelect: (value) =>
+                  onModality(value as AppointmentModality | "all"),
+                options: [
+                  { label: "Todas", value: "all" },
+                  { label: "Presencial", value: "presencial" },
+                  { label: "A domicilio", value: "domicilio" },
+                  { label: "Online", value: "online" },
                 ],
               },
             ]}

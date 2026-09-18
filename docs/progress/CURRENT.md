@@ -4,13 +4,15 @@
 
 ## En curso
 
-Agenda en desarrollo:
+Agenda cerrada en prototipo frontend:
 
 - capacidad opcional para negocios de servicios o mixtos;
 - citas presenciales, online o a domicilio;
-- integración prevista con CRM, Equipo, Catálogo y Pedidos/POS;
-- primer bloque activo: contrato mock y overview.
+- overview con KPIs y vistas día, semana, mes y lista;
+- alta mock enriquecida y preview con contacto, pago y compartir;
+- integración parcial con CRM, Equipo y Catálogo;
+- edición, historial, disponibilidad visual, recursos, bloqueos, pagos y conflictos mock implementados.
 
-La tarea activa es construir Agenda según docs/frontend/modules/agenda/README.md.
+La siguiente tarea es seleccionar el próximo módulo del roadmap. Los pendientes de Agenda son de integración/backend o QA transversal.
 
 No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.

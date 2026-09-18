@@ -40,7 +40,7 @@ export const ConfirmDialog = ({
   onConfirm,
 }: ConfirmDialogProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="sm:max-w-sm">
+    <DialogContent className="sm:max-w-sm rounded-2xl">
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2">
           {/* <Icon className="size-5 text-destructive" /> */}

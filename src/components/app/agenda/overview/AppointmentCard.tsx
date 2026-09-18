@@ -66,7 +66,9 @@ export function AppointmentCard({
         <DropdownMenu>
           <DropdownMenuTrigger
             onClick={(event) => event.stopPropagation()}
-            className="cursor-pointer rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="hidden"
+            aria-hidden="true"
+            tabIndex={-1}
           >
             <MoreHorizontal className="size-4" />
           </DropdownMenuTrigger>

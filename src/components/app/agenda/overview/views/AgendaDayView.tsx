@@ -213,7 +213,8 @@ export function AgendaDayView({
 
   // Red time indicator calculation (10:15 in the prototype day)
   const isToday = date === "2026-09-12";
-  const currentMinutesFromMidnight = 10 * 60 + 15; // 10:15 AM
+  const now = new Date();
+  const currentMinutesFromMidnight = now.getHours() * 60 + now.getMinutes();
   const currentIndicatorTop = (currentMinutesFromMidnight / 60) * HOUR_HEIGHT;
 
   // Auto-scroll to around 8:00 AM on initial mount
@@ -388,7 +389,6 @@ export function AgendaDayView({
                           <DropdownMenu>
                             <DropdownMenuTrigger
                               onClick={(e) => e.stopPropagation()}
-                              className="cursor-pointer rounded-md p-1 opacity-70 hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 shrink-0"
                             >
                               <MoreHorizontal className="size-4" />
                             </DropdownMenuTrigger>
@@ -501,7 +501,6 @@ export function AgendaDayView({
                           <DropdownMenu>
                             <DropdownMenuTrigger
                               onClick={(e) => e.stopPropagation()}
-                              className="cursor-pointer rounded-md p-1 opacity-70 hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 shrink-0"
                             >
                               <MoreHorizontal className="size-4" />
                             </DropdownMenuTrigger>

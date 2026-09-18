@@ -123,7 +123,8 @@ export function AgendaWeekView({
   });
 
   // Indicator top calculation
-  const currentMinutesFromMidnight = 10 * 60 + 15; // 10:15 AM
+  const now = new Date();
+  const currentMinutesFromMidnight = now.getHours() * 60 + now.getMinutes();
   const currentIndicatorTop = (currentMinutesFromMidnight / 60) * HOUR_HEIGHT;
 
   // Auto-scroll to morning hours

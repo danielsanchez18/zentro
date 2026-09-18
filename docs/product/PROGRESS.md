@@ -1,6 +1,6 @@
 # Progreso actual
 
-**Última actualización:** 12 de septiembre de 2026.
+**Última actualización:** 17 de septiembre de 2026.
 
 ## Estado general
 
@@ -16,17 +16,15 @@
 - Equipo: prototipo existente; debe adaptarse al nuevo modelo Owner/Member, perfiles y alcance.
 - POS: prototipo principal cerrado; cruces con Equipo/Caja, Agenda y backend documentados.
 - CRM: prototipo cerrado, con CRUD, detalle, acciones rápidas y conexión con POS.
-- Agenda: en desarrollo; planeamiento cerrado e inicio del overview.
+- Agenda: prototipo frontend cerrado; overview, cuatro vistas, operación, configuración y trazabilidad mock implementados.
 - Formularios, Finanzas, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
 
 ## Trabajo activo
 
-**Agenda en desarrollo:** planeamiento y primer bloque implementados. Ya existen contrato mock, KPIs, vistas diaria/semanal/listado, filtros, creación rápida, vista previa y transiciones básicas.
+**Agenda cerrada en prototipo frontend:** incluye alta, edición, reprogramación, estados, cancelación/no asistencia, historial, adelantos, pagos parciales, disponibilidad visual, recursos, bloqueos, filtros y detección mock de cruces.
 
 ## Siguiente entrega
 
-1. Definir alcance, rutas, disponibilidad y contrato mock de Agenda.
-2. Diseñar calendario y vistas de agenda.
-3. Crear alta, edición y detalle de citas/reservas.
-4. Conectar servicios, clientes, responsables y ubicación.
-5. Integrar reserva y adelanto con POS/Pedidos en el prototipo.
+1. Seleccionar el siguiente módulo según el roadmap.
+2. Mantener los pendientes de backend e integración de Agenda en su archivo de issues.
+3. Ejecutar QA visual manual transversal antes de congelar contratos mock.

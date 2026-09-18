@@ -5,6 +5,7 @@ import {
   AlignLeft,
   ArrowRight,
   Bell,
+  CalendarClock,
   Check,
   ChevronDown,
   ChevronUp,
@@ -13,13 +14,11 @@ import {
   Globe,
   Home,
   Layers,
+  Lock,
   Mail,
   MapPin,
-  Plus,
-  RefreshCcw,
   Type,
   UserCheck,
-  UserPlus,
   Users,
   Video,
 } from "lucide-react";
@@ -58,45 +57,18 @@ import {
 } from "@/lib/mock/agenda";
 import { teamMembers } from "@/lib/mock/team";
 import { useCrmStore } from "@/stores/crm-store";
+import { TimeInputSelect } from "@/components/app/agenda/settings/shared/TimeInputSelect";
 
-interface CreateAppointmentDialogProps {
+interface EditAppointmentDialogProps {
+  appointment: Appointment | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (appointment: Appointment) => boolean | void;
-  initialDate?: string;
+  onSave: (
+    changes: Partial<Appointment>,
+    rescheduled: boolean,
+    detail: string,
+  ) => boolean | void;
 }
-
-const TIME_OPTIONS = [
-  "07:00",
-  "07:30",
-  "08:00",
-  "08:30",
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-  "18:00",
-  "18:30",
-  "19:00",
-  "19:30",
-  "20:00",
-  "20:30",
-  "21:00",
-];
 
 const formatDisplayDate = (dateStr: string) => {
   if (!dateStr) return "";
@@ -116,169 +88,20 @@ const dateKey = (d: Date) =>
     String(d.getDate()).padStart(2, "0"),
   ].join("-");
 
-const createAppointmentId = () => `apt_${crypto.randomUUID()}`;
-const createAppointmentNumber = () =>
-  `CIT-${crypto.randomUUID().replace(/\D/g, "").slice(0, 4).padEnd(4, "0")}`;
+const splitDateTime = (value: string) => {
+  const date = new Date(value);
+  return {
+    date: value.slice(0, 10),
+    time: date.toLocaleTimeString("es-PE", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
+  };
+};
 
 /**
- * Input de hora editable con formato HH:mm, validación de horas (máx 23)
- * y minutos (máx 59), más botón ChevronDown para desplegar opciones predefinidas.
- */
-function TimeInputSelect({
-  value,
-  onChange,
-  className,
-}: {
-  value: string;
-  onChange: (time: string) => void;
-  className?: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(value);
-
-  useEffect(() => {
-    // Sincroniza el valor editable cuando el horario cambia por servicio.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInputValue(value);
-  }, [value]);
-
-  const sanitizeAndClamp = (val: string): string => {
-    const clean = val.replace(/[^\d:]/g, "").slice(0, 5);
-    const parts = clean.split(":");
-    const hStr = parts[0] ?? "";
-    const mStr = parts[1] ?? "";
-
-    let h = parseInt(hStr, 10);
-    if (isNaN(h)) h = 0;
-    if (h > 23) h = 23;
-
-    let m = parseInt(mStr, 10);
-    if (isNaN(m)) m = 0;
-    if (m > 59) m = 59;
-
-    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let raw = e.target.value.replace(/[^\d:]/g, "");
-    if (raw.length > 5) raw = raw.slice(0, 5);
-
-    // Si el usuario ingresa 2 dígitos seguidos sin dos puntos
-    if (
-      raw.length === 2 &&
-      !raw.includes(":") &&
-      (e.nativeEvent as InputEvent).inputType !== "deleteContentBackward"
-    ) {
-      raw = raw + ":";
-    }
-
-    // Clamping dinámico mientras escribe
-    const parts = raw.split(":");
-    let hStr = parts[0] ?? "";
-    let mStr = parts[1] ?? "";
-
-    if (hStr.length >= 2) {
-      const h = parseInt(hStr, 10);
-      if (h > 23) {
-        hStr = "23";
-        raw = "23" + (raw.includes(":") ? ":" + mStr : "");
-      }
-    }
-    if (mStr.length >= 2) {
-      const m = parseInt(mStr, 10);
-      if (m > 59) {
-        mStr = "59";
-        raw = hStr + ":59";
-      }
-    }
-
-    setInputValue(raw);
-
-    if (/^([01]\d|2[0-3]):[0-5]\d$/.test(raw)) {
-      onChange(raw);
-    }
-  };
-
-  const handleBlur = () => {
-    const clamped = sanitizeAndClamp(inputValue);
-    setInputValue(clamped);
-    onChange(clamped);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleBlur();
-      (e.target as HTMLInputElement).blur();
-    }
-  };
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <div
-        className={cn(
-          "flex items-center w-full h-fit rounded-lg border border-border bg-input/30 focus-within:ring-1 focus-within:ring-primary/40 focus-within:border-primary/50 transition-colors",
-          className,
-        )}
-      >
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder="00:00"
-          maxLength={5}
-          className="w-full bg-transparent px-3 py-2 text-sm font-medium text-foreground outline-none tracking-wide text-left placeholder:text-muted-foreground"
-        />
-        <PopoverTrigger
-          render={
-            <button
-              type="button"
-              className="cursor-pointer px-2.5 py-2 text-muted-foreground hover:text-foreground transition-colors shrink-0 outline-none"
-              aria-label="Seleccionar hora"
-            />
-          }
-        >
-          <ChevronDown className="size-3.5 opacity-60 hover:opacity-100" />
-        </PopoverTrigger>
-      </div>
-
-      <PopoverContent
-        align="start"
-        className="w-36 p-1 rounded-xl max-h-60 overflow-y-auto shadow-xl border border-border bg-popover z-50"
-      >
-        <div className="space-y-0.5">
-          {TIME_OPTIONS.map((timeOpt) => {
-            const isSelected = value === timeOpt;
-            return (
-              <button
-                key={timeOpt}
-                type="button"
-                onClick={() => {
-                  setInputValue(timeOpt);
-                  onChange(timeOpt);
-                  setOpen(false);
-                }}
-                className={cn(
-                  "cursor-pointer flex items-center justify-between w-full px-2.5 py-1.5 rounded-lg text-sm transition-colors text-left",
-                  isSelected
-                    ? "bg-primary text-primary-foreground font-semibold"
-                    : "hover:bg-muted text-foreground",
-                )}
-              >
-                <span>{timeOpt}</span>
-                {isSelected && <Check className="size-3.5 stroke-[2.5]" />}
-              </button>
-            );
-          })}
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-/**
- * Checkbox interactivo con esquinas rounded-lg reales y accesibilidad
+ * Checkbox interactivo con esquinas redondeadas
  */
 function CustomCheckboxItem({
   checked,
@@ -322,24 +145,22 @@ const MODALITY_OPTIONS: {
   { id: "domicilio", label: "A domicilio", icon: Home },
 ];
 
-export function CreateAppointmentDialog({
+export function EditAppointmentDialog({
+  appointment,
   open,
   onOpenChange,
-  onCreate,
-  initialDate = "2026-09-12",
-}: CreateAppointmentDialogProps) {
-  const customers = useCrmStore((state) => state.customers).filter(
-    (c) => c.status === "activo",
-  );
-  const professionals = teamMembers.filter((m) => m.status === "activo");
+  onSave,
+}: EditAppointmentDialogProps) {
+  const customers = useCrmStore((state) => state.customers);
+  const professionals = teamMembers.filter((member) => member.status === "activo");
 
   // Form states
   const [title, setTitle] = useState("");
   const [serviceId, setServiceId] = useState("service_1");
-  const [startDate, setStartDate] = useState(initialDate);
-  const [endDate, setEndDate] = useState(initialDate);
-  const [startTime, setStartTime] = useState("10:00");
-  const [endTime, setEndTime] = useState("10:45");
+  const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [allDay, setAllDay] = useState(false);
   const [repeat, setRepeat] = useState("none");
 
@@ -347,12 +168,7 @@ export function CreateAppointmentDialog({
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
 
-  // Participants
-  const [customerId, setCustomerId] = useState("");
-  const [isGuest, setIsGuest] = useState(false);
-  const [guestName, setGuestName] = useState("");
-  const [guestPhone, setGuestPhone] = useState("");
-  const [guestEmail, setGuestEmail] = useState("");
+  // Participants & Resources
   const [responsibleId, setResponsibleId] = useState("unassigned");
   const [resourceId, setResourceId] = useState("unassigned");
   const [permissionsOpen, setPermissionsOpen] = useState(false);
@@ -361,36 +177,72 @@ export function CreateAppointmentDialog({
   const [notifyEmail, setNotifyEmail] = useState(true);
 
   // Modality & Meeting
-  const [modality, setModality] = useState<AppointmentModality>("online");
-  const [meetUrl] = useState("meet.google.com/dks-qzdb-xgd");
-  const [locationName, setLocationName] = useState("Sede Central - Monsefú");
+  const [modality, setModality] = useState<AppointmentModality>("presencial");
+  const [meetUrl, setMeetUrl] = useState("meet.google.com/dks-qzdb-xgd");
+  const [locationName, setLocationName] = useState("");
 
   // Description & Reminder
   const [notes, setNotes] = useState("");
   const [reminder, setReminder] = useState("30");
   const [copiedLink, setCopiedLink] = useState(false);
+  const [reason, setReason] = useState("");
 
-  // Auto-calculate end time when service changes
-  const handleServiceChange = (id: string) => {
-    setServiceId(id);
-    if (id === "custom") {
-      if (!title) setTitle("Servicio personalizado");
-      return;
-    }
-    const s = agendaServices.find((item) => item.id === id);
-    if (s) {
-      if (!title || agendaServices.some((item) => item.name === title)) {
-        setTitle(s.name);
-      }
-      const [h, m] = startTime.split(":").map(Number);
-      const totalMinutes =
-        (isNaN(h) ? 10 : h) * 60 + (isNaN(m) ? 0 : m) + s.durationMinutes;
-      const endH = Math.min(23, Math.floor(totalMinutes / 60));
-      const endM = totalMinutes % 60;
-      const pad = (n: number) => String(n).padStart(2, "0");
-      setEndTime(`${pad(endH)}:${pad(endM)}`);
-    }
-  };
+  useEffect(() => {
+    if (!appointment || !open) return;
+    const start = splitDateTime(appointment.startsAt);
+    const end = splitDateTime(appointment.endsAt);
+
+    // Reinicia el formulario al abrir la cita
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTitle(appointment.serviceName);
+    setServiceId(appointment.serviceId ?? "service_1");
+    setStartDate(start.date);
+    setStartTime(start.time);
+    setEndDate(end.date);
+    setEndTime(end.time);
+    setAllDay(Boolean(appointment.allDay));
+    setRepeat(appointment.repeat ?? "none");
+    setResponsibleId(appointment.responsibleId ?? "unassigned");
+    setResourceId(appointment.resourceId ?? "unassigned");
+    setModality(appointment.modality);
+    setLocationName(appointment.locationName ?? appointment.address ?? "");
+    setNotes(appointment.notes ?? "");
+    setReminder(
+      appointment.reminderMinutes ? String(appointment.reminderMinutes) : "30",
+    );
+    setNotifyEmail(appointment.notifyByEmail ?? true);
+    setInviteOthers(appointment.allowGuests ?? true);
+    setSeeParticipantList(appointment.showParticipantList ?? true);
+    setMeetUrl(
+      appointment.meetingUrl
+        ? appointment.meetingUrl.replace(/^https?:\/\//, "")
+        : "meet.google.com/dks-qzdb-xgd",
+    );
+    setReason("");
+    setPermissionsOpen(false);
+  }, [appointment, open]);
+
+  if (!appointment) return null;
+
+  const selectedCustomer = appointment.customerId
+    ? customers.find((c) => c.id === appointment.customerId)
+    : customers.find(
+        (c) =>
+          c.name.toLowerCase() === appointment.customerName.toLowerCase() ||
+          (c.phone && appointment.customerPhone && c.phone === appointment.customerPhone),
+      );
+
+  const selectedResponsible = professionals.find((m) => m.id === responsibleId);
+  const selectedService = agendaServices.find((s) => s.id === serviceId);
+
+  // Verificamos si hubo reprogramación respecto al horario original
+  const sTime = allDay ? "08:00" : startTime;
+  const eTime = allDay ? "18:00" : endTime;
+  const currentStartsAt = `${startDate}T${sTime}:00-05:00`;
+  const currentEndsAt = `${endDate}T${eTime}:00-05:00`;
+  const isRescheduled =
+    currentStartsAt !== appointment.startsAt ||
+    currentEndsAt !== appointment.endsAt;
 
   const copyMeet = () => {
     navigator.clipboard.writeText(`https://${meetUrl}`);
@@ -399,113 +251,90 @@ export function CreateAppointmentDialog({
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const close = () => {
-    setTitle("");
-    setServiceId("service_1");
-    setCustomerId("");
-    setIsGuest(false);
-    setGuestName("");
-    setGuestPhone("");
-    setGuestEmail("");
-    setResponsibleId("unassigned");
-    setResourceId("unassigned");
-    setNotes("");
-    setModality("online");
-    onOpenChange(false);
-  };
-
   const handleSave = () => {
-    const customer = customers.find((c) => c.id === customerId);
-    const service =
-      agendaServices.find((s) => s.id === serviceId) ?? agendaServices[0];
-    const responsible = professionals.find((m) => m.id === responsibleId);
-    const resource = agendaResources.find((item) => item.id === resourceId);
+    if (!title.trim() || !startDate || !startTime || !endDate || !endTime) {
+      toastMsg.error("Faltan datos", "Completa el título y el horario.");
+      return;
+    }
 
-    const clientName = customer?.name ?? guestName.trim();
-    if (!clientName) {
+    if (new Date(currentEndsAt) <= new Date(currentStartsAt)) {
       toastMsg.error(
-        "Falta el participante",
-        "Por favor selecciona un cliente registrado o ingresa los datos del invitado.",
+        "Horario inválido",
+        "La hora de finalización debe ser posterior al inicio.",
       );
       return;
     }
 
-    const appointmentTitle = title.trim() || service?.name || "Cita agendada";
-    const now = new Date().toISOString();
+    if (isRescheduled && !reason.trim()) {
+      toastMsg.error(
+        "Indica el motivo",
+        "La reprogramación de horario debe quedar explicada en el historial de auditoría.",
+      );
+      return;
+    }
 
-    const sTime = allDay ? "08:00" : startTime;
-    const eTime = allDay ? "18:00" : endTime;
+    const responsible = professionals.find((member) => member.id === responsibleId);
+    const resource = agendaResources.find((item) => item.id === resourceId);
 
-    const created = onCreate({
-      id: createAppointmentId(),
-      number: createAppointmentNumber(),
-      customerId: customer?.id,
-      customerName: clientName,
-      customerPhone: customer?.phone ?? guestPhone.trim(),
-      customerEmail: customer?.email ?? guestEmail.trim(),
-      serviceId: service?.id ?? "service_1",
-      serviceName: appointmentTitle,
-      durationMinutes: service?.durationMinutes ?? 45,
-      price: service?.price ?? 0,
+    const durationMinutes = Math.round(
+      (new Date(currentEndsAt).getTime() - new Date(currentStartsAt).getTime()) / 60000,
+    );
+
+    const changes: Partial<Appointment> = {
+      serviceName: title.trim(),
+      startsAt: currentStartsAt,
+      endsAt: currentEndsAt,
+      durationMinutes,
+      allDay,
+      repeat: repeat as Appointment["repeat"],
       responsibleId: responsible?.id,
       responsibleName: responsible?.name,
       resourceId: resource?.id,
       resourceName: resource?.name,
       modality,
-      status: "confirmada",
-      paymentStatus: "sin_pago",
-      paidAmount: 0,
-      origin: "manual",
-      startsAt: `${startDate}T${sTime}:00-05:00`,
-      endsAt: `${endDate}T${eTime}:00-05:00`,
+      locationName:
+        modality === "presencial"
+          ? locationName.trim()
+          : modality === "domicilio"
+            ? "Domicilio del cliente"
+            : undefined,
+      address: modality === "domicilio" ? locationName.trim() : undefined,
+      meetingUrl: modality === "online" ? `https://${meetUrl}` : undefined,
       notes: notes.trim(),
-      allDay,
-      repeat: repeat as Appointment["repeat"],
       reminderMinutes: reminder === "none" ? undefined : Number(reminder),
       notifyByEmail: notifyEmail,
       allowGuests: inviteOthers,
       showParticipantList: seeParticipantList,
-      meetingUrl: modality === "online" ? `https://${meetUrl}` : undefined,
-      address: modality === "domicilio" ? locationName.trim() : undefined,
-      locationName:
-        modality === "presencial"
-          ? locationName
-          : modality === "domicilio"
-            ? "Domicilio del cliente"
-            : undefined,
-      createdAt: now,
-      updatedAt: now,
-    });
+    };
 
-    if (created === false) return;
-
-    toastMsg.success(
-      "Cita programada",
-      `Se agendó «${appointmentTitle}» para ${clientName}.`,
+    const saved = onSave(
+      changes,
+      isRescheduled,
+      reason.trim() || (isRescheduled ? "Cita reprogramada" : "Se actualizaron los datos de la cita."),
     );
-    close();
+
+    if (saved === false) return;
+    onOpenChange(false);
   };
 
-  const selectedCustomer = customers.find((c) => c.id === customerId);
-  const selectedResponsible = professionals.find((m) => m.id === responsibleId);
-  const selectedService = agendaServices.find((s) => s.id === serviceId);
-
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(next) => (next ? onOpenChange(true) : close())}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[95dvh] flex flex-col sm:max-w-xl rounded-2xl">
-        {/* Header con título */}
+        {/* Header con título y badge de cita */}
         <DialogHeader>
-          <DialogTitle>Nueva cita</DialogTitle>
+          <div className="flex items-center justify-between gap-2">
+            <DialogTitle>Editar cita</DialogTitle>
+            <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border">
+              {appointment.number}
+            </span>
+          </div>
           <p className="text-sm text-muted-foreground">
-            Agrega una nueva cita a tu calendario.
+            Modifica los detalles de la cita. Las propiedades clave permanecen bloqueadas por control.
           </p>
         </DialogHeader>
 
         {/* Formulario estructurado con iconos a la izquierda */}
-        <div className="space-y-5 py-2 overflow-y-auto font-heading">
+        <div className="space-y-5 py-2 overflow-y-auto font-heading pr-1">
           {/* Fila 1: Título y Servicio (Icono T) */}
           <div className="flex items-start gap-4">
             <div className="pt-2 shrink-0 text-muted-foreground/80 flex justify-center">
@@ -519,55 +348,45 @@ export function CreateAppointmentDialog({
                 className="h-fit py-2 px-3 text-sm font-medium"
               />
 
-              {/* Selector de servicio rápido con label mejorado */}
-              <div className="flex items-center gap-2 min-w-0">
-                <Select
-                  value={serviceId}
-                  onValueChange={(val) => handleServiceChange(String(val))}
-                >
-                  <SelectTrigger className="bg-input/30! text-sm h-fit py-2 w-full px-3 rounded-lg min-w-0">
+              {/* Selector de servicio bloqueado por control */}
+              <div className="space-y-1">
+                <Select value={serviceId} disabled>
+                  <SelectTrigger
+                    disabled
+                    className="bg-muted/40! text-sm h-fit py-2 w-full px-3 rounded-lg min-w-0 opacity-80 cursor-not-allowed border border-border"
+                  >
                     {selectedService ? (
                       <div className="flex items-center gap-2 min-w-0 truncate text-sm">
                         <span className="font-medium text-foreground truncate">
                           {selectedService.name}
                         </span>
                         <span className="text-muted-foreground text-sm shrink-0">
-                          · S/ {selectedService.price} -{" "}
-                          {selectedService.durationMinutes} min
+                          · S/ {selectedService.price} - {selectedService.durationMinutes} min
                         </span>
                       </div>
-                    ) : serviceId === "custom" ? (
-                      <span className="text-sm font-medium text-primary truncate">
-                        Servicio personalizado / Libre
-                      </span>
                     ) : (
-                      <span className="text-sm text-muted-foreground truncate">
-                        Seleccionar servicio...
-                      </span>
+                      <div className="flex items-center gap-2 min-w-0 truncate text-sm">
+                        <span className="font-medium text-foreground truncate">
+                          {appointment.serviceName}
+                        </span>
+                        {appointment.price !== undefined && (
+                          <span className="text-muted-foreground text-sm shrink-0">
+                            · S/ {appointment.price} - {appointment.durationMinutes} min
+                          </span>
+                        )}
+                      </div>
                     )}
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="custom">
-                      <div className="font-medium flex items-center gap-2 text-primary">
-                        <Plus className="size-3" />
-                        Servicio personalizado / Libre
-                      </div>
+                    <SelectItem value={serviceId}>
+                      {selectedService?.name ?? appointment.serviceName}
                     </SelectItem>
-                    <SelectSeparator />
-                    {agendaServices
-                      .filter((s) => s.status === "activo")
-                      .map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          <div className="flex items-center justify-between w-full gap-2">
-                            <span className="font-medium">{s.name}</span>·
-                            <span className="text-sm text-muted-foreground">
-                              S/ {s.price} - {s.durationMinutes} min
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
                   </SelectContent>
                 </Select>
+                <p className="text-2xs text-muted-foreground pl-1 flex items-center gap-1">
+                  <Lock className="size-2.5" />
+                  Servicio y tarifa bloqueados para preservar la consistencia contable.
+                </p>
               </div>
             </div>
           </div>
@@ -678,7 +497,7 @@ export function CreateAppointmentDialog({
                 </div>
               </div>
 
-              {/* Sub-fila C: Switch Todo el día & Repetición con label mejorado */}
+              {/* Sub-fila C: Switch Todo el día & Repetición */}
               <div className="flex items-center justify-between gap-3 pt-1 flex-wrap sm:flex-nowrap">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">
@@ -711,25 +530,61 @@ export function CreateAppointmentDialog({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No se repite</SelectItem>
-                    <SelectItem value="daily">
-                      Todos los días (Diario)
-                    </SelectItem>
-                    <SelectItem value="weekly">
-                      Todas las semanas (Semanal)
-                    </SelectItem>
-                    <SelectItem value="monthly">
-                      Todos los meses (Mensual)
-                    </SelectItem>
-                    <SelectItem value="yearly">
-                      Todos los años (Anual)
-                    </SelectItem>
+                    <SelectItem value="daily">Todos los días (Diario)</SelectItem>
+                    <SelectItem value="weekly">Todas las semanas (Semanal)</SelectItem>
+                    <SelectItem value="monthly">Todos los meses (Mensual)</SelectItem>
+                    <SelectItem value="yearly">Todos los años (Anual)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
           </div>
 
-          {/* Fila: Recurso Reservable (Icono Layers) */}
+          {/* Alerta / Input de Motivo de reprogramación */}
+          {isRescheduled ? (
+            <div className="flex items-start gap-4 p-3 rounded-xl border border-amber-500/40 bg-amber-500/10 transition-all">
+              <div className="pt-1 shrink-0 text-amber-600 dark:text-amber-400 flex justify-center">
+                <CalendarClock className="size-4" />
+              </div>
+              <div className="flex-1 space-y-1.5 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-semibold text-foreground">
+                    Motivo de reprogramación
+                  </span>
+                  <span className="text-2xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-700 dark:text-amber-300">
+                    Requerido por auditoría
+                  </span>
+                </div>
+                <Input
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="Ej. Solicitud del paciente, ajuste de agenda médica..."
+                  className="h-fit py-2 px-3 text-sm bg-background border-amber-500/30 font-medium"
+                  autoFocus
+                />
+                <p className="text-2xs text-muted-foreground">
+                  El horario cambió respecto al original ({splitDateTime(appointment.startsAt).date}{" "}
+                  {splitDateTime(appointment.startsAt).time} - {splitDateTime(appointment.endsAt).time}).
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-start gap-4">
+              <div className="pt-2 shrink-0 text-muted-foreground/80 flex justify-center">
+                <CalendarClock className="size-4" />
+              </div>
+              <div className="flex-1 space-y-1 min-w-0">
+                <Input
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="Motivo del ajuste (opcional si el horario no cambia)..."
+                  className="h-fit py-2 px-3 text-sm bg-input/30 rounded-lg"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Fila 3: Recurso Reservable (Icono Layers) */}
           <div className="flex items-center gap-4">
             <div className="shrink-0 text-muted-foreground/80 flex justify-center">
               <Layers className="size-4" />
@@ -780,7 +635,7 @@ export function CreateAppointmentDialog({
             </div>
           </div>
 
-          {/* Fila 3: Zona Horaria (Icono Globo) */}
+          {/* Fila 4: Zona Horaria (Icono Globo) */}
           <div className="flex items-center gap-4">
             <div className="shrink-0 text-muted-foreground/80 flex justify-center">
               <Globe className="size-4" />
@@ -790,226 +645,103 @@ export function CreateAppointmentDialog({
             </div>
           </div>
 
-          {/* Fila 4: Participantes (Icono Usuarios) */}
+          {/* Fila 5: Participantes (Icono Usuarios) */}
           <div className="flex items-start gap-4">
             <div className="pt-2 shrink-0 text-muted-foreground/80 flex justify-center">
               <Users className="size-4" />
             </div>
             <div className="flex-1 space-y-3 min-w-0">
-              {/* Selector de Cliente / Invitado con Fotos y Truncate */}
-              {!isGuest ? (
-                <div className="flex items-center gap-2 min-w-0">
-                  <Select
-                    value={customerId}
-                    onValueChange={(val) => {
-                      const v = String(val);
-                      if (v === "guest_mode") {
-                        setIsGuest(true);
-                        setCustomerId("");
-                      } else {
-                        setCustomerId(v);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="h-fit px-3 py-2 bg-input/30 rounded-lg w-full min-w-0 overflow-hidden text-left">
-                      {selectedCustomer ? (
-                        <div className="flex items-center gap-2 min-w-0 truncate text-sm">
-                          {selectedCustomer.avatar ? (
-                            <img
-                              src={selectedCustomer.avatar}
-                              alt={selectedCustomer.name}
-                              className="size-5 rounded-full object-cover shrink-0"
-                            />
-                          ) : (
-                            <div className="size-5 rounded-full bg-primary/15 text-primary text-xs font-semibold flex items-center justify-center shrink-0">
-                              {selectedCustomer.name[0]?.toUpperCase()}
-                            </div>
-                          )}
-                          <span className="font-medium text-foreground truncate">
-                            {selectedCustomer.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground shrink-0">
-                            ({selectedCustomer.phone || selectedCustomer.email})
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-muted-foreground truncate min-w-0 block">
-                          Buscar o agregar participante...
+              {/* Cliente Bloqueado por Control / Auditoría */}
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center gap-3 p-2.5 rounded-lg border border-border bg-muted/30">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    {selectedCustomer?.avatar ? (
+                      <img
+                        src={selectedCustomer.avatar}
+                        alt={appointment.customerName}
+                        className="size-8 rounded-full object-cover shrink-0 border border-border/60"
+                      />
+                    ) : (
+                      <div className="size-8 rounded-full bg-primary/10 text-primary font-medium flex items-center justify-center text-sm shrink-0">
+                        {(appointment.customerName || "C")[0]?.toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-medium text-foreground truncate">
+                          {appointment.customerName}
                         </span>
-                      )}
-                    </SelectTrigger>
-                    <SelectContent className="max-h-64">
-                      <SelectItem value="guest_mode">
-                        <div className="font-medium text-primary flex items-center gap-2">
-                          <UserPlus className="size-4" />
-                          <span>Registrar persona invitada</span>
-                        </div>
-                      </SelectItem>
-                      <SelectSeparator />
-                      {customers.map((c) => (
-                        <SelectItem key={c.id} value={c.id}>
-                          <div className="flex items-center gap-2.5 min-w-0 py-0.5">
-                            {c.avatar ? (
-                              <img
-                                src={c.avatar}
-                                alt={c.name}
-                                className="size-6 rounded-full object-cover shrink-0 border border-border/50"
-                              />
-                            ) : (
-                              <div className="size-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center shrink-0">
-                                {c.name[0]?.toUpperCase()}
-                              </div>
-                            )}
-                            <div className="flex items-center gap-1 min-w-0 text-left">
-                              <span className="text-sm font-medium text-foreground truncate">
-                                {c.name}
-                              </span>
-                              <span className="text-sm text-muted-foreground truncate">
-                                {c.phone || c.email}
-                              </span>
-                            </div>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              ) : (
-                <div className="space-y-2 mt-1.5 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">
-                      Datos del invitado
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setIsGuest(false)}
-                      className="text-sm text-primary hover:underline cursor-pointer flex items-center gap-1"
-                    >
-                      <RefreshCcw className="size-3.5" />
-                      Elegir cliente
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <Input
-                      value={guestName}
-                      onChange={(e) => setGuestName(e.target.value)}
-                      placeholder="Nombre del invitado"
-                      className="h-fit px-3 py-2 text-sm bg-input/30 rounded-lg"
-                    />
-                    <Input
-                      value={guestPhone}
-                      onChange={(e) => setGuestPhone(e.target.value)}
-                      placeholder="Teléfono"
-                      className="h-fit px-3 py-2 text-sm bg-input/30 rounded-lg"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Lista de participantes agregados con Foto */}
-              {(selectedCustomer ||
-                (isGuest && guestName.trim()) ||
-                selectedResponsible) && (
-                <div className="space-y-2 pt-1 min-w-0">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>
-                      {1 +
-                        (selectedResponsible &&
-                        selectedResponsible.id !== "unassigned"
-                          ? 1
-                          : 0)}{" "}
-                      participante
-                      {selectedResponsible &&
-                      selectedResponsible.id !== "unassigned"
-                        ? "s"
-                        : ""}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <Mail className="size-4 text-muted-foreground" />
-                      <UserCheck className="size-4 text-muted-foreground" />
+                        <Lock className="size-3 text-muted-foreground shrink-0" />
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {appointment.customerPhone || appointment.customerEmail || "Cliente registrado"}
+                      </p>
                     </div>
                   </div>
+                  <span className="text-2xs rounded-md font-medium px-2 py-1 h-fit leading-none bg-muted text-muted-foreground border border-border shrink-0">
+                    Cliente (Fijo)
+                  </span>
+                </div>
+                <p className="text-2xs text-muted-foreground pl-1 flex items-center gap-1">
+                  <Lock className="size-2.5" />
+                  El participante titular no puede ser alterado en una cita registrada.
+                </p>
+              </div>
 
-                  {/* Participante 1: Cliente / Invitado */}
-                  {(selectedCustomer || (isGuest && guestName.trim())) && (
-                    <div className="flex justify-between items-center gap-3 p-2 rounded-lg border border-border">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {selectedCustomer?.avatar ? (
-                          <img
-                            src={selectedCustomer.avatar}
-                            alt={selectedCustomer.name}
-                            className="size-8 rounded-full object-cover shrink-0 border border-border/60"
-                          />
-                        ) : (
-                          <div className="size-8 rounded-full bg-primary/10 text-primary font-medium flex items-center justify-center text-sm shrink-0">
-                            {(selectedCustomer?.name ??
-                              guestName)[0]?.toUpperCase()}
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">
-                            {selectedCustomer?.name ?? guestName}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {selectedCustomer?.email ??
-                              selectedCustomer?.phone ??
-                              guestPhone ??
-                              "Cliente"}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs rounded-md font-medium px-2 py-1.5 h-fit leading-none bg-primary/10 text-primary shrink-0">
-                        Cliente
-                      </span>
+              {/* Participantes asignados */}
+              <div className="space-y-2 pt-1 min-w-0">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>
+                    {1 + (selectedResponsible && selectedResponsible.id !== "unassigned" ? 1 : 0)}{" "}
+                    participante{selectedResponsible && selectedResponsible.id !== "unassigned" ? "s" : ""}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Mail className="size-4 text-muted-foreground" />
+                    <UserCheck className="size-4 text-muted-foreground" />
+                  </div>
+                </div>
+
+                {/* Participante Responsable / Especialista (Editable) */}
+                <div className="flex justify-between items-center gap-3 p-2 rounded-lg border border-border">
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div className="size-8 rounded-full bg-muted text-foreground font-medium flex items-center justify-center text-sm shrink-0">
+                      {selectedResponsible && selectedResponsible.id !== "unassigned"
+                        ? selectedResponsible.name[0]
+                        : "?"}
                     </div>
-                  )}
-
-                  {/* Participante 2: Responsable */}
-                  <div className="flex justify-between items-center gap-3 p-2 rounded-lg border border-border">
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                      <div className="size-8 rounded-full bg-muted text-foreground font-medium flex items-center justify-center text-sm shrink-0">
-                        {selectedResponsible &&
-                        selectedResponsible.id !== "unassigned"
-                          ? selectedResponsible.name[0]
-                          : "?"}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <Select
-                          value={responsibleId}
-                          onValueChange={(val) => setResponsibleId(String(val))}
-                        >
-                          <SelectTrigger className="h-fit text-sm border-0 bg-transparent p-0 shadow-none font-medium text-foreground focus:ring-0">
-                            <span className="truncate">
-                              {selectedResponsible &&
-                              selectedResponsible.id !== "unassigned"
-                                ? `${selectedResponsible.name} (${selectedResponsible.role})`
-                                : "Sin asignar"}
-                            </span>
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="unassigned">
-                              Sin asignar
+                    <div className="min-w-0 flex-1">
+                      <Select
+                        value={responsibleId}
+                        onValueChange={(val) => setResponsibleId(String(val))}
+                      >
+                        <SelectTrigger className="h-fit text-sm border-0 bg-transparent p-0 shadow-none font-medium text-foreground focus:ring-0">
+                          <span className="truncate">
+                            {selectedResponsible && selectedResponsible.id !== "unassigned"
+                              ? `${selectedResponsible.name} (${selectedResponsible.role})`
+                              : "Sin asignar"}
+                          </span>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="unassigned">Sin asignar</SelectItem>
+                          {professionals.map((m) => (
+                            <SelectItem key={m.id} value={m.id}>
+                              {m.name} ({m.role})
                             </SelectItem>
-                            {professionals.map((m) => (
-                              <SelectItem key={m.id} value={m.id}>
-                                {m.name} ({m.role})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <p className="text-xs text-muted-foreground">
-                          Responsable / Especialista
-                        </p>
-                      </div>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">
+                        Responsable / Especialista
+                      </p>
                     </div>
-                    <span className="text-xs rounded-md font-medium px-2 py-1.5 h-fit leading-none bg-primary/10 text-primary shrink-0">
-                      Organizador
-                    </span>
                   </div>
+                  <span className="text-xs rounded-md font-medium px-2 py-1.5 h-fit leading-none bg-primary/10 text-primary shrink-0">
+                    Organizador
+                  </span>
                 </div>
-              )}
+              </div>
 
-              {/* Acordeón de Permisos con Checkbox rounded-lg reales */}
+              {/* Acordeón de Permisos y Notificaciones */}
               <div className="border-t border-border/50 pt-2">
                 <button
                   type="button"
@@ -1047,7 +779,7 @@ export function CreateAppointmentDialog({
             </div>
           </div>
 
-          {/* Fila 5: Modalidad en Botones Chips y Ubicación */}
+          {/* Fila 6: Modalidad en Chips y Ubicación */}
           <div className="flex items-start gap-4">
             <div className="pt-2 shrink-0 text-muted-foreground/80 flex justify-center">
               {modality === "online" ? (
@@ -1059,7 +791,7 @@ export function CreateAppointmentDialog({
               )}
             </div>
             <div className="flex-1 space-y-2.5 min-w-0">
-              {/* Botones de Selección Estilo Chips */}
+              {/* Botones Chips de Modalidad */}
               <div className="flex items-center gap-2 flex-wrap">
                 {MODALITY_OPTIONS.map((opt) => {
                   const Icon = opt.icon;
@@ -1126,6 +858,8 @@ export function CreateAppointmentDialog({
                 />
               ) : (
                 <Input
+                  value={locationName}
+                  onChange={(e) => setLocationName(e.target.value)}
                   placeholder="Dirección del domicilio del cliente..."
                   className="h-fit px-3 py-2 rounded-lg text-sm border-border bg-input/30"
                 />
@@ -1133,7 +867,7 @@ export function CreateAppointmentDialog({
             </div>
           </div>
 
-          {/* Fila 6: Notas / Descripción (Icono AlignLeft) */}
+          {/* Fila 7: Notas / Descripción (Icono AlignLeft) */}
           <div className="flex items-start gap-4">
             <div className="pt-2 shrink-0 text-muted-foreground/80 flex justify-center">
               <AlignLeft className="size-4" />
@@ -1149,7 +883,7 @@ export function CreateAppointmentDialog({
             </div>
           </div>
 
-          {/* Fila 7: Recordatorio con Label Mejorado (Icono Campana) */}
+          {/* Fila 8: Recordatorio (Icono Campana) */}
           <div className="flex items-center gap-4">
             <div className="shrink-0 text-muted-foreground/80 flex justify-center">
               <Bell className="size-4" />
@@ -1192,12 +926,12 @@ export function CreateAppointmentDialog({
           </div>
         </div>
 
-        {/* Footer con botones redondeados Cancelar y Guardar */}
+        {/* Footer con botones redondeados Cancelar y Guardar cambios */}
         <DialogFooter className="py-3">
           <Button
             type="button"
             variant="outline"
-            onClick={close}
+            onClick={() => onOpenChange(false)}
             className="rounded-full cursor-pointer"
           >
             Cancelar
@@ -1207,7 +941,7 @@ export function CreateAppointmentDialog({
             onClick={handleSave}
             className="rounded-full cursor-pointer"
           >
-            Guardar cita
+            Guardar cambios
           </Button>
         </DialogFooter>
       </DialogContent>
