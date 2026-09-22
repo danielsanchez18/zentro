@@ -4,6 +4,7 @@
 
 ## Próxima entrega
 
-1. Elegir el siguiente módulo funcional del roadmap.
-2. Mantener los pendientes de integración de Agenda registrados en `docs/frontend/modules/agenda/issues.md`.
-3. Continuar con QA responsive y accesibilidad como trabajo transversal.
+1. Planificar el alcance funcional de Caja por ubicación y terminal.
+2. Diseñar overview, sesiones, aperturas, cierres y movimientos.
+3. Conectar el prototipo de Caja con POS, Pedidos y responsables de Equipo.
+4. Conservar los pendientes backend de Formularios para la etapa de integración.

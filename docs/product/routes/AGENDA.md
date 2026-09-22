@@ -1,31 +1,36 @@
 # Rutas — Agenda
 
-## Ruta implementada
+## /app/[slug]/agenda
 
-### /app/[slug]/agenda
+Ruta operativa implementada.
 
-Centro operativo con KPIs, calendario diario/semanal/mensual, listado, búsqueda y filtro de estado. La creación y el preview viven actualmente en diálogos dentro de esta ruta.
+Contiene:
 
-Incluye alta mock, contacto del participante, modalidades presencial/domicilio/online, resumen de pago, acciones de estado y resumen compartible.
+- KPIs;
+- vistas día, semana, mes y lista;
+- navegación por fecha;
+- búsqueda y filtros;
+- creación en diálogo;
+- preview y acciones;
+- edición/reprogramación;
+- pagos parciales;
+- historial mock.
 
-## Flujos resueltos en diálogos
+No se crea una ruta `/agenda/agregar` porque el alta cabe en un diálogo y forma parte del flujo rápido del calendario.
 
-### Detalle y operación
+No se crea una ruta `/agenda/[appointmentId]` en el prototipo porque el preview concentra detalle y operación. Podrá añadirse si el historial o las integraciones futuras requieren una página profunda.
 
-Detalle permanente con servicios, contacto, estado, pago, historial y acciones operativas. Hoy esta consulta está cubierta parcialmente por el preview.
+## /app/[slug]/agenda/configuracion
 
-### Edición y reprogramación
+Ruta implementada y persistida localmente.
 
-Edición y reprogramación con motivo e historial, resuelta desde el preview.
+Secciones:
 
-### Configuración
-
-Horarios, excepciones, servicios reservables, capacidad, responsables, recursos, políticas y recordatorios.
-
-## Decisión de navegación
-
-No se requiere `/agenda/agregar` en el prototipo actual: la creación rápida se resuelve mediante un diálogo desde el overview. Solo se añadirá una ruta dedicada si el flujo futuro supera razonablemente el espacio del modal.
+- horario semanal;
+- recursos reservables;
+- bloqueos y excepciones;
+- parámetros de reserva y notificaciones.
 
 ## Estado
 
-Prototipo frontend cerrado en una ruta principal con diálogos operativos. Se crearán rutas dedicadas únicamente si el crecimiento del flujo lo justifica.
+Rutas del prototipo cerradas. La especificación detallada y las restricciones están en [Agenda](../../frontend/modules/agenda/FUNCTIONAL_SPEC.md).

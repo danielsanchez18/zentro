@@ -1,28 +1,42 @@
 # Agenda — issues pendientes
 
-## Frontend no bloqueante
+Estos issues no reabren la maquetación principal; delimitan la diferencia entre el prototipo cerrado y una implementación integrada.
 
-- [ ] Centralizar la configuración visual de horarios, recursos y bloqueos en un store persistente cuando se defina su contrato final.
-- [ ] Añadir filtro de ubicación cuando exista más de una ubicación mock activa en Agenda.
-- [ ] Sustituir imágenes `img` por el componente optimizado del proyecto y limpiar warnings de imports heredados.
-- [ ] Ejecutar QA visual manual en dispositivos móviles antes de integración.
+## Frontend e integración mock
+
+- [ ] Usar `useAgendaSettingsStore.resources` en crear/editar en lugar de `agendaResources` estático.
+- [ ] Aplicar horario semanal, bloqueos, buffer y antelación al validar disponibilidad.
+- [ ] Renderizar citas `allDay` en la fila “Todo el día”.
+- [ ] Materializar recurrencias o representar claramente que se trata de una regla sin serie generada.
+- [ ] Calcular KPIs usando la fecha actual/activa en lugar de `2026-09-12`.
+- [ ] Persistir el store mock de citas si se necesita conservar pruebas tras recargar.
+- [ ] Añadir filtro de ubicación cuando haya varias ubicaciones.
+- [ ] Incorporar capacidad grupal.
+- [ ] Validar dirección obligatoria para domicilio y contacto/enlace para online.
+- [ ] Eliminar el componente legado no conectado `overview/AgendaSettingsDialog.tsx`.
+- [ ] Retirar menús ocultos y props de transición residuales en tarjetas/vistas.
+- [ ] Limpiar warnings de imports e imágenes sin optimizar.
+- [ ] Ejecutar QA visual manual móvil y accesibilidad.
 
 ## Backend
 
-- [ ] Persistir citas, servicios reservables, horarios, excepciones, recursos y bloqueos por organización.
-- [ ] Implementar detección transaccional de conflictos y capacidad concurrente.
-- [ ] Normalizar timezone, cambios de horario y fechas autoritativas.
-- [ ] Implementar recurrencia, series y edición de una ocurrencia o serie completa.
-- [ ] Mantener historial append-only de estados, reprogramaciones y asignaciones.
-- [ ] Aplicar permisos y alcance por organización/ubicación.
+- [ ] Persistir citas, servicios reservables, horarios, excepciones, recursos y bloqueos por organización/ubicación.
+- [ ] Implementar disponibilidad y detección transaccional de conflictos.
+- [ ] Normalizar timezone, UTC y fechas autoritativas.
+- [ ] Implementar recurrencia, series y edición de ocurrencia/serie.
+- [ ] Mantener historial append-only con actor real.
+- [ ] Aplicar permisos y alcance.
 - [ ] Implementar recordatorios, confirmaciones y enlaces seguros.
+- [ ] Proteger transiciones de estado y eliminación en servidor.
 
 ## Integraciones
 
-- [ ] Usar `customerId` autoritativo de CRM y permitir invitado sin alta automática.
-- [ ] Obtener responsables reservables desde Equipo y sus permisos.
-- [ ] Unificar servicios con el catálogo maestro y snapshots por cita.
-- [ ] Conectar adelantos, saldos y devoluciones con Pedidos, POS y Caja.
+- [ ] Usar identidad autoritativa de CRM y conservar snapshot.
+- [ ] Obtener responsables reservables desde Equipo y permisos.
+- [ ] Unificar servicios y recursos con sus fuentes maestras.
+- [ ] Conectar pagos, saldos y devoluciones con Pedidos, POS y Caja.
+- [ ] Registrar método, caja, terminal y cobrador.
 - [ ] Crear enlaces de videollamada mediante proveedor configurable.
 - [ ] Sincronizar calendarios externos evitando duplicados.
-- [ ] Integrar disponibilidad pública con Web, Marketplace y Formularios.
+- [ ] Publicar disponibilidad en Web, Marketplace y Formularios.
+- [ ] Enviar WhatsApp/correo y registrar entrega/error.

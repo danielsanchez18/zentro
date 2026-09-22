@@ -1,6 +1,6 @@
 # Progreso actual
 
-**Última actualización:** 17 de septiembre de 2026.
+**Última actualización:** 21 de septiembre de 2026.
 
 ## Estado general
 
@@ -17,14 +17,14 @@
 - POS: prototipo principal cerrado; cruces con Equipo/Caja, Agenda y backend documentados.
 - CRM: prototipo cerrado, con CRUD, detalle, acciones rápidas y conexión con POS.
 - Agenda: prototipo frontend cerrado; overview, cuatro vistas, operación, configuración y trazabilidad mock implementados.
-- Formularios, Finanzas, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
+- Formularios: prototipo frontend cerrado; flujo completo de creación, publicación, captura, revisión, historial y conversión mock.
+- Finanzas, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
 
 ## Trabajo activo
 
-**Agenda cerrada en prototipo frontend:** incluye alta, edición, reprogramación, estados, cancelación/no asistencia, historial, adelantos, pagos parciales, disponibilidad visual, recursos, bloqueos, filtros y detección mock de cruces.
+**Formularios cerrado en frontend:** quedan únicamente persistencia, seguridad, archivos y automatizaciones reales para la integración backend.
 
 ## Siguiente entrega
 
-1. Seleccionar el siguiente módulo según el roadmap.
-2. Mantener los pendientes de backend e integración de Agenda en su archivo de issues.
-3. Ejecutar QA visual manual transversal antes de congelar contratos mock.
+1. Planificar y desarrollar Caja.
+2. Mantener los issues backend de Formularios para la etapa de integración.

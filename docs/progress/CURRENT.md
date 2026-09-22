@@ -2,17 +2,23 @@
 
 **Fuente detallada:** [Progreso del producto](../product/PROGRESS.md).
 
-## En curso
+## Módulo recién cerrado
 
-Agenda cerrada en prototipo frontend:
+Formularios — prototipo frontend cerrado:
 
-- capacidad opcional para negocios de servicios o mixtos;
-- citas presenciales, online o a domicilio;
-- overview con KPIs y vistas día, semana, mes y lista;
-- alta mock enriquecida y preview con contacto, pago y compartir;
-- integración parcial con CRM, Equipo y Catálogo;
-- edición, historial, disponibilidad visual, recursos, bloqueos, pagos y conflictos mock implementados.
+- contrato y datos mock definidos;
+- overview con KPIs, búsqueda, filtros, ordenamiento y paginación;
+- tabla y cards;
+- preview y enlace público copiable;
+- publicar, pausar, reactivar, duplicar y eliminar borradores;
+- selección de plantilla mediante diálogo en el overview;
+- constructor compartido para agregar y editar;
+- campos configurables, orden, duplicación, eliminación y vista previa;
+- canal, destino y mensaje de confirmación;
+- formulario público con envío mock;
+- bandeja, filtros, detalle y estados de respuestas.
+- métricas por estado, historial y conversiones mock a CRM, Agenda o Pedidos.
 
-La siguiente tarea es seleccionar el próximo módulo del roadmap. Los pendientes de Agenda son de integración/backend o QA transversal.
+No quedan issues de maquetación necesarios para cerrar el módulo. Archivos, seguridad, persistencia, deduplicación y automatizaciones reales están documentados para backend.
 
 No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.

@@ -4,11 +4,6 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 ## Clientes y servicios
 
-### `/app/[slug]/formularios`
-
-- Formularios de captación, contacto, reservas y solicitudes.
-- Publicación o asociación por canal; respuestas integradas con CRM.
-
 ## Finanzas
 
 ### `/app/[slug]/caja`

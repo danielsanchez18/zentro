@@ -51,7 +51,10 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
    - Alta, edición/reprogramación, preview, estados, historial y pagos mock.
    - Configuración visual de disponibilidad, recursos y bloqueos; conflictos mock por responsable o recurso.
    - Persistencia autoritativa e integraciones externas documentadas como issues.
-18. **Formularios** — planificados para captación y flujos de canales.
+18. **Formularios** — prototipo frontend cerrado.
+   - Overview, constructor, plantillas, publicación y formulario público implementados.
+   - Bandeja, métricas, detalle, estados, historial y conversiones mock implementados.
+   - Persistencia, seguridad, archivos y automatizaciones reales documentados como issues de backend.
 
 ## Fase 6 — Finanzas
 
