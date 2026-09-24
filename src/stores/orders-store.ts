@@ -28,7 +28,7 @@ interface OrdersStore {
   updateCourierStatus: (id: string, status: CourierStatus) => boolean;
   cancelOrder: (id: string, reason: string, note?: string) => boolean;
   refundPayment: (id: string, amount: number, reason: string) => boolean;
-  issueReceipt: (id: string, receipt: Omit<OrderReceipt, "number" | "issuedAt">) => boolean;
+  issueReceipt: (id: string, receipt: Omit<OrderReceipt, "number" | "issuedAt"> & { number?: string }) => boolean;
   updateOrderContent: (id: string, lines: OrderLine[], manualDiscount: number, reason: string) => boolean;
 }
 
@@ -147,7 +147,8 @@ export const useOrdersStore = create<OrdersStore>((set) => ({
         if (order.id !== id || order.receipt || order.paymentStatus === "pago_pendiente") return order;
         const now = new Date().toISOString();
         changed = true;
-        return { ...order, receipt: { ...receipt, number: `${receipt.type === "factura" ? "F001" : "B001"}-${String(Date.now()).slice(-6)}`, issuedAt: now }, updatedAt: now };
+        const number = receipt.number ?? `${receipt.type === "factura" ? "F001" : "B001"}-${String(Date.now()).slice(-6)}`;
+        return { ...order, receipt: { ...receipt, number, issuedAt: now }, updatedAt: now };
       }),
     }));
     return changed;

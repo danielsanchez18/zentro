@@ -1,6 +1,6 @@
 # Progreso actual
 
-**Última actualización:** 22 de septiembre de 2026.
+**Última actualización:** 24 de septiembre de 2026.
 
 ## Estado general
 
@@ -19,13 +19,14 @@
 - Agenda: prototipo frontend cerrado; overview, cuatro vistas, operación, configuración y trazabilidad mock implementados.
 - Formularios: prototipo frontend cerrado; flujo completo de creación, publicación, captura, revisión, historial y conversión mock.
 - Caja: prototipo frontend cerrado con sesiones, movimientos, arqueo, historial, conciliación y configuración.
-- Facturación, Reportes, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
+- Facturación: prototipo frontend cerrado. Overview con KPIs, filtros (tipo, estado, método de pago, fecha, sesión de caja) y paginación; detalle con línea de tiempo (emitido → enviado → pagado → anulado), ítems, totales, notas de crédito/débito, trazabilidad y snapshot de configuración fiscal; emisión unificada desde Pedidos que registra el comprobante en Facturación; configuración fiscal con correlativos secuenciales. Pendientes reales (PDF, correo, SUNAT, permisos) documentados en issues.md.
+- Reportes, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
 
 ## Trabajo activo
 
-**Caja cerrada en frontend:** quedan persistencia transaccional e integraciones reales con pagos, pedidos y permisos.
+- Facturación: prototipo frontend cerrado (emisión conectada a Pedidos, estados completos, notas, filtros de caja, configuración fiscal).
 
 ## Siguiente entrega
 
-1. Planificar y desarrollar Facturación.
-2. Conservar los contratos backend de Caja para la etapa de integración.
+1. Conservar los contratos backend de Caja y Facturación para la etapa de integración.
+2. Auditoría QA transversal (responsive, accesibilidad, estados vacíos/error).

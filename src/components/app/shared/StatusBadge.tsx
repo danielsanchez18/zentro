@@ -6,12 +6,15 @@ import {
   BadgeCheck,
   Ban,
   CalendarClock,
+  CircleDot,
   CircleSlash2,
   CheckCheck,
   CheckCircle2,
   Clock3,
   FilePenLine,
+  FileText,
   Hourglass,
+  Info,
   PackageCheck,
   PackageX,
   PauseCircle,
@@ -67,7 +70,14 @@ export type BadgeStatus =
   | "confirmada"
   | "en_curso"
   | "completada"
-  | "no_asistio";
+  | "no_asistio"
+  | "emitido"
+  | "anulado"
+  | "info"
+  | "success"
+  | "warning"
+  | "error"
+  | "default";
 
 /**
  * Configuración visual por estado 🎨.
@@ -417,6 +427,48 @@ const STATUS_CONFIG: Record<
     icon: CircleSlash2,
     badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  emitido: {
+    label: "Emitido",
+    icon: FileText,
+    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    iconClass: "text-yellow-600 dark:text-yellow-400",
+  },
+  anulado: {
+    label: "Anulado",
+    icon: Ban,
+    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  info: {
+    label: "Info",
+    icon: Info,
+    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    iconClass: "text-sky-600 dark:text-sky-400",
+  },
+  success: {
+    label: "Éxito",
+    icon: CheckCircle2,
+    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  warning: {
+    label: "Advertencia",
+    icon: TriangleAlert,
+    badge: "bg-amber-500/10 text-amber-600 ring-amber-500/25 dark:bg-amber-500/15 dark:text-amber-400",
+    iconClass: "text-amber-600 dark:text-amber-400",
+  },
+  error: {
+    label: "Error",
+    icon: XCircle,
+    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    iconClass: "text-rose-600 dark:text-rose-400",
+  },
+  default: {
+    label: "Estado",
+    icon: CircleDot,
+    badge: "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
+    iconClass: "text-neutral-800 dark:text-neutral-300",
   },
 };
 

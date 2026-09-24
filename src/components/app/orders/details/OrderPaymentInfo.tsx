@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CreditCard, Download } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { ArrowRight, Building2, CreditCard, ReceiptText } from "lucide-react";
 import { StatusBadge } from "@/components/app/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,10 +27,11 @@ import {
   orderPaymentMethodLabel,
   type CustomerOrder,
 } from "@/lib/mock/orders";
+import type { BillingConfig, Invoice, InvoiceItem } from "@/lib/mock/billing";
+import { useBillingStore } from "@/stores/billing-store";
 import { useOrdersStore } from "@/stores/orders-store";
 import { IssueReceiptDialog } from "./IssueReceiptDialog";
 import { RefundPaymentDialog } from "./RefundPaymentDialog";
-import { ReceiptPreviewDialog } from "./ReceiptPreviewDialog";
 
 type PaymentMethod = NonNullable<CustomerOrder["paymentMethod"]>;
 
@@ -42,13 +44,22 @@ const methods: PaymentMethod[] = [
 ];
 
 export function OrderPaymentInfo({ order }: { order: CustomerOrder }) {
+  const router = useRouter();
+  const params = useParams<{ slug: string }>();
   const [open, setOpen] = useState(false);
   const [refundOpen, setRefundOpen] = useState(false);
   const [receiptOpen, setReceiptOpen] = useState(false);
-  const [receiptPreviewOpen, setReceiptPreviewOpen] = useState(false);
   const registerPayment = useOrdersStore((state) => state.registerPayment);
   const refundPayment = useOrdersStore((state) => state.refundPayment);
   const issueReceipt = useOrdersStore((state) => state.issueReceipt);
+  const addInvoice = useBillingStore((state) => state.addInvoice);
+  const invoices = useBillingStore((state) => state.invoices);
+  const config = useBillingStore((state) => state.config);
+  const updateConfig = useBillingStore((state) => state.updateConfig);
+  const linkedInvoice = useMemo(
+    () => invoices.find((inv) => inv.orderId === order.id),
+    [invoices, order.id],
+  );
   const paid = useMemo(() => getPaidAmount(order), [order]);
   const refunded = useMemo(
     () =>
@@ -58,7 +69,10 @@ export function OrderPaymentInfo({ order }: { order: CustomerOrder }) {
   );
   const balance = Math.max(0, order.total - paid);
   const refundable = Math.max(0, paid - refunded);
-  const promotionDiscount = Math.max(0, order.discount - (order.manualDiscount ?? 0));
+  const promotionDiscount = Math.max(
+    0,
+    order.discount - (order.manualDiscount ?? 0),
+  );
   const canRegister = balance > 0 && order.paymentStatus !== "reembolsado";
 
   const submitPayment = (payment: {
@@ -109,7 +123,11 @@ export function OrderPaymentInfo({ order }: { order: CustomerOrder }) {
             />
           )}
           {(order.manualDiscount ?? 0) > 0 && (
-            <Row label="Descuento directo" value={`-${formatOrderMoney(order.manualDiscount ?? 0)}`} tone="success" />
+            <Row
+              label="Descuento directo"
+              value={`-${formatOrderMoney(order.manualDiscount ?? 0)}`}
+              tone="success"
+            />
           )}
           {order.deliveryFee > 0 && (
             <Row label="Envío" value={formatOrderMoney(order.deliveryFee)} />
@@ -164,20 +182,37 @@ export function OrderPaymentInfo({ order }: { order: CustomerOrder }) {
         )}
 
         {order.receipt && (
-          <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
-            <div className="flex items-center gap-2 font-heading">
-              <p className="text-sm font-medium capitalize">
-                {order.receipt.type}
-              </p>
-              -
-              <p className="mt-0.5 font-mono text-sm tabular-nums text-muted-foreground">
-                {order.receipt.number}
-              </p>
-            </div>
-            <div className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" onClick={() => setReceiptPreviewOpen(true)}>Ver</Button>
-              <Button variant="ghost" size="icon-sm" aria-label="Descargar comprobante" onClick={() => downloadReceipt(order)}><Download /></Button>
-            </div>
+          <div className="mt-5 border-t border-border pt-4 font-heading">
+            <Button
+              variant="link"
+              className="h-auto w-full justify-start gap-3 p-0"
+              onClick={() =>
+                router.push(
+                  linkedInvoice
+                    ? `/app/${params.slug}/facturacion/${linkedInvoice.id}`
+                    : `/app/${params.slug}/facturacion`,
+                )
+              }
+            >
+              {order.receipt.type === "factura" ? (
+                <span className="p-2.5 rounded-lg bg-accent text-foreground">
+                  <Building2 className="size-4" />
+                </span>
+              ) : (
+                <span className="p-2.5 rounded-lg bg-accent text-foreground">
+                  <ReceiptText className="size-4" />
+                </span>
+              )}
+              <span className="min-w-0 flex-1 text-left">
+                <span className="block text-sm font-medium capitalize text-foreground">
+                  Detalle de {order.receipt.type}
+                </span>
+                <span className="block truncate font-mono text-xs tabular-nums text-muted-foreground">
+                  {order.receipt.number}
+                </span>
+              </span>
+              <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
+            </Button>
           </div>
         )}
 
@@ -231,41 +266,96 @@ export function OrderPaymentInfo({ order }: { order: CustomerOrder }) {
       <IssueReceiptDialog
         open={receiptOpen}
         onOpenChange={setReceiptOpen}
+        order={order}
+        config={config}
         onConfirm={(receipt) => {
-          if (issueReceipt(order.id, receipt)) {
-            toastMsg.success("Comprobante emitido", order.number);
+          const isFactura = receipt.type === "factura";
+          const seqKey = isFactura ? "factura" : "boleta";
+          const prefix = isFactura ? "F001" : "B001";
+          const next = config.sequences[seqKey] + 1;
+          const number = `${prefix}-${String(next).padStart(4, "0")}`;
+          if (issueReceipt(order.id, { ...receipt, number })) {
+            addInvoice(buildInvoice(order, receipt, number, config));
+            updateConfig({
+              sequences: { ...config.sequences, [seqKey]: next },
+            });
+            toastMsg.success(
+              "Comprobante emitido",
+              `${number} · ${order.number}`,
+            );
             setReceiptOpen(false);
           }
         }}
-      />
-      <ReceiptPreviewDialog
-        order={order}
-        open={receiptPreviewOpen}
-        onOpenChange={setReceiptPreviewOpen}
-        onDownload={() => downloadReceipt(order)}
       />
     </section>
   );
 }
 
-function downloadReceipt(order: CustomerOrder) {
-  if (!order.receipt) return;
-  const content = [
-    order.receipt.type.toUpperCase(),
-    order.receipt.number,
-    `Pedido: ${order.number}`,
-    `Cliente: ${order.customerName}`,
-    `Total: ${formatOrderMoney(order.total)}`,
-    `Emitido: ${new Date(order.receipt.issuedAt).toLocaleString("es-PE")}`,
-  ].join("\n");
-  const url = URL.createObjectURL(
-    new Blob([content], { type: "text/plain;charset=utf-8" }),
-  );
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${order.receipt.number}.txt`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+function buildInvoice(
+  order: CustomerOrder,
+  receipt: {
+    type: "boleta" | "factura";
+    customerDocument?: string;
+    businessName?: string;
+    customerName?: string;
+    customerAddress?: string;
+    customerEmail?: string;
+  },
+  number: string,
+  config: BillingConfig,
+): Invoice {
+  const round2 = (value: number) => Math.round(value * 100) / 100;
+  const isFactura = receipt.type === "factura";
+  const now = new Date().toISOString();
+  const items: InvoiceItem[] = order.lines.map((line, index) => {
+    const subtotal = round2(line.unitPrice * line.quantity - line.discount);
+    return {
+      id: `item_${Date.now()}_${index}`,
+      productId: line.productId,
+      productName: line.name,
+      sku: line.productId,
+      quantity: line.quantity,
+      unitPrice: line.unitPrice,
+      discount: line.discount,
+      subtotal,
+      igv: round2(subtotal * config.igvRate),
+    };
+  });
+  const subtotal = round2(items.reduce((sum, item) => sum + item.subtotal, 0));
+  const igv = round2(items.reduce((sum, item) => sum + item.igv, 0));
+
+  return {
+    id: `inv_${Date.now()}`,
+    number,
+    type: receipt.type,
+    status: "emitido",
+    orderId: order.id,
+    orderNumber: order.number,
+    // Snapshot de la config fiscal del negocio al momento de emitir (reglas 44-45)
+    fiscalSnapshot: {
+      businessName: config.businessName,
+      ruc: config.ruc,
+      address: config.address,
+      igvRate: config.igvRate,
+    },
+    customer: {
+      documentType: isFactura ? "ruc" : "dni",
+      documentNumber: receipt.customerDocument ?? "",
+      name: isFactura
+        ? (receipt.businessName ?? order.customerName)
+        : (receipt.customerName ?? order.customerName),
+      tradeName: isFactura ? receipt.businessName : undefined,
+      address: receipt.customerAddress,
+      email: receipt.customerEmail ?? order.customerEmail,
+    },
+    items,
+    subtotal,
+    igv,
+    total: round2(subtotal + igv),
+    currency: "PEN",
+    issuedAt: now,
+    createdAt: now,
+  };
 }
 
 function PaymentDialog({

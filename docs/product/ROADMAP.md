@@ -62,7 +62,12 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
    - KPIs, sesiones, movimientos, filtros, apertura, arqueo y cierre implementados.
    - Detalle histórico, conciliación por método, terminales y políticas configurables implementados.
    - Integraciones autoritativas con POS, Pedidos, Agenda y Equipo documentadas para backend.
-20. **Facturación** — planificada y global con trazabilidad por pedido.
+20. **Facturación** — prototipo cerrado, con trazabilidad por pedido.
+    - Overview con KPIs, búsqueda, filtros (tipo, estado, método de pago, rango de fechas, sesión de caja) y paginación.
+    - Detalle con línea de tiempo emitido → enviado → pagado → anulado, ítems, totales, notas de crédito/débito, trazabilidad y snapshot fiscal.
+    - Emisión unificada desde Pedidos: el comprobante se registra en Facturación y avanza la secuencia correlativa.
+    - Configuración fiscal con correlativos secuenciales (B001/F001/NC001/ND001) e IGV configurable.
+    - Pendientes reales: PDF, envío por correo, SUNAT, permisos (issues.md del módulo).
 21. **Reportes** — planificados en vista consolidada o por ubicación/canal.
 
 ## Fase 7 — Presencia y canales

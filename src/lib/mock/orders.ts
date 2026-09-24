@@ -59,6 +59,9 @@ export interface OrderReceipt {
   number: string;
   customerDocument?: string;
   businessName?: string;
+  customerName?: string;
+  customerAddress?: string;
+  customerEmail?: string;
   issuedAt: string;
 }
 
