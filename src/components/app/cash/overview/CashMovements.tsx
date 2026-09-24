@@ -71,7 +71,6 @@ export function CashMovements({
   ];
 
   const filtered = useMemo(() => {
-    setPage(1);
     return movements.filter((item) => {
       const matchesSearch =
         `${item.concept} ${item.orderNumber ?? ""} ${item.responsibleName} ${item.reference ?? ""}`
@@ -104,10 +103,13 @@ export function CashMovements({
     });
   }, [movements, query, type, method, session, dateFrom, dateTo]);
 
+  const maxPage = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, maxPage);
+
   const paginated = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
+    const start = (currentPage - 1) * PAGE_SIZE;
     return filtered.slice(start, start + PAGE_SIZE);
-  }, [filtered, page]);
+  }, [filtered, currentPage]);
 
   const activeFilterCount =
     Number(type !== "all") +
@@ -123,75 +125,97 @@ export function CashMovements({
     <section className="space-y-5 rounded-xl border border-border bg-card p-5">
       <div className="flex flex-col gap-3 font-heading">
         <h2 className="text-sm font-medium">Movimientos recientes</h2>
-        <Search
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Buscar pedido, referencia o responsable"
-          className="w-full"
-        />
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <DateRangeFilter
-              from={dateFrom}
-              to={dateTo}
-              onFromChange={setDateFrom}
-              onToChange={setDateTo}
-              onClear={() => {
-                setDateFrom("");
-                setDateTo("");
-              }}
-            />
-            <FilterPopover
-              activeCount={activeFilterCount}
-              onClear={() => {
-                setType("all");
-                setMethod("all");
-                setSession("all");
-              }}
-              groups={[
-                {
-                  label: "Terminal",
-                  options: sessionOptions,
-                  selected: session,
-                  onSelect: setSession,
-                },
-                {
-                  label: "Tipo",
-                  options: types,
-                  selected: type,
-                  onSelect: setType,
-                },
-                {
-                  label: "Método",
-                  options: methods,
-                  selected: method,
-                  onSelect: setMethod,
-                },
-              ]}
-            />
-          </div>
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <Search
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setPage(1);
+            }}
+            placeholder="Buscar pedido, referencia o responsable"
+            className="w-full md:min-w-56 md:max-w-90 md:flex-1"
+          />
+          <div className="flex w-full items-center justify-between gap-2 md:w-auto md:justify-end">
+            <div className="flex flex-wrap items-center gap-2">
+              <DateRangeFilter
+                from={dateFrom}
+                to={dateTo}
+                onFromChange={(val) => {
+                  setDateFrom(val);
+                  setPage(1);
+                }}
+                onToChange={(val) => {
+                  setDateTo(val);
+                  setPage(1);
+                }}
+                onClear={() => {
+                  setDateFrom("");
+                  setDateTo("");
+                  setPage(1);
+                }}
+              />
+              <FilterPopover
+                activeCount={activeFilterCount}
+                onClear={() => {
+                  setType("all");
+                  setMethod("all");
+                  setSession("all");
+                  setPage(1);
+                }}
+                groups={[
+                  {
+                    label: "Terminal",
+                    options: sessionOptions,
+                    selected: session,
+                    onSelect: (val) => {
+                      setSession(val);
+                      setPage(1);
+                    },
+                  },
+                  {
+                    label: "Tipo",
+                    options: types,
+                    selected: type,
+                    onSelect: (val) => {
+                      setType(val);
+                      setPage(1);
+                    },
+                  },
+                  {
+                    label: "Método",
+                    options: methods,
+                    selected: method,
+                    onSelect: (val) => {
+                      setMethod(val);
+                      setPage(1);
+                    },
+                  },
+                ]}
+              />
+            </div>
 
-          <div className="flex items-center gap-1 rounded-lg border border-border bg-background p-1">
-            {[
-              { id: "tabla" as const, icon: List, label: "Tabla" },
-              { id: "cards" as const, icon: LayoutGrid, label: "Tarjetas" },
-            ].map(({ id, icon: Icon, label }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setView(id)}
-                aria-label={`Vista ${label}`}
-                title={`Vista ${label}`}
-                className={cn(
-                  "cursor-pointer rounded-md p-1.5 transition-colors",
-                  view === id
-                    ? "bg-accent text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <Icon className="size-4" />
-              </button>
-            ))}
+            <div className="flex items-center gap-1 rounded-lg border border-border bg-background p-1 shrink-0">
+              {[
+                { id: "tabla" as const, icon: List, label: "Tabla" },
+                { id: "cards" as const, icon: LayoutGrid, label: "Tarjetas" },
+              ].map(({ id, icon: Icon, label }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setView(id)}
+                  aria-label={`Vista ${label}`}
+                  title={`Vista ${label}`}
+                  className={cn(
+                    "cursor-pointer rounded-md p-1.5 transition-colors",
+                    view === id
+                      ? "bg-accent text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4" />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -230,7 +254,7 @@ export function CashMovements({
                 <tbody className="divide-y divide-border">
                   {paginated.map((item) => (
                     <tr key={item.id} className="hover:bg-muted/30">
-                      <td className="px-4 py-3 max-w-[280px]">
+                      <td className="px-4 py-3 max-w-70">
                         <p className="text-sm font-medium text-nowrap truncate">
                           {item.concept}
                         </p>
@@ -301,9 +325,9 @@ export function CashMovements({
                       </span>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs border-y border-border py-2.5">
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-sm border-y border-border py-3">
                       <div className="min-w-0">
-                        <span className="text-muted-foreground block text-[11px]">
+                        <span className="text-muted-foreground block text-xs">
                           Terminal
                         </span>
                         <span className="font-medium text-foreground text-nowrap truncate block">
@@ -311,7 +335,7 @@ export function CashMovements({
                         </span>
                       </div>
                       <div className="min-w-0">
-                        <span className="text-muted-foreground block text-[11px]">
+                        <span className="text-muted-foreground block text-xs">
                           Método
                         </span>
                         <span className="font-medium text-foreground text-nowrap truncate block">
@@ -320,7 +344,7 @@ export function CashMovements({
                       </div>
                     </div>
 
-                    <div className="mt-2.5 flex items-center justify-between text-xs text-muted-foreground">
+                    <div className="mt-2.5 flex items-center justify-between text-sm text-muted-foreground">
                       <span className="text-nowrap truncate mr-2">
                         {item.responsibleName}
                       </span>
