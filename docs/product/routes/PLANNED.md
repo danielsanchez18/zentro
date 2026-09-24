@@ -6,11 +6,6 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 ## Finanzas
 
-### `/app/[slug]/caja`
-
-- Apertura, movimientos, arqueo, cierre y diferencias por terminal/ubicación.
-- Módulo estrictamente local.
-
 ### `/app/[slug]/facturacion`
 
 - Comprobantes, notas, estados, cliente fiscal y trazabilidad al pedido/pago.

@@ -58,7 +58,10 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
 
 ## Fase 6 — Finanzas
 
-19. **Caja** — planificada y local por ubicación/terminal.
+19. **Caja** — prototipo frontend cerrado.
+   - KPIs, sesiones, movimientos, filtros, apertura, arqueo y cierre implementados.
+   - Detalle histórico, conciliación por método, terminales y políticas configurables implementados.
+   - Integraciones autoritativas con POS, Pedidos, Agenda y Equipo documentadas para backend.
 20. **Facturación** — planificada y global con trazabilidad por pedido.
 21. **Reportes** — planificados en vista consolidada o por ubicación/canal.
 

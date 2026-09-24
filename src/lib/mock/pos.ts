@@ -28,8 +28,17 @@ export const posServicePoints: PosServicePoint[] = [
   { id: "point_7", name: "Mostrador 03", kind: "mostrador", status: "ocupado", capacity: 1, associatedOrderId: "ord_1047" },
 ];
 
-export const posStaff = [
-  { id: "staff_1", name: "Daniel Sánchez", role: "Administrador" },
-  { id: "staff_2", name: "María Torres", role: "Atención" },
-  { id: "staff_3", name: "Luis Mendoza", role: "Caja" },
+export interface PosStaffMember {
+  id: string;
+  name: string;
+  role: string;
+  avatar?: string;
+}
+
+export const posStaff: PosStaffMember[] = [
+  { id: "staff_1", name: "Daniel Sánchez", role: "Administrador", avatar: "https://i.pravatar.cc/120?img=68" },
+  { id: "staff_2", name: "María Torres", role: "Atención", avatar: "https://i.pravatar.cc/120?img=47" },
+  { id: "staff_3", name: "Luis Mendoza", role: "Caja", avatar: "https://i.pravatar.cc/120?img=12" },
+  { id: "staff_4", name: "Fernanda Soto", role: "Ventas", avatar: "https://i.pravatar.cc/120?img=32" },
+  { id: "staff_5", name: "Carlos Ramos", role: "Cajero", avatar: "https://i.pravatar.cc/120?img=15" },
 ];

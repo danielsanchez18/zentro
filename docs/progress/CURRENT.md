@@ -4,21 +4,20 @@
 
 ## Módulo recién cerrado
 
-Formularios — prototipo frontend cerrado:
+Caja — prototipo frontend cerrado:
 
-- contrato y datos mock definidos;
-- overview con KPIs, búsqueda, filtros, ordenamiento y paginación;
-- tabla y cards;
-- preview y enlace público copiable;
-- publicar, pausar, reactivar, duplicar y eliminar borradores;
-- selección de plantilla mediante diálogo en el overview;
-- constructor compartido para agregar y editar;
-- campos configurables, orden, duplicación, eliminación y vista previa;
-- canal, destino y mensaje de confirmación;
-- formulario público con envío mock;
-- bandeja, filtros, detalle y estados de respuestas.
-- métricas por estado, historial y conversiones mock a CRM, Agenda o Pedidos.
+- contrato mock para terminales, sesiones y movimientos;
+- KPIs de terminales, efectivo, cobros y salidas;
+- sesiones abiertas por terminal;
+- búsqueda y filtros de movimientos;
+- apertura de caja con fondo y responsable;
+- movimientos manuales;
+- arqueo, cierre y diferencia.
+- historial navegable y detalle por sesión;
+- conciliación por método de pago;
+- CRUD mock de terminales;
+- políticas de apertura, diferencias y métodos aceptados.
 
-No quedan issues de maquetación necesarios para cerrar el módulo. Archivos, seguridad, persistencia, deduplicación y automatizaciones reales están documentados para backend.
+No quedan issues de maquetación. Persistencia, concurrencia, permisos e integraciones reales permanecen documentados para backend.
 
 No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.

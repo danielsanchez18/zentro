@@ -4,7 +4,6 @@
 
 ## Próxima entrega
 
-1. Planificar el alcance funcional de Caja por ubicación y terminal.
-2. Diseñar overview, sesiones, aperturas, cierres y movimientos.
-3. Conectar el prototipo de Caja con POS, Pedidos y responsables de Equipo.
-4. Conservar los pendientes backend de Formularios para la etapa de integración.
+1. Planificar el módulo Facturación y su frontera con Caja y Pedidos.
+2. Diseñar comprobantes, notas, estados y cliente fiscal.
+3. Mantener los contratos de Caja para la integración backend.

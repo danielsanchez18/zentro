@@ -1,6 +1,6 @@
 # Progreso actual
 
-**Última actualización:** 21 de septiembre de 2026.
+**Última actualización:** 22 de septiembre de 2026.
 
 ## Estado general
 
@@ -18,13 +18,14 @@
 - CRM: prototipo cerrado, con CRUD, detalle, acciones rápidas y conexión con POS.
 - Agenda: prototipo frontend cerrado; overview, cuatro vistas, operación, configuración y trazabilidad mock implementados.
 - Formularios: prototipo frontend cerrado; flujo completo de creación, publicación, captura, revisión, historial y conversión mock.
-- Finanzas, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
+- Caja: prototipo frontend cerrado con sesiones, movimientos, arqueo, historial, conciliación y configuración.
+- Facturación, Reportes, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
 
 ## Trabajo activo
 
-**Formularios cerrado en frontend:** quedan únicamente persistencia, seguridad, archivos y automatizaciones reales para la integración backend.
+**Caja cerrada en frontend:** quedan persistencia transaccional e integraciones reales con pagos, pedidos y permisos.
 
 ## Siguiente entrega
 
-1. Planificar y desarrollar Caja.
-2. Mantener los issues backend de Formularios para la etapa de integración.
+1. Planificar y desarrollar Facturación.
+2. Conservar los contratos backend de Caja para la etapa de integración.

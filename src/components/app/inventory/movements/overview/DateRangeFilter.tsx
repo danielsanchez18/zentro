@@ -167,7 +167,7 @@ export function DateRangeFilter({
         }
       >
         <CalendarDays className="size-3.5" />
-        <span className="hidden sm:inline">{label}</span>
+        <span className="inline">{label}</span>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-fit p-0">
         {view === "presets" ? (
