@@ -1,0 +1,37 @@
+.chart :global(.apexcharts-tooltip) {
+  --apx-tt-bg: var(--popover);
+  --apx-tt-border: var(--border);
+  --apx-tt-color: var(--popover-foreground);
+  --apx-tt-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  padding: 0;
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: var(--apx-tt-shadow) !important;
+  color: var(--popover-foreground) !important;
+}
+
+.chart :global(.apexcharts-tooltip-title) {
+  display: none !important;
+}
+
+.chart :global(.apexcharts-xaxistooltip) {
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--popover-foreground) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+}
+
+.chart :global(.apexcharts-xcrosshairs) {
+  stroke: var(--muted-foreground) !important;
+  stroke-width: 1px !important;
+  opacity: 0.5 !important;
+}
+
+.chart :global(.apexcharts-gridline) {
+  stroke-dasharray: 3 !important;
+}

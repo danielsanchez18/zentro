@@ -20,11 +20,12 @@
 - Formularios: prototipo frontend cerrado; flujo completo de creación, publicación, captura, revisión, historial y conversión mock.
 - Caja: prototipo frontend cerrado con sesiones, movimientos, arqueo, historial, conciliación y configuración.
 - Facturación: prototipo frontend cerrado. Overview con KPIs, filtros (tipo, estado, método de pago, fecha, sesión de caja) y paginación; detalle con línea de tiempo (emitido → enviado → pagado → anulado), ítems, totales, notas de crédito/débito, trazabilidad y snapshot de configuración fiscal; emisión unificada desde Pedidos que registra el comprobante en Facturación; configuración fiscal con correlativos secuenciales. Pendientes reales (PDF, correo, SUNAT, permisos) documentados en issues.md.
-- Reportes, Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
+- Reportes: prototipo frontend cerrado. Vista consolidada global con selector de período (hoy/7/30/90/todo), KPIs (ventas, pedidos, ticket promedio, clientes activos), series de ventas por día, distribución por canal y método de pago, pedidos por estado y servicio, rentabilidad estimada por producto, stock crítico + valorización, compras por proveedor, top clientes y citas por estado. Exportación CSV mock del período. Pendientes reales (SQL agregado, PDF servidor, permisos) documentados en issues.md.
+- Presencia, Configuración y Auditoría: planificados, sin ruta funcional.
 
 ## Trabajo activo
 
-- Facturación: prototipo frontend cerrado (emisión conectada a Pedidos, estados completos, notas, filtros de caja, configuración fiscal).
+- Reportes: prototipo frontend cerrado (agregaciones de solo lectura sobre los mocks; sin backend).
 
 ## Siguiente entrega
 

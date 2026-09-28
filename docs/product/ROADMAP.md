@@ -68,7 +68,9 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
     - Emisión unificada desde Pedidos: el comprobante se registra en Facturación y avanza la secuencia correlativa.
     - Configuración fiscal con correlativos secuenciales (B001/F001/NC001/ND001) e IGV configurable.
     - Pendientes reales: PDF, envío por correo, SUNAT, permisos (issues.md del módulo).
-21. **Reportes** — planificados en vista consolidada o por ubicación/canal.
+21. **Reportes** — prototipo frontend cerrado.
+    - Vista consolidada global con selector de período, KPIs y agregaciones de solo lectura sobre los mocks (ventas, pedidos, rentabilidad, inventario, compras, clientes, citas y canales).
+    - Exportación CSV del período; pendientes reales: SQL agregado, PDF en servidor y permisos (issues.md del módulo).
 
 ## Fase 7 — Presencia y canales
 

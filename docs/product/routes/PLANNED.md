@@ -15,6 +15,7 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 - Ventas, pedidos, rentabilidad, inventario, compras, clientes, citas y canales.
 - Consolidado para usuarios globales y filtro por ubicación/canal.
+- **Estado:** prototipo frontend cerrado (ver `docs/frontend/modules/reportes/`).
 
 ## Presencia y canales
 
