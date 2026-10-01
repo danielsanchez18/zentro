@@ -113,7 +113,7 @@ export function ProfitSection({ products }: { products: ProductMargin[] }) {
       ) : (
         <div className="w-full space-y-5">
           {/* Barra de búsqueda y contador */}
-          <div className="flex flex-wrap items-center justify-between gap-3 px-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 max-sm:px-5">
             <Search
               value={query}
               onChange={(e) => {
@@ -283,7 +283,7 @@ export function ProfitSection({ products }: { products: ProductMargin[] }) {
 
               {/* Paginación si supera el tamaño de página */}
               {filtered.length > PAGE_SIZE && (
-                <div className="px-5">
+                <div className="max-sm:px-5">
                   <Paginator
                     totalResults={filtered.length}
                     pageSize={PAGE_SIZE}

@@ -1,3 +1,5 @@
+import { NATIVE_CHANNELS } from "./channels";
+
 export type OrderStatus =
   | "nuevo"
   | "confirmado"
@@ -13,6 +15,11 @@ export type OrderPaymentStatus =
   | "reembolsado";
 
 export type OrderServiceType = "mesa" | "recojo" | "delivery";
+/**
+ * Claves legacy del canal del pedido. El vocabulario autoritativo vive en
+ * `channels.ts` (entidad `SalesChannel`); estas claves se conservan porque los
+ * pedidos guardan el origen con un snapshot y Reportes los agrega.
+ */
 export type OrderChannel = "pos" | "web" | "marketplace";
 export type CourierStatus = "asignado" | "recogido" | "en_camino" | "entregado";
 
@@ -498,12 +505,19 @@ export const orderServiceLabel = (type: OrderServiceType) =>
       ? "Recojo en tienda"
       : "Envío a domicilio";
 
+/**
+ * Etiqueta del canal del pedido.
+ *
+ * Se resuelve contra la entidad de canales (`NATIVE_CHANNELS`), que es la fuente
+ * de verdad; el ternario queda como respaldo para claves sin entidad.
+ */
 export const orderChannelLabel = (channel: OrderChannel) =>
-  channel === "pos"
+  NATIVE_CHANNELS.find((c) => c.key === channel)?.label ??
+  (channel === "pos"
     ? "Punto de venta"
     : channel === "web"
       ? "Sitio web"
-      : "Marketplace";
+      : "Marketplace");
 
 export const orderPaymentMethodLabel = (method?: CustomerOrder["paymentMethod"]) => !method ? "Sin método registrado" : method === "tarjeta" ? "Tarjeta" : method === "transferencia" ? "Transferencia bancaria" : method.charAt(0).toUpperCase() + method.slice(1);
 

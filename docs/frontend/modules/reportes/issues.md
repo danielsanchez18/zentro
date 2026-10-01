@@ -3,6 +3,7 @@
 ## Frontend
 
 - [x] Vista consolidada global con selector de período
+- [x] Filtro por ubicación activa del workspace (caja vía sesión y citas; el resto global en el mock)
 - [x] KPIs: ventas, pedidos, ticket promedio, clientes activos
 - [x] Serie de ventas por día
 - [x] Distribución por canal y por método de pago
@@ -12,7 +13,7 @@
 - [x] Compras por proveedor
 - [x] Top clientes y clientes nuevos
 - [x] Citas por estado
-- [x] Exportación mock (PDF/CSV) del período
+- [x] Exportación mock (CSV + PDF) del período
 - [x] Estado vacío por período sin datos
 - [ ] Gráficos interactivos (tooltips, zoom) — opcional, sin fecha
 

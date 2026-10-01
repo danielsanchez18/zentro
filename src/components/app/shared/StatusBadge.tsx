@@ -314,25 +314,29 @@ const STATUS_CONFIG: Record<
   nueva: {
     label: "Nueva",
     icon: Clock3,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   revisada: {
     label: "Revisada",
     icon: CheckCircle2,
-    badge: "bg-indigo-500/10 text-indigo-600 ring-indigo-500/25 dark:bg-indigo-800/15 dark:text-indigo-400",
+    badge:
+      "bg-indigo-500/10 text-indigo-600 ring-indigo-500/25 dark:bg-indigo-800/15 dark:text-indigo-400",
     iconClass: "text-indigo-600 dark:text-indigo-400",
   },
   convertida: {
     label: "Convertida",
     icon: BadgeCheck,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   descartada: {
     label: "Descartada",
     icon: CircleSlash2,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   confirmado: {
@@ -401,73 +405,85 @@ const STATUS_CONFIG: Record<
   pendiente_confirmacion: {
     label: "Por confirmar",
     icon: Clock3,
-    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
     iconClass: "text-yellow-600 dark:text-yellow-400",
   },
   confirmada: {
     label: "Confirmada",
     icon: CheckCircle2,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   en_curso: {
     label: "En curso",
     icon: Hourglass,
-    badge: "bg-violet-500/10 text-violet-600 ring-violet-500/25 dark:bg-violet-800/15 dark:text-violet-400",
+    badge:
+      "bg-violet-500/10 text-violet-600 ring-violet-500/25 dark:bg-violet-800/15 dark:text-violet-400",
     iconClass: "text-violet-600 dark:text-violet-400",
   },
   completada: {
     label: "Completada",
     icon: BadgeCheck,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   no_asistio: {
     label: "No asistió",
     icon: CircleSlash2,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   emitido: {
     label: "Emitido",
     icon: FileText,
-    badge: "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
+    badge:
+      "bg-yellow-500/10 text-yellow-600 ring-yellow-500/25 dark:bg-yellow-500/15 dark:text-yellow-400",
     iconClass: "text-yellow-600 dark:text-yellow-400",
   },
   anulado: {
     label: "Anulado",
     icon: Ban,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   info: {
     label: "Info",
     icon: Info,
-    badge: "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
+    badge:
+      "bg-sky-500/10 text-sky-600 ring-sky-500/25 dark:bg-sky-800/15 dark:text-sky-400",
     iconClass: "text-sky-600 dark:text-sky-400",
   },
   success: {
     label: "Éxito",
     icon: CheckCircle2,
-    badge: "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
+    badge:
+      "bg-emerald-500/10 text-emerald-600 ring-emerald-500/25 dark:bg-emerald-800/15 dark:text-emerald-400",
     iconClass: "text-emerald-600 dark:text-emerald-400",
   },
   warning: {
     label: "Advertencia",
     icon: TriangleAlert,
-    badge: "bg-amber-500/10 text-amber-600 ring-amber-500/25 dark:bg-amber-500/15 dark:text-amber-400",
+    badge:
+      "bg-amber-500/10 text-amber-600 ring-amber-500/25 dark:bg-amber-500/15 dark:text-amber-400",
     iconClass: "text-amber-600 dark:text-amber-400",
   },
   error: {
     label: "Error",
     icon: XCircle,
-    badge: "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
+    badge:
+      "bg-rose-500/10 text-rose-600 ring-rose-500/25 dark:bg-rose-800/15 dark:text-rose-400",
     iconClass: "text-rose-600 dark:text-rose-400",
   },
   default: {
     label: "Estado",
     icon: CircleDot,
-    badge: "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
+    badge:
+      "bg-neutral-500/10 text-neutral-800 ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-300",
     iconClass: "text-neutral-800 dark:text-neutral-300",
   },
 };
@@ -495,7 +511,7 @@ export const StatusBadge = ({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 text-nowrap rounded-lg px-2.5 py-2 text-[13px] font-medium font-heading",
+        "inline-flex items-center gap-1 text-nowrap rounded-lg px-2.5 py-2 text-[13px] font-medium font-heading w-fit",
         badge,
         className,
       )}

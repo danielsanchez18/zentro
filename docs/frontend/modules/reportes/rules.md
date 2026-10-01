@@ -3,7 +3,7 @@
 ## Alcance y globalidad
 
 1. Reportes es un módulo de solo lectura: agrega información de Pedidos, Caja, Facturación, Inventario, Compras, CRM y Agenda.
-2. La vista consolidada está disponible para roles globales (OWNER/ADMIN). Con una ubicación activa se filtran los datos que tengan `locationId` (movimientos de caja, citas).
+2. La vista consolidada está disponible para roles globales (OWNER/ADMIN). Con una ubicación activa se filtran los datos que tengan ubicación (`locationName`/`locationId`): movimientos de caja (vía sesión) y citas de Agenda. Los pedidos, inventario, compras y CRM no tienen ubicación en el mock y se muestran globales; el backend agregará `locationId` para filtrarlos.
 3. El período seleccionado (hoy, 7, 30, 90 días, todo) se aplica a toda métrica con fecha; el resto (stock, inventario) se presenta como "al momento".
 
 ## Ventas

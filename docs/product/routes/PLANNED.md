@@ -40,16 +40,14 @@ Estas rutas aparecen en el alcance o sidebar, pero todavía no cuentan con una p
 
 ## Administración
 
-### `/app/[slug]/configuracion`
+Las rutas de administración se movieron a [WORKSPACE.md](./WORKSPACE.md) porque
+ya tienen prototipo funcional:
 
-- Centro guiado de configuración, progreso y recomendaciones.
-- Datos del negocio, capacidades, canales, seguridad, facturación y accesos delegables.
+- `/app/[slug]/configuracion` y `/app/[slug]/configuracion/ubicaciones` →
+  [WORKSPACE.md](./WORKSPACE.md#appslugconfiguracion).
+- `/app/[slug]/auditoria` →
+  [WORKSPACE.md](./WORKSPACE.md#appslugauditoria).
 
-### `/app/[slug]/configuracion/ubicaciones`
-
-- Crear y configurar ubicaciones flexibles, funciones, privacidad, horarios, cobertura, surtido y miembros.
-
-### `/app/[slug]/auditoria`
-
-- Historial de cambios con actor, acción, entidad, contexto, fecha y motivo.
-- Vista global o filtrada según alcance; registros inmutables en backend.
+Pendiente en backend (no es ruta nueva): historial de cambios inmutable con
+actor, acción, entidad, contexto, fecha y motivo, con vista filtrada según el
+alcance del rol.

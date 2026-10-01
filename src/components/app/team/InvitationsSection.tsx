@@ -1,17 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Mail, RefreshCw, SearchX, User, X } from "lucide-react";
+import { useMemo } from "react";
+import { Mail, SearchX, ShieldCheck, Store, User, X } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Search } from "../shared/Search";
 import { StatusBadge } from "../shared/StatusBadge";
-import type { MemberInvitation } from "@/lib/mock/team";
+import { useState } from "react";
+import { type MemberInvitation } from "@/lib/mock/team";
+import { useTeamStore } from "@/stores/team-store";
 
 interface InvitationsSectionProps {
   invitations: MemberInvitation[];
   onRevoke: (id: string) => void;
-  onReinvite: (id: string) => void;
 }
 
 const statOf = (invitations: MemberInvitation[], status: string) =>
@@ -36,14 +37,15 @@ const initials = (email: string) => {
 
 /**
  * Tab «Invitaciones» del módulo Equipo.
- * Muestra el historial completo como una grilla de cards.
+ * Muestra el historial completo como una grilla de cards, con el perfil de
+ * acceso y el alcance guardados en el momento del envío.
  */
 export const InvitationsSection = ({
   invitations,
   onRevoke,
-  onReinvite,
 }: InvitationsSectionProps) => {
   const [query, setQuery] = useState("");
+  const branches = useTeamStore((s) => s.branches);
 
   const pending = statOf(invitations, "PENDING");
   const accepted = statOf(invitations, "ACCEPTED");
@@ -53,6 +55,18 @@ export const InvitationsSection = ({
     if (!q) return invitations;
     return invitations.filter((i) => i.email.toLowerCase().includes(q));
   }, [invitations, query]);
+
+  const scopeLabel = (invitation: MemberInvitation) => {
+    if (
+      invitation.locationScope === "ALL" ||
+      invitation.locationIds.length === 0
+    )
+      return "Todas las ubicaciones";
+    const names = branches
+      .filter((b) => invitation.locationIds.includes(b.id))
+      .map((b) => b.name);
+    return names.length > 0 ? names.join(", ") : "Ubicaciones seleccionadas";
+  };
 
   return (
     <div className="sm:p-5 font-heading sm:rounded-xl sm:border sm:border-border sm:bg-card space-y-5">
@@ -94,8 +108,8 @@ export const InvitationsSection = ({
                   <p className="truncate text-sm font-medium">
                     {invitation.email}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {invitation.role}
+                  <p className="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground">
+                    {invitation.roleName}
                   </p>
                 </div>
               </div>
@@ -104,6 +118,10 @@ export const InvitationsSection = ({
 
               {/* Metadata */}
               <dl className="space-y-1.5 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Store className="size-3.5" />
+                  <span className="truncate">{scopeLabel(invitation)}</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <User className="size-3.5" />
                   <span>Enviada por {invitation.sentBy}</span>
@@ -123,14 +141,6 @@ export const InvitationsSection = ({
               <div className="my-3 border-t border-border" />
               {invitation.status === "PENDING" ? (
                 <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    onClick={() => onReinvite(invitation.id)}
-                    className="flex-1 px-3 rounded-full text-sm"
-                  >
-                    <Mail className="size-3.5" />
-                    Reenviar
-                  </Button>
                   <Button
                     type="button"
                     variant="outline"

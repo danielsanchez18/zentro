@@ -24,9 +24,24 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
 ## Fase 3 — Base del workspace
 
 6. **Layout y selector de contexto** — selector implementado; navegación dinámica pendiente.
-7. **WorkspaceContext mock** — siguiente paso.
-8. **Equipo, perfiles, permisos y alcance** — readecuación pendiente.
-9. **Centro de configuración y ubicaciones** — planificado.
+7. **WorkspaceContext mock** — implementado.
+   - `src/lib/workspace/context.ts` resuelve el contexto compuesto: organización actual, membresía, rol efectivo (desde team-store, con fallback por roleKey), permisos por módulo, capacidades de la org, ubicaciones permitidas por alcance y ubicación activa persistida (puede ser `null`).
+   - Sidebar filtra grupos e ítems por permiso efectivo (`view`+) y capacidad activa; oculta módulos no autorizados en lugar de mostrarlos con candados.
+   - Resumen (`/app/:slug`) filtra sus accesos directos con el mismo contexto; Reportes reusa `canUseGeneralView` derivado.
+   - Pendiente: contexto de canal activo, guard de tenant real y enforcement en rutas/servidor.
+8. **Equipo, perfiles, permisos y alcance** — prototipo frontend cerrado.
+   - Roles rígidos migrados a entidad `TeamRole` con matriz de permisos por módulo, acciones sensibles y alcance de ubicaciones.
+   - Perfiles de sistema (Administrador, Vendedor, Cajero, Contador, Inventario y compras, Contenido y canales) + Owner como titular no asignable.
+   - Invitación en flujo perfil → alcance → mensaje; cambio de rol desde lista y detalle con perfiles asignables.
+   - Detalle de miembro estilo CRM (cabecera con tabs, resumen de acceso, matriz en solo lectura y timeline).
+   - Protecciones de producto: Owner no deshabilitable/eliminable y auto-protección.
+   - Pendientes reales: endpoints, auditoría, transferencia de propiedad y enforcement en servidor (issues.md del módulo).
+9. **Centro de configuración y ubicaciones** — prototipo frontend cerrado.
+   - Hub `/configuracion` con tarjetas de sección (Ubicaciones, Facturación) y atajos a las configuraciones embebidas de otros módulos (caja, agenda, equipo).
+   - Sección `configuracion/ubicaciones`: CRUD completo de la entidad flexible "Ubicación" con funciones "¿Qué sucede aquí?" (atención, POS, inventario, preparación, recojo, delivery, citas, presencia pública), contacto, principal y ficha pública opcional.
+   - `locations-store` es la fuente de verdad de ubicaciones del workspace: el selector del sidebar y el `WorkspaceContext` reflejan altas, ediciones, publicación y eliminaciones.
+   - `configuracion/facturacion` reusa el formulario fiscal del módulo Facturación, cerrando el enlace del dashboard de suscripciones que estaba en 404.
+   - Pendientes reales: persistencia y límites del plan por ubicación, validación de funciones contra capacidades y enforcement de permisos en servidor (issues.md del módulo).
 
 ## Fase 4 — Comercio y operación
 
@@ -74,14 +89,25 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
 
 ## Fase 7 — Presencia y canales
 
-22. **Canales de venta** — planificado como entidad y página propia.
+22. **Canales de venta** — prototipo frontend cerrado.
+    - Entidad `SalesChannel` que unifica los "canales" que estaban dispersos en tres unions distintas (`OrderChannel`, `CustomerChannel`, `FormChannel`).
+    - Distingue **canales propios** (POS, sitio web, Marketplace Zentro: el pedido nace en Zentro → se activan) de **integraciones externas** (el pedido nace afuera → tienen estado de conexión, no un toggle).
+    - Integraciones de WhatsApp, TikTok, Instagram, Shopify y Mercado Libre catalogadas con sus capacidades y deshabilitadas hasta que exista conector.
+    - Clave de permiso nueva `canales`, separada de `marketplace`: el perfil "Contenido y canales" opera los canales sin heredar el Marketplace.
+    - Tarjeta en el hub de Configuración, que cierra la promesa del copy sobre "canales de venta".
+    - Pendientes reales: conectores (OAuth, sincronización de catálogo, recepción de pedidos, pagos, inventario), migración de las unions legacy, contexto de canal activo y guard de servidor (issues.md del módulo).
 23. **Marketplace Zentro** — planificado.
 24. **CMS/Sitio web** — planificado; Blog vivirá dentro de este módulo.
 25. **Marketing** — planificado por audiencias y canales.
 
 ## Fase 8 — Gobierno y cierre frontend
 
-26. **Auditoría del workspace** — planificada.
+26. **Auditoría del workspace** — prototipo cerrado.
+    - Registro append-only de solo lectura por organización: quién hizo qué, cuándo y en qué módulo.
+    - KPIs (eventos, acciones sensibles, actores únicos, último evento) + filtros combinables (búsqueda, módulo, tipo, gravedad, actor, periodo) y tabla paginada.
+    - Taxonomía unificada con la actividad de miembros (`rol`, `acceso`, `invitacion`, `ingreso`, `perfil`) y las de finanzas/operación; los eventos sensibles enlazan con `SENSITIVE_ACTIONS`.
+    - Guard por permiso `auditoria` (solo Owner/Administrador); la entrada de sidebar y la ruta `/app/:slug/auditoria` ya funcionan.
+    - Pendientes reales: captura de eventos en vivo (`logEvent()`), guard de servidor, persistencia, retención y exportación CSV (issues.md del módulo).
 27. **QA responsive, accesibilidad y estados vacíos/error** — transversal.
 28. **Auditoría final del frontend y congelamiento de contratos mock**.
 29. **Plan de integración backend**, sin reintroducir un selector mock/API.

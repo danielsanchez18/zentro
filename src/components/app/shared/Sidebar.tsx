@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
+  Antenna,
   Building2,
   Boxes,
   CalendarDays,
@@ -39,21 +40,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { useDashboardStore } from "@/stores/dashboard-store";
 import { useWorkspaceContext } from "@/stores/workspace-context-store";
 import { useWorkspaceNav } from "@/stores/workspace-nav-store";
+import { useWorkspaceContextView } from "@/hooks/use-workspace-context";
 
 /**
  * Sidebar del Tenant Workspace (/app/:slug).
  *
  * Arquitectura igual que el dashboard y el hub:
  * - Es un componente de presentación (cliente) que vive en `components/app/shared/`.
- * - No contiene lógica de negocio: la API para obtener el slug de la organización, el ítem
- *   activo y las secciones se resuelven localmente con `usePathname`.
+ * - El contexto (organización, rol efectivo, ubicaciones permitidas y navegación
+ *   filtrada por permisos) se resuelve con `useWorkspaceContextView(slug)`.
  * - Las páginas (`page.tsx`) NO declaran el sidebar: lo monta el layout.
- *
- * Contexto actual (mockup de flujo): solo ámbito Tenant, un único rol (Owner),
- * sin switchers ni contexto de sucursal.
  *
  * Responsivamente: en desktop (>= lg) se muestra el sidebar estático; en pantallas
  * más pequeñas se oculta y pasa a ser un drawer (Sheet) controlado por
@@ -113,6 +111,7 @@ const navGroups: NavGroup[] = [
     label: "Presencia",
     icon: Globe,
     items: [
+      { label: "Canales de venta", href: "/canales", icon: Antenna },
       { label: "Mi sitio web", href: "/presencia", icon: Globe },
       { label: "Blog", href: "/blog", icon: Newspaper },
       { label: "Marketing", href: "/marketing", icon: Megaphone },
@@ -145,42 +144,42 @@ const SidebarContent = () => {
     return segments[1] ?? "org";
   }, [pathname]);
 
-  const organizations = useDashboardStore((state) => state.organizations);
-  const memberships = useDashboardStore((state) => state.memberships);
-  const branches = useDashboardStore((state) => state.branches);
-  const currentUser = useDashboardStore((state) => state.currentUser);
-  const activeLocationByOrganization = useWorkspaceContext(
-    (state) => state.activeLocationByOrganization,
-  );
+  const view = useWorkspaceContextView(slug);
   const setActiveLocation = useWorkspaceContext(
     (state) => state.setActiveLocation,
   );
 
-  const organization = organizations.find((item) => item.slug === slug);
-  const membership = memberships.find(
-    (item) =>
-      item.organizationId === organization?.id &&
-      item.userId === currentUser.id &&
-      item.status === "ACTIVE",
-  );
-  const availableLocations = branches.filter(
-    (item) =>
-      item.organizationId === organization?.id && item.status === "ACTIVE",
-  );
-  const canUseGeneralView = membership?.roleKey === "OWNER" || membership?.roleKey === "ADMIN";
-  const storedLocationId = organization
-    ? activeLocationByOrganization[organization.id]
-    : null;
-  const activeLocation = availableLocations.find(
-    (item) => item.id === storedLocationId,
-  );
+  const organization = view.organization;
+  const activeLocation = view.activeLocation;
   const activeContextLabel = activeLocation?.name ?? "Vista general";
 
+  // Navegación filtrada por permisos efectivos y capacidades de la org.
+  const visibleNavGroups = useMemo(
+    () =>
+      navGroups
+        .map((group) => ({
+          ...group,
+          items: group.items.filter(
+            (item) =>
+              view.canViewModule(item.href) &&
+              view.moduleEnabledByCapability(item.href),
+          ),
+        }))
+        .filter((group) => group.items.length > 0),
+    [view],
+  );
+
   useEffect(() => {
-    if (!organization || canUseGeneralView || activeLocation) return;
-    const firstLocation = availableLocations[0];
+    if (!organization || view.canUseGeneralView || activeLocation) return;
+    const firstLocation = view.allowedLocations[0];
     if (firstLocation) setActiveLocation(organization.id, firstLocation.id);
-  }, [activeLocation, availableLocations, canUseGeneralView, organization, setActiveLocation]);
+  }, [
+    activeLocation,
+    view.allowedLocations,
+    view.canUseGeneralView,
+    organization,
+    setActiveLocation,
+  ]);
 
   // Detección del ítem activo: la raíz del workspace (/app/:slug) activa
   // solamente «Resumen». El resto activa para sí mismo y sus sub-rutas.
@@ -196,7 +195,7 @@ const SidebarContent = () => {
   // Grupos colapsados. Por defecto solo el grupo de la ruta activa comienza
   // desplegado; el resto inicia cerrado.
   const [collapsed, setCollapsed] = useState<Set<string>>(() => {
-    const closed = navGroups
+    const closed = visibleNavGroups
       .filter((g) => !groupActive(g))
       .map((g) => g.label);
     return new Set(closed);
@@ -235,7 +234,7 @@ const SidebarContent = () => {
         </Link>
 
         {/* Grupo de secciones */}
-        {navGroups.map((group) => {
+        {visibleNavGroups.map((group) => {
           const opened = groupActive(group) || !collapsed.has(group.label);
           return (
             <div key={group.label} className="">
@@ -329,7 +328,7 @@ const SidebarContent = () => {
             </div>
 
             <div className="flex flex-col gap-0.5">
-              {canUseGeneralView && organization && (
+              {view.canUseGeneralView && organization && (
                 <PopoverClose
                   className="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-left text-sm hover:bg-secondary"
                   onClick={() => setActiveLocation(organization.id, null)}
@@ -340,7 +339,7 @@ const SidebarContent = () => {
                 </PopoverClose>
               )}
 
-              {availableLocations.map((location) => (
+              {view.allowedLocations.map((location) => (
                 <PopoverClose
                   key={location.id}
                   className="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-left text-sm hover:bg-secondary"

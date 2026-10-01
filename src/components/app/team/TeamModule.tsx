@@ -1,57 +1,55 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Users, MailCheck } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Users, MailCheck, ShieldCheck, UserKey } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toastMsg } from "@/components/ui/toast-message";
 import { Title } from "./Title";
 import { KPIS } from "./KPIS";
 import { List } from "./List";
 import { InvitationsSection } from "./InvitationsSection";
+import { RolesSection } from "./roles/RolesSection";
 import { InviteMemberDialog } from "./InviteMemberDialog";
-import {
-  type TeamMember,
-  type MemberInvitation,
-  type TeamRole,
-} from "@/lib/mock/team";
+import { useTeamStore } from "@/stores/team-store";
 
 interface TeamModuleProps {
   slug: string;
-  members: TeamMember[];
-  /** Historial de invitaciones (mock); se conectará a la API más adelante. */
-  invitations?: MemberInvitation[];
 }
 
-type TeamTab = "members" | "invitations";
+type TeamTab = "members" | "invitations" | "roles";
 
 export const TABS: { id: TeamTab; label: string; icon: typeof Users }[] = [
   { id: "members", label: "Miembros", icon: Users },
   { id: "invitations", label: "Invitaciones", icon: MailCheck },
+  { id: "roles", label: "Roles y permisos", icon: UserKey },
 ];
-
-const addDays = (iso: string, days: number) => {
-  const d = new Date(iso);
-  d.setDate(d.getDate() + days);
-  return d.toISOString();
-};
 
 /**
  * Contenedor del módulo Equipo y permisos.
  *
- * Mantiene el estado del dialog de invitación y el historial de invitaciones,
- * separado de la lista de miembros. `Title` (botón "Invitar miembro"),
- * la lista de miembros y el tab de invitaciones comparten este estado.
+ * Los datos (miembros, invitaciones, roles) viven en `useTeamStore` (mock por
+ * ahora; al conectar la API solo cambia el origen del store). Este componente
+ * orquesta los tabs, el estado del dialog de invitación y los toasts.
  */
-export const TeamModule = ({
-  slug,
-  members,
-  invitations: initialInvitations = [],
-}: TeamModuleProps) => {
+export const TeamModule = ({ slug }: TeamModuleProps) => {
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get("tab") as TeamTab | null;
+
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [tab, setTab] = useState<TeamTab>("members");
-  // Historial de invitaciones (pendientes + cerradas).
-  const [invitations, setInvitations] =
-    useState<MemberInvitation[]>(initialInvitations);
+  const [tab, setTab] = useState<TeamTab>(() =>
+    urlTab === "roles" || urlTab === "invitations" ? urlTab : "members",
+  );
+
+  useEffect(() => {
+    if (urlTab === "roles" || urlTab === "invitations" || urlTab === "members") {
+      setTab(urlTab);
+    }
+  }, [urlTab]);
+  const members = useTeamStore((s) => s.members);
+  const invitations = useTeamStore((s) => s.invitations);
+  const sendInvitation = useTeamStore((s) => s.sendInvitation);
+  const revokeInvitation = useTeamStore((s) => s.revokeInvitation);
 
   const pendingCount = useMemo(
     () => invitations.filter((i) => i.status === "PENDING").length,
@@ -60,12 +58,12 @@ export const TeamModule = ({
 
   const handleSendInvite = (
     email: string,
-    role: TeamRole,
+    roleId: string,
+    locationScope: "ALL" | "SELECTED",
+    locationIds: string[],
     message?: string,
   ) => {
     const normalized = email.trim().toLowerCase();
-
-    // Regla de negocio: como mucho 1 invitación activa por correo.
     const active = invitations.find(
       (i) => i.email.toLowerCase() === normalized && i.status === "PENDING",
     );
@@ -78,61 +76,21 @@ export const TeamModule = ({
       return;
     }
 
-    const now = new Date().toISOString();
-    const invitation: MemberInvitation = {
-      id: `inv_${now}`,
+    const invitation = sendInvitation({
       email: normalized,
-      role,
-      status: "PENDING",
-      sentBy: "Daniel Sánchez", // mock: usuario de la sesión
-      sentAt: now,
-      expiresAt: addDays(now, 7),
-    };
-
-    setInvitations((prev) => [invitation, ...prev]);
+      roleId,
+      locationScope,
+      locationIds,
+      message,
+    });
     setTab("invitations");
     setInviteOpen(false);
     toastMsg.success(
       "Invitación enviada",
       message
-        ? `Correo enviado a ${normalized} como ${role}. Mensaje incluido: “${message}”.`
-        : `Correo enviado a ${normalized} como ${role}.`,
+        ? `Correo enviado a ${normalized} como ${invitation.roleName}. Mensaje incluido: “${message}”.`
+        : `Correo enviado a ${normalized} como ${invitation.roleName}.`,
     );
-  };
-
-  const handleRevoke = (id: string) => {
-    const target = invitations.find((i) => i.id === id);
-    setInvitations((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, status: "REVOKED" } : i)),
-    );
-    toastMsg.info(
-      "Invitación revocada",
-      target ? `El enlace de ${target.email} ya no es válido.` : undefined,
-    );
-  };
-
-  const handleReinvite = (id: string) => {
-    const target = invitations.find((i) => i.id === id);
-    if (!target) return;
-
-    const now = new Date().toISOString();
-    // Reenviar revoca la anterior y genera una nueva PENDING (recibiría un
-    // correo nuevo en el flujo real).
-    setInvitations((prev) => [
-      {
-        id: `inv_${now}`,
-        email: target.email,
-        role: target.role,
-        status: "PENDING" as const,
-        sentBy: "Daniel Sánchez",
-        sentAt: now,
-        expiresAt: addDays(now, 7),
-      },
-      ...prev.map((i) =>
-        i.id === id ? { ...i, status: "REVOKED" as const } : i,
-      ),
-    ]);
-    toastMsg.success("Invitación reenviada", `Nuevo enlace enviado a ${target.email}.`);
   };
 
   return (
@@ -140,7 +98,7 @@ export const TeamModule = ({
       <Title onInvite={() => setInviteOpen(true)} />
       <KPIS members={members} pendingInvitations={pendingCount} />
 
-      {/* Tabs: Miembros / Invitaciones */}
+      {/* Tabs: Miembros / Invitaciones / Roles y permisos */}
       <div>
         <div className="flex w-full items-center gap-1 border-b border-border">
           {TABS.map(({ id, label, icon: Icon }) => (
@@ -169,16 +127,14 @@ export const TeamModule = ({
 
         <div className="mt-4 sm:mt-6">
           {tab === "members" ? (
-            <List
-              initialMembers={members}
-              slug={slug}
-            />
-          ) : (
+            <List slug={slug} />
+          ) : tab === "invitations" ? (
             <InvitationsSection
               invitations={invitations}
-              onRevoke={handleRevoke}
-              onReinvite={handleReinvite}
+              onRevoke={revokeInvitation}
             />
+          ) : (
+            <RolesSection slug={slug} />
           )}
         </div>
       </div>

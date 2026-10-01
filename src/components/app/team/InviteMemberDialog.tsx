@@ -1,58 +1,55 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { ArrowUpRight, Mail, MessageSquareText, UserPlus } from "lucide-react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { Mail, UserPlus } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TEAM_ROLES, type TeamRole } from "@/lib/mock/team";
+import { assignableRoles, type LocationScope } from "@/lib/mock/team";
+import { useTeamStore } from "@/stores/team-store";
+import { roleIcon } from "./RoleChangeDialog";
 
-/** Roles que se pueden otorgar desde esta pantalla (el Owner no se invita). */
-const INVITABLE_ROLES = TEAM_ROLES.filter((r) => r !== "Owner");
-const DEFAULT_ROLE: TeamRole = "Vendedor";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MESSAGE_MAX = 500;
-
-const ROLE_OPTIONS = INVITABLE_ROLES.map((role) => ({
-  label: role,
-  value: role,
-}));
 
 interface InviteMemberDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Devuelve el correo normalizado, el rol elegido y el mensaje (opcional). */
-  onSend: (email: string, role: TeamRole, message?: string) => void;
+  /** Devuelve correo normalizado, id de rol, alcance y mensaje (opcional). */
+  onSend: (
+    email: string,
+    roleId: string,
+    locationScope: LocationScope,
+    locationIds: string[],
+    message?: string,
+  ) => void;
 }
 
 /**
  * Dialog de «Invitar miembro».
  *
- * Pide el correo (validado), el rol que recibirá el invitado (los que son
- * invitables; el Owner se excluye porque es único por organización) y un
- * mensaje personalizado opcional. El envío queda a cargo del padre (List) para
- * que cree el miembro en su estado local.
+ * Flujo en un solo paso: correo → perfil de acceso (chips) → mensaje (opcional) → enviar.
+ * El rol elegido define tanto los permisos como el alcance de ubicaciones.
+ * El Owner nunca aparece como opción (no se puede invitar un propietario).
  */
 export const InviteMemberDialog = ({
   open,
   onOpenChange,
   onSend,
 }: InviteMemberDialogProps) => {
+  const roles = useTeamStore((s) => s.roles);
+
+  const options = useMemo(() => assignableRoles(roles), [roles]);
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<TeamRole>(DEFAULT_ROLE);
+  const [roleId, setRoleId] = useState<string>("");
   const [message, setMessage] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -63,41 +60,42 @@ export const InviteMemberDialog = ({
   useEffect(() => {
     if (open) {
       setEmail("");
-      setRole(DEFAULT_ROLE);
+      setRoleId(options[0]?.id ?? "");
       setMessage("");
       setTouched(false);
     }
-  }, [open]);
+  }, [open, options]);
+
+  const selectedRole = options.find((r) => r.id === roleId);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!emailValid) {
+    if (!emailValid || !selectedRole) {
       setTouched(true);
       return;
     }
-    onSend(email.trim(), role, message.trim() || undefined);
+    onSend(
+      email.trim(),
+      roleId,
+      selectedRole.locationScope,
+      selectedRole.locationIds,
+      message.trim() || undefined,
+    );
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader className="m-1 font-heading">
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
           <DialogTitle>Invitar miembro</DialogTitle>
-          <div className="flex items-center gap-x-2 text-sm text-muted-foreground">
-            <p>
-              El plan{" "}
-              <span className="font-medium text-primary">Trial</span> permite{" "}
-              <span className="font-medium text-primary">3/5</span> usuarios
-            </p>
-            <span className="size-1 min-w-1 bg-muted-foreground rounded-full" />
-            <Button variant="link" className="p-0 h-fit">
-              Ver Planes <ArrowUpRight />
-            </Button>
-          </div>
+          <DialogDescription>
+            Envía una invitación para sumar un nuevo integrante al equipo.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-5">
-          <div className="grid gap-2 mx-1">
+          {/* Correo */}
+          <div className="grid gap-2">
             <label htmlFor="invite-email" className="text-sm font-medium">
               Correo del invitado
             </label>
@@ -131,41 +129,51 @@ export const InviteMemberDialog = ({
             )}
           </div>
 
-          <div className="grid gap-2 mx-1">
-            <label htmlFor="invite-role" className="text-sm font-medium">
-              Rol
-            </label>
-            <Select
-              value={role}
-              onValueChange={(value) => setRole(value as TeamRole)}
-              items={ROLE_OPTIONS}
-            >
-              <SelectTrigger
-                id="invite-role"
-                className="w-full h-fit rounded-lg px-4 py-2"
-              >
-                <SelectValue placeholder="Selecciona un rol" />
-              </SelectTrigger>
-              <SelectContent>
-                {INVITABLE_ROLES.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    {r}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Perfil sugerido */}
+          <div className="grid gap-2.5">
+            <label className="text-sm font-medium">Perfil de acceso</label>
+            <div className="flex flex-wrap gap-2">
+              {options.map((r) => {
+                const Icon = roleIcon(r.icon);
+                const isSelected = r.id === roleId;
+                return (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => setRoleId(r.id)}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-all cursor-pointer",
+                      isSelected
+                        ? "border-primary bg-primary/10 text-primary shadow-xs"
+                        : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:bg-accent hover:text-foreground",
+                    )}
+                  >
+                    <Icon
+                      className={cn(
+                        "size-4 shrink-0",
+                        isSelected ? "text-primary" : "text-muted-foreground",
+                      )}
+                    />
+                    <span>{r.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {selectedRole && (
+              <p className="text-sm text-muted-foreground">
+                {selectedRole.description}
+              </p>
+            )}
           </div>
 
-          <div className="grid gap-2 mx-1">
+          {/* Mensaje personalizado */}
+          <div className="grid gap-2">
             <div className="flex items-baseline justify-between gap-3">
-              <label
-                htmlFor="invite-message"
-                className="text-sm font-medium"
-              >
+              <label htmlFor="invite-message" className="text-sm font-medium">
                 Mensaje personalizado
               </label>
               <span className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
-                <span className="tabular-nums font-heading ">
+                <span className="tabular-nums font-heading">
                   {message.length}/{MESSAGE_MAX}
                 </span>
               </span>
@@ -181,7 +189,7 @@ export const InviteMemberDialog = ({
             />
           </div>
 
-          <DialogFooter className="gap-x-1 px-5">
+          <DialogFooter className="gap-x-1">
             <Button
               type="button"
               variant="outline"
@@ -192,9 +200,10 @@ export const InviteMemberDialog = ({
             </Button>
             <Button
               type="submit"
-              disabled={!emailValid}
+              disabled={!emailValid || !roleId}
               className="px-3 rounded-full"
             >
+              <UserPlus className="size-4" />
               Enviar invitación
             </Button>
           </DialogFooter>

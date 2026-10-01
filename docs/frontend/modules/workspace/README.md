@@ -40,7 +40,7 @@ El footer muestra siempre la organización y el contexto operativo actual. Al ab
 
 Si el miembro solo puede trabajar en una ubicación, esta se selecciona automáticamente y no se ofrece “Vista general”. La selección mock se conserva por organización en almacenamiento local; sigue siendo estado de interfaz y no una fuente de autorización.
 
-**Estado del prototipo:** selector de contexto implementado y validado en desktop. La resolución granular de ubicaciones permitidas se completará junto con el modelo mock de permisos.
+**Estado del prototipo:** selector de contexto implementado y validado en desktop. El mock de permisos (WorkspaceContext) está implementado en `src/lib/workspace/context.ts` y el hook `src/hooks/use-workspace-context.ts`: resuelve rol efectivo (desde team-store con fallback por roleKey), permisos por módulo, capacidades y ubicaciones permitidas; el sidebar y los accesos directos del Resumen filtran por permiso y capacidad.
 
 ## Roles y alcance
 
@@ -154,6 +154,14 @@ Cada pedido conserva por separado el canal de origen y la ubicación que lo atie
 - La dirección y ficha pública son opcionales: una casa, cocina o almacén puede operar de forma privada sin aparecer en el marketplace.
 - Los módulos y acciones disponibles se adaptan a las funciones activadas; una organización digital o de servicios puede operar sin ubicaciones.
 
+**Estado del prototipo:** implementado en el Centro de configuración
+(`/app/[slug]/configuracion/ubicaciones`). La entidad `WorkspaceLocation`
+(`src/lib/mock/locations.ts`) extiende `OrganizationBranch` con `functions` y
+`publicProfile`, y `locations-store` es la fuente de verdad de ubicaciones del
+workspace: el `WorkspaceContext` y el selector del sidebar la consumen, por lo
+que el CRUD se refleja de inmediato. Ver
+[configuration/README.md](../configuration/README.md).
+
 ## Asignación de pedidos
 
 En la primera versión, cada pedido es atendido por una sola ubicación; no se divide un carrito entre varias.
@@ -176,6 +184,6 @@ Si una ubicación deja de poder atender un pedido, un usuario autorizado puede r
 
 ## Decisiones relacionadas pendientes
 
-- Implementar capacidades, permisos efectivos y asignaciones de ubicación en el mock del workspace.
-- Hacer que el sidebar filtre sus grupos y enlaces desde ese contexto.
-- Construir el Centro de configuración y su sección de ubicaciones.
+- Contexto de canal activo cuando una pantalla lo necesite (mock: `null`).
+- Capacidades por ubicación y funciones de ubicación en el Centro de configuración.
+- Validación de permisos en rutas y servidor (el filtrado del sidebar es decisión de UI; la autorización real debe validarse en rutas, acciones y backend).

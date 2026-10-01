@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Download } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Download, FileText, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
 import { useOrdersStore } from "@/stores/orders-store";
@@ -10,6 +11,7 @@ import { useInventoryStore } from "@/stores/inventory-store";
 import { usePurchasesStore } from "@/stores/purchases-store";
 import { useCrmStore } from "@/stores/crm-store";
 import { useAgendaStore } from "@/stores/agenda-store";
+import { useWorkspaceContextView } from "@/hooks/use-workspace-context";
 import {
   periodRange,
   salesSummary,
@@ -50,12 +52,51 @@ function downloadCsv(filename: string, rows: (string | number)[][]) {
 
 export function ReportsModule() {
   const [period, setPeriod] = useState<ReportPeriod>("30d");
+  const pathname = usePathname();
+
+  // Contexto de workspace: slug → organización → ubicación activa (mismo
+  // criterio que el Sidebar). Si no hay ubicación activa hay vista general.
+  const slug = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "org";
+  }, [pathname]);
+
+  const view = useWorkspaceContextView(slug);
+  const canUseGeneralView = view.canUseGeneralView;
+  const activeLocation = view.activeLocation;
+  const activeLocationName = activeLocation?.name ?? null;
+
   const orders = useOrdersStore((state) => state.orders);
-  const cashMovements = useCashStore((state) => state.movements);
+  const cashSessions = useCashStore((state) => state.sessions);
+  const cashMovementsRaw = useCashStore((state) => state.movements);
   const inventoryItems = useInventoryStore((state) => state.items);
   const purchaseOrders = usePurchasesStore((state) => state.orders);
   const customers = useCrmStore((state) => state.customers);
-  const appointments = useAgendaStore((state) => state.appointments);
+  const appointmentsRaw = useAgendaStore((state) => state.appointments);
+
+  // Filtro por ubicación activa: solo se filtran los datos que tienen
+  // locationName/locationId (movimientos de caja vía sesión, citas). Los
+  // pedidos, inventario, compras y CRM aún no tienen ubicación en el mock.
+  const cashMovements = useMemo(() => {
+    if (!activeLocationName) return cashMovementsRaw;
+    const locationSessionIds = new Set(
+      cashSessions
+        .filter((session) => session.locationName === activeLocationName)
+        .map((session) => session.id),
+    );
+    return cashMovementsRaw.filter((movement) =>
+      locationSessionIds.has(movement.sessionId),
+    );
+  }, [activeLocationName, cashMovementsRaw, cashSessions]);
+
+  const appointments = useMemo(() => {
+    if (!activeLocationName) return appointmentsRaw;
+    return appointmentsRaw.filter(
+      (appointment) =>
+        appointment.locationName === activeLocationName ||
+        appointment.locationId === activeLocation?.id,
+    );
+  }, [activeLocationName, activeLocation?.id, appointmentsRaw]);
 
   const range = useMemo(() => periodRange(period), [period]);
 
@@ -89,7 +130,9 @@ export function ReportsModule() {
     [appointments, range],
   );
 
-  const handleExport = () => {
+  const contextLabel = activeLocationName ?? "Vista general";
+
+  const handleExportCsv = () => {
     const rows: (string | number)[][] = [
       ["Día", "Ventas", "Pedidos"],
       ...summary.byDay.map((d) => [d.label, d.total.toFixed(2), d.orders]),
@@ -101,6 +144,13 @@ export function ReportsModule() {
     toastMsg.success("Exportación lista", "El CSV del período se descargó.");
   };
 
+  const handleExportPdf = () => {
+    toastMsg.success(
+      "Descarga iniciada",
+      "El PDF del período se está generando en el servidor.",
+    );
+  };
+
   return (
     <div className="w-full min-w-0 max-w-full flex flex-col gap-y-7 px-4 py-6 sm:px-5 sm:py-7 md:px-7 xl:px-10">
       <header className="flex items-center justify-between gap-4">
@@ -110,14 +160,12 @@ export function ReportsModule() {
             Indicadores consolidados del negocio
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            className="rounded-full cursor-pointer px-3"
-            onClick={handleExport}
-          >
-            Exportar CSV
+        <div className="flex flex-wrap items-center gap-1">
+          <Button type="button" variant="outline" onClick={handleExportCsv}>
+            CSV
+          </Button>
+          <Button type="button" variant="outline" onClick={handleExportPdf}>
+            PDF
           </Button>
         </div>
       </header>

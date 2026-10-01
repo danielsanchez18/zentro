@@ -13,7 +13,8 @@ Reportes consolida la actividad del negocio en una vista global de indicadores: 
 5. **Rentabilidad**: margen bruto estimado por producto (precio venta − costo unitario) y top productos.
 6. **Inventario y compras**: stock crítico (bajo/agotado), valor del inventario y compras por proveedor.
 7. **Clientes y citas**: top clientes por gasto, clientes nuevos por período y citas por estado.
-8. Exportación mock a PDF/CSV (botón de descarga local con datos del período).
+8. Exportación mock a PDF/CSV: CSV descarga archivo real con los datos del período; PDF muestra una confirmación de prototipo (la generación real es del backend).
+9. Filtro por ubicación activa: respeta la ubicación seleccionada en el workspace; filtra movimientos de caja (vía sesión) y citas. La vista general se muestra cuando no hay ubicación activa.
 
 ## Decisiones
 
@@ -28,6 +29,6 @@ Reportes consolida la actividad del negocio en una vista global de indicadores: 
 
 ## Estado
 
-**Planificado → en construcción.** Este documento define alcance y decisiones del módulo. La página `/reportes` y la sección `docs/frontend/modules/reportes/` se crean en esta iteración.
+**Prototipo frontend cerrado.** La página `/reportes` está implementada y verificada en navegador con datos de los mocks locales. Pendientes de backend: consultas agregadas SQL/Prisma, PDF real, permisos autoritativos, rentabilidad con costo real, reportes programados, métricas en tiempo real y auditoría de acceso.
 
 Ver [reglas](./rules.md) e [issues](./issues.md).

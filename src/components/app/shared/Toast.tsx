@@ -11,6 +11,7 @@ interface ToastProps {
   previewLabel?: string;
   submitLabel?: string;
   disabled?: boolean;
+  submitDisabled?: boolean;
   ariaLabel?: string;
   className?: string;
 }
@@ -23,6 +24,7 @@ export const Toast = ({
   previewLabel = "Preview",
   submitLabel = "Guardar cambios",
   disabled = false,
+  submitDisabled,
   ariaLabel = "Acciones",
   className,
 }: ToastProps) => {
@@ -63,7 +65,7 @@ export const Toast = ({
             type="submit"
             form={formId}
             variant="secondary"
-            disabled={disabled}
+            disabled={disabled || submitDisabled}
             className="cursor-pointer px-3.5 rounded-full text-sm font-medium shrink-0 whitespace-nowrap"
           >
             {submitLabel}

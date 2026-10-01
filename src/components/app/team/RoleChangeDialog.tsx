@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Calculator,
   Crown,
+  Megaphone,
+  PackageSearch,
   Shield,
   ShoppingBag,
   Wallet,
@@ -19,49 +21,59 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TEAM_ROLES, type TeamMember, type TeamRole } from "@/lib/mock/team";
+import { assignableRoles, type TeamMember } from "@/lib/mock/team";
+import { useTeamStore } from "@/stores/team-store";
 
-const ROLE_META: Record<TeamRole, { icon: LucideIcon; description: string }> = {
-  Owner: {
-    icon: Crown,
-    description: "Control total de la organización",
-  },
-  Admin: {
-    icon: Shield,
-    description: "Gestiona equipo y configuración",
-  },
-  Vendedor: {
-    icon: ShoppingBag,
-    description: "Realiza ventas y gestiona clientes",
-  },
-  Cajero: {
-    icon: Wallet,
-    description: "Opera el punto de venta",
-  },
-  Contador: {
-    icon: Calculator,
-    description: "Accede a reportes y finanzas",
-  },
+const FALLBACK_ICONS: Record<string, LucideIcon> = {
+  Crown,
+  Shield,
+  ShoppingBag,
+  Wallet,
+  Calculator,
+  PackageSearch,
+  Megaphone,
 };
+
+/** Resuelve el ícono de rol a un componente lucide (fallback: Shield). */
+export const roleIcon = (iconName: string): LucideIcon =>
+  FALLBACK_ICONS[iconName] ?? Shield;
 
 interface RoleChangeDialogProps {
   member: TeamMember | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm: (member: TeamMember, role: TeamRole) => void;
+  /** Devuelve el id del miembro y el id del rol elegido. */
+  onConfirm: (memberId: string, roleId: string) => void;
 }
 
+/**
+ * Dialog de «Cambiar rol».
+ *
+ * Lista los perfiles asignables (excluye Owner; no se puede otorgar la
+ * propiedad desde aquí) y muestra, para cada uno, su descripción y un resumen
+ * de los permisos que traerá.
+ */
 export const RoleChangeDialog = ({
   member,
   open,
   onOpenChange,
   onConfirm,
 }: RoleChangeDialogProps) => {
-  const [role, setRole] = useState<TeamRole>(member?.role ?? TEAM_ROLES[0]);
+  const roles = useTeamStore((s) => s.roles);
+  const [roleId, setRoleId] = useState<string>("");
+
+  const options = useMemo(() => assignableRoles(roles), [roles]);
 
   useEffect(() => {
-    if (member) setRole(member.role);
-  }, [member]);
+    if (member) {
+      const target = options.find((r) => r.id === member.roleId) ?? options[0];
+      setRoleId(target?.id ?? "");
+    }
+  }, [member, options]);
+
+  const selected = options.find((r) => r.id === roleId);
+  const hasPermissions = (r: typeof options[number]) =>
+    Object.values(r.permissions).some((lvl) => lvl !== "none");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -77,49 +89,41 @@ export const RoleChangeDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-2">
-          {TEAM_ROLES.map((r) => {
-            const selected = r === role;
-            const { icon: Icon, description } = ROLE_META[r];
-            return (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRole(r)}
-                className={cn(
-                  "flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors cursor-pointer",
-                  selected
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/30 hover:bg-accent/50",
-                )}
-              >
-                <div
+        <div className="grid gap-2.5">
+          <div className="flex flex-wrap gap-2">
+            {options.map((r) => {
+              const Icon = roleIcon(r.icon);
+              const isSelected = r.id === roleId;
+              return (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => setRoleId(r.id)}
                   className={cn(
-                    "flex size-9 shrink-0 items-center justify-center rounded-lg",
-                    selected
-                      ? "bg-primary/10 text-primary"
-                      : "bg-muted text-muted-foreground",
+                    "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-all cursor-pointer",
+                    isSelected
+                      ? "border-primary bg-primary/10 text-primary shadow-xs"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:bg-accent hover:text-foreground",
                   )}
                 >
-                  <Icon className="size-4.5" />
-                </div>
-                <div className="min-w-0">
-                  <p
+                  <Icon
                     className={cn(
-                      "text-sm font-medium",
-                      selected ? "text-primary" : "text-foreground",
+                      "size-4 shrink-0",
+                      isSelected ? "text-primary" : "text-muted-foreground",
                     )}
-                  >
-                    {r}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{description}</p>
-                </div>
-                {selected && (
-                  <div className="ml-auto size-2 shrink-0 rounded-full bg-primary" />
-                )}
-              </button>
-            );
-          })}
+                  />
+                  <span>{r.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {selected && (
+            <p className="text-sm text-muted-foreground">
+              {selected.description}
+              {!hasPermissions(selected) && " · Sin permisos asignados aún"}
+            </p>
+          )}
         </div>
 
         <DialogFooter className="gap-x-1">
@@ -131,8 +135,8 @@ export const RoleChangeDialog = ({
             Cancelar
           </Button>
           <Button
-            disabled={!member || role === member.role}
-            onClick={() => member && onConfirm(member, role)}
+            disabled={!member || !selected || selected.id === member.roleId}
+            onClick={() => member && selected && onConfirm(member.id, selected.id)}
             className="px-3 rounded-full"
           >
             Guardar

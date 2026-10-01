@@ -12,14 +12,13 @@ import { MemberPreviewDialog } from "./MemberPreviewDialog";
 import { RoleChangeDialog } from "./RoleChangeDialog";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { Table } from "./Table";
-import { teamMembers, type TeamMember, type TeamRole } from "@/lib/mock/team";
+import { useTeamStore } from "@/stores/team-store";
 
 const PAGE_SIZE = 10;
 
 type MemberView = "tabla" | "cards";
 
 interface ListProps {
-  initialMembers?: TeamMember[];
   /** Slug de la organización (p. ej. las-rocas) para armar URLs internas. */
   slug: string;
 }
@@ -31,22 +30,26 @@ const VIEWS: { id: MemberView; label: string; icon: typeof Table2 }[] = [
 
 /**
  * Lista de miembros del módulo Equipo y permisos.
- * Orquesta búsqueda, paginación, vistas (tabla/cards) y acciones (mock).
+ * Orquesta búsqueda, paginación, vistas (tabla/cards) y acciones (mock) con
+ * datos vivos de `useTeamStore`.
  */
-export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
-  const [members, setMembers] = useState<TeamMember[]>(initialMembers);
+export const List = ({ slug }: ListProps) => {
+  const members = useTeamStore((s) => s.members);
+  const assignRole = useTeamStore((s) => s.assignRole);
+  const toggleMemberStatus = useTeamStore((s) => s.toggleMemberStatus);
+  const removeMember = useTeamStore((s) => s.removeMember);
+
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [view, setView] = useState<MemberView>("cards");
   // Integrante cuyo rol se está editando (null = dialog cerrado).
-  const [roleMember, setRoleMember] = useState<TeamMember | null>(null);
+  const [roleMember, setRoleMember] = useState<typeof members[number] | null>(null);
   // Integrante que se muestra en el preview del perfil (null = cerrado).
-  const [previewMember, setPreviewMember] = useState<TeamMember | null>(null);
+  const [previewMember, setPreviewMember] = useState<typeof members[number] | null>(null);
   // Confirmación de deshabilitar/habilitar acceso.
-  const [toggleAccessMember, setToggleAccessMember] =
-    useState<TeamMember | null>(null);
+  const [toggleAccessMember, setToggleAccessMember] = useState<typeof members[number] | null>(null);
   // Confirmación de eliminar miembro.
-  const [removeMember, setRemoveMember] = useState<TeamMember | null>(null);
+  const [removeTarget, setRemoveTarget] = useState<typeof members[number] | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -69,32 +72,31 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
     setPage(1);
   };
 
-  const handleRoleChange = (member: TeamMember, role: TeamRole) => {
-    setMembers((prev) =>
-      prev.map((m) => (m.id === member.id ? { ...m, role } : m)),
-    );
+  const handleRoleChange = (memberId: string, roleId: string) => {
+    const target = members.find((m) => m.id === memberId);
+    assignRole(memberId, roleId);
     setRoleMember(null);
-    toastMsg.success("Rol actualizado", `${member.name} ahora es ${role}.`);
+    toastMsg.success("Rol actualizado", `${target?.name ?? "Miembro"} ahora tiene un nuevo rol.`);
   };
 
   const handleToggleAccess = (id: string) => {
     const target = members.find((m) => m.id === id);
     if (!target) return;
     const disabling = target.status !== "deshabilitado";
-    setMembers((prev) =>
-      prev.map((m) =>
-        m.id === id
-          ? { ...m, status: disabling ? "deshabilitado" : "activo" }
-          : m,
-      ),
+    toggleMemberStatus(id);
+    toastMsg.success(
+      disabling ? "Acceso deshabilitado" : "Acceso habilitado",
+      target.name,
     );
-    toastMsg.success(disabling ? "Acceso deshabilitado" : "Acceso habilitado", target.name);
   };
 
   const handleRemove = (id: string) => {
-    const name = members.find((m) => m.id === id)?.name ?? "Miembro";
-    setMembers((prev) => prev.filter((m) => m.id !== id));
-    toastMsg.info(`${name} eliminado/a de la empresa`, "Mockup: se enviará confirmación antes de borrar de verdad.");
+    const target = members.find((m) => m.id === id);
+    removeMember(id);
+    toastMsg.info(
+      `${target?.name ?? "Miembro"} eliminado/a de la empresa`,
+      "Mockup: se enviará confirmación antes de borrar de verdad.",
+    );
   };
 
   return (
@@ -145,8 +147,8 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
               members={pageItems}
               onPreview={setPreviewMember}
               onRequestRoleChange={setRoleMember}
-              onRequestToggleAccess={setToggleAccessMember}
-              onRequestRemove={setRemoveMember}
+              onRequestToggleAccess={(member) => setToggleAccessMember(member)}
+              onRequestRemove={setRemoveTarget}
             />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -157,7 +159,7 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
                   onPreview={setPreviewMember}
                   onRequestRoleChange={setRoleMember}
                   onRequestToggleAccess={setToggleAccessMember}
-                  onRequestRemove={setRemoveMember}
+                  onRequestRemove={setRemoveTarget}
                 />
               ))}
             </div>
@@ -183,7 +185,7 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
         member={roleMember}
         open={roleMember !== null}
         onOpenChange={(open) => !open && setRoleMember(null)}
-        onConfirm={handleRoleChange}
+        onConfirm={(memberId, roleId) => handleRoleChange(memberId, roleId)}
       />
 
       <ConfirmDialog
@@ -210,13 +212,13 @@ export const List = ({ initialMembers = teamMembers, slug }: ListProps) => {
       />
 
       <ConfirmDialog
-        open={removeMember !== null}
-        onOpenChange={(open) => !open && setRemoveMember(null)}
+        open={removeTarget !== null}
+        onOpenChange={(open) => !open && setRemoveTarget(null)}
         title="Eliminar de la empresa"
-        description={`${removeMember?.name} será eliminado/a de la organización. Esta acción no se puede deshacer.`}
+        description={`${removeTarget?.name} será eliminado/a de la organización. Esta acción no se puede deshacer.`}
         confirmLabel="Eliminar"
         onConfirm={() => {
-          if (removeMember) handleRemove(removeMember.id);
+          if (removeTarget) handleRemove(removeTarget.id);
         }}
       />
     </div>

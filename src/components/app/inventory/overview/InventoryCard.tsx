@@ -125,7 +125,6 @@ function StockStat({
 }) {
   return (
     <div className="flex min-w-0 items-center justify-center gap-2 rounded-lg bg-accent/50 p-1 text-center">
-      <Icon className="size-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0">
         <p className="font-medium tabular-nums">{value}</p>
         <p className="truncate text-sm text-muted-foreground">{label}</p>
