@@ -96,3 +96,18 @@ Decisiones completas: [auditoría del workspace](../../frontend/modules/audit/RE
 
 Decisiones completas: [canales de venta](../../frontend/modules/channels/README.md).
 
+## `/app/[slug]/presencia`
+
+**Estado:** prototipo frontend cerrado (mock).
+
+- Constructor de sitios por bloques ("Mi sitio web"). Los 10 bloques de la spec, reordenables y ocultables, con preview de solo lectura.
+- **Editar no es publicar.** La spec exige entorno de desarrollo y publicación manual, así que el sitio tiene `lastPublishedAt`; lo editado después queda pendiente y el visitante no lo ve hasta pulsar Publicar.
+- El sitio pertenece a la organización, **no a una sucursal**: el módulo ignora el selector de ubicación a propósito.
+- Objetivos del sitio (informativo, captar leads, reservas, vender) y dominio público. El plan decide el dominio: Esencial solo subdominio `zentro.app`; Crecimiento además dominio propio. Cuando el plan no alcanza, la opción aparece deshabilitada con el motivo.
+- Diseño por plantilla (4) más tokens de personalización. Sin HTML, CSS ni JS propio: la spec lo prohíbe por seguridad.
+- **Desacoplado de Canales a propósito:** publicar el catálogo no habilita carrito ni pedidos, porque la spec dice que no obliga.
+- Decisión de scope: solo Constructor Web. Blog queda como módulo aparte, así que el bloque Blog apunta a artículos que todavía no existen.
+- Requiere el permiso `presencia`.
+
+Decisiones completas: [constructor web](../../frontend/modules/presencia/README.md).
+

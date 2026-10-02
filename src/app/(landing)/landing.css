@@ -1,0 +1,201 @@
+/* ==========================================================================
+   CONFIGURACIÓN VISUAL EXCLUSIVA DE LA LANDING DE ZENTRO
+   ==========================================================================
+   Este archivo controla ÚNICAMENTE la apariencia de la landing page.
+   Cualquier cambio aquí NO afecta el dashboard, autenticación ni otras rutas.
+   ========================================================================== */
+
+.landing-scope {
+  /* ========================================================================
+     1. COLOR PRINCIPAL / PRIMARIO (Landing)
+     ======================================================================== */
+  /* Color primario en modo claro (tono lima más profundo para textos, acentos e iconos) */
+  --primary: #72BF16;
+
+  /* Color del texto sobre elementos con fondo primario */
+  --primary-foreground: #070b02;
+
+  /* Color de enfoque y anillos de selección */
+  --ring: #72BF16;
+
+  /* Color primario exclusivo para botones (mantiene el lima vibrante de dark mode) */
+  --btn-primary-bg: #91E62F;
+  --btn-primary-fg: #070b02;
+  --btn-primary-hover: #82d822;
+
+  /* Sombra / resplandor acentuado para elementos clave */
+  --landing-glow: rgba(145, 230, 47, 0.35);
+
+  /* ========================================================================
+     2. TIPOGRAFÍA BASE (Párrafos y textos regulares)
+     ======================================================================== */
+  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Soporte para modo oscuro en la landing (se mantiene el lima eléctrico vibrante) */
+.dark .landing-scope {
+  --primary: #91E62F;
+  --primary-foreground: #070b02;
+  --ring: #91E62F;
+  --landing-glow: rgba(145, 230, 47, 0.18);
+  --btn-primary-bg: #91E62F;
+  --btn-primary-fg: #070b02;
+  --btn-primary-hover: #82d822;
+}
+
+/* ==========================================================================
+   3. REGLAS TIPOGRÁFICAS AUTOMÁTICAS
+   ========================================================================== */
+
+/* TÍTULOS GRANDES: Oswald
+   Aplica a H1 y a clases de títulos principales */
+.landing-scope h1,
+.landing-scope .font-title-lg,
+.landing-scope .font-oswald {
+  font-family: var(--font-oswald), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.015em;
+}
+
+/* TÍTULOS MENORES: Inter
+   Aplica a H2, H3, H4, H5, H6 y a subtítulos */
+.landing-scope h2,
+.landing-scope h3,
+.landing-scope h4,
+.landing-scope h5,
+.landing-scope h6,
+.landing-scope .font-title-sm,
+.landing-scope .font-inter {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* PÁRRAFOS Y TEXTOS COMUNES: Inter Tight */
+.landing-scope p,
+.landing-scope li,
+.landing-scope input,
+.landing-scope textarea,
+.landing-scope label,
+.landing-scope blockquote,
+.landing-scope .font-inter-tight {
+  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ==========================================================================
+   4. CLASES DE UTILIDAD PARA USAR EN TUS COMPONENTES DE LA LANDING
+   ========================================================================== */
+
+/* Clases directas de tipografía por si quieres forzarlas en algún elemento */
+.font-oswald {
+  font-family: var(--font-oswald), ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.font-inter {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.font-inter-tight {
+  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Botón con efecto glow en hover (opcional) */
+.landing-scope .landing-btn-glow {
+  box-shadow: 0 4px 18px -2px var(--landing-glow);
+  transition: all 0.2s ease-in-out;
+}
+
+.landing-scope .landing-btn-glow:hover {
+  box-shadow: 0 6px 26px 0px rgba(145, 230, 47, 0.42);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   BOTONES PRIMARIOS (Landing)
+   ==========================================================================
+   Los botones mantienen siempre el color lima característico (#91E62F)
+   del modo oscuro, garantizando el impacto de marca con texto oscuro legible,
+   mientras que los textos y encabezados usan el tono primario adaptado (#72BF16).
+   ========================================================================== */
+.landing-scope button[data-slot="button"].bg-primary,
+.landing-scope a[data-slot="button"].bg-primary,
+.landing-scope [data-slot="button"].bg-primary,
+.landing-scope button.bg-primary,
+.landing-scope a.bg-primary {
+  background-color: var(--btn-primary-bg, #91E62F) !important;
+  color: var(--btn-primary-fg, #070b02) !important;
+}
+
+.landing-scope button[data-slot="button"].bg-primary *,
+.landing-scope a[data-slot="button"].bg-primary *,
+.landing-scope [data-slot="button"].bg-primary *,
+.landing-scope button.bg-primary *,
+.landing-scope a.bg-primary * {
+  color: var(--btn-primary-fg, #070b02) !important;
+}
+
+.landing-scope button[data-slot="button"].bg-primary:hover,
+.landing-scope a[data-slot="button"].bg-primary:hover,
+.landing-scope [data-slot="button"].bg-primary:hover,
+.landing-scope button.bg-primary:hover,
+.landing-scope a.bg-primary:hover {
+  background-color: var(--btn-primary-hover, #82d822) !important;
+  color: var(--btn-primary-fg, #070b02) !important;
+}
+
+/* Selección de texto con el color primario de la marca */
+.landing-scope ::selection {
+  background-color: #91E62F;
+  color: #090e03;
+}
+
+/* ==========================================================================
+   5. CLASE GLASSMORPHIC UNIVERSAL (.glass / .glass-card)
+   ==========================================================================
+   Puedes aplicar 'glass' o 'glass-card' a cualquier contenedor, card o div:
+   Ejemplo: <div className="glass rounded-2xl p-6">...</div>
+   Ejemplo interactivo: <div className="glass glass-interactive rounded-2xl p-6">...</div>
+   ========================================================================== */
+
+.glass,
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9),
+    0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .glass,
+.dark .glass-card {
+  background-color: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.2),
+    0 8px 32px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Efecto hover opcional para cards o contenedores clickeables */
+.glass-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-interactive:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1),
+    0 8px 30px -4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.dark .glass-interactive:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.3),
+    0 12px 36px 0 rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+

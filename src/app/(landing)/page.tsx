@@ -14,11 +14,11 @@ import { Footer } from "@/components/landing/shared/Footer";
 import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
-  title: "Zentro — Centraliza y multiplica tu negocio",
+  title: "Zentro - Tu negocio, en un solo lugar",
   description:
     "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma. Prueba Zentro gratis.",
   openGraph: {
-    title: "Zentro — Centraliza y multiplica tu negocio",
+    title: "Zentro - Tu negocio, en un solo lugar",
     description:
       "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma.",
   },
@@ -27,29 +27,31 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="flex flex-col font-sans relative">
-        <Navbar />
-        <section className="w-full py-10 max-sm:pb-20 bg-cover bg-center">
-            <div className="w-full max-w-300 mx-auto px-5 sm:px-7 xl:px-10">
-                <Hero />
-                <Demo />
-            </div>
-        </section>
-        <section className="w-full py-10">
-            <div className="w-full max-w-300 mx-auto px-4 sm:px-7 xl:px-10">
-                <Reviews />
-                <About />
-                <Modules />
-                <Features />
-                <Stats />
-                <Clients />
-                <div id="preguntas-frecuentes">
-                    <Questions />
-                </div>
-                <CTA />
-            </div>
-        </section>
-        <Footer />
-        <UpArrowButton />
+      <Navbar />
+      <section className="w-full py-10 max-sm:pb-20 bg-cover bg-center">
+        <div className="w-full max-w-300 mx-auto px-5 sm:px-7 xl:px-10">
+          <Hero />
+          <div id="demo">
+            <Demo />
+          </div>
+        </div>
+      </section>
+      <section className="w-full py-10">
+        <div className="w-full max-w-300 mx-auto px-4 sm:px-7 xl:px-10">
+          <Reviews />
+          <About />
+          <Modules />
+          <Features />
+          <Stats />
+          <Clients />
+          <div id="preguntas-frecuentes">
+            <Questions />
+          </div>
+          <CTA />
+        </div>
+      </section>
+      <Footer />
+      <UpArrowButton />
     </div>
   );
 }

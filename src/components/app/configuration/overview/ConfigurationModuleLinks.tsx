@@ -23,7 +23,7 @@ export const ConfigurationModuleLinks = ({
   links,
 }: ConfigurationModuleLinksProps) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-7">
       <div>
         <h2 className="text-lg font-medium text-foreground">
           Configuraciones de módulos

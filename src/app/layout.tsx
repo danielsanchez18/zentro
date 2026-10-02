@@ -68,7 +68,9 @@ export const metadata: Metadata = {
       "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/branding/logos/icon/logo-icon-dark-background-rounded.png?v=2",
+    shortcut: "/branding/logos/icon/logo-icon-dark-background-rounded.png?v=2",
+    apple: "/branding/logos/icon/logo-icon-dark-background-rounded.png?v=2",
   },
 };
 

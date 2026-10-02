@@ -22,6 +22,7 @@ const MODULE_LABELS: Record<string, string> = {
   facturacion: "Facturación",
   reportes: "Reportes",
   presencia: "Mi sitio web",
+  constructor: "Constructor",
   canales: "Canales de venta",
   blog: "Blog",
   marketing: "Marketing",

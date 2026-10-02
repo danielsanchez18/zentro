@@ -97,7 +97,15 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
     - Tarjeta en el hub de Configuración, que cierra la promesa del copy sobre "canales de venta".
     - Pendientes reales: conectores (OAuth, sincronización de catálogo, recepción de pedidos, pagos, inventario), migración de las unions legacy, contexto de canal activo y guard de servidor (issues.md del módulo).
 23. **Marketplace Zentro** — planificado.
-24. **CMS/Sitio web** — planificado; Blog vivirá dentro de este módulo.
+24. **CMS/Sitio web (Constructor Web)** — prototipo frontend cerrado.
+    - Constructor por bloques con los 10 bloques de la spec (encabezado, hero, catálogo, producto, formulario, blog, testimonios, galería, FAQ, footer), reordenables y ocultables.
+    - **Editar no es publicar**: la spec exige que los cambios se editen en un entorno de desarrollo y se publiquen manualmente, así que el sitio tiene `lastPublishedAt` y las páginas quedan pendientes hasta que alguien pulsa Publicar.
+    - El sitio pertenece a la organización, no a una sucursal, así que el módulo ignora el selector de ubicación a propósito.
+    - Dominio según el plan: Esencial → subdominio `zentro.app`; Crecimiento → además dominio propio. Cuando el plan no alcanza, la opción se muestra deshabilitada con el motivo.
+    - Solo tokens de diseño (colores, tipografía, escala, espaciado): la spec prohíbe explícitamente inyectar HTML, CSS o JS propio.
+    - Deliberadamente desacoplado de Canales: publicar el catálogo no habilita carrito ni pedidos, porque la spec dice que no obliga.
+    - Decisión de scope: se construyó solo el Constructor Web; Blog queda como módulo aparte (Notion lo trata como capacidad separada con su propia clave de permiso).
+    - Pendientes reales: drag & drop y preview en tiempo real, bloques con contenido real del catálogo y formularios, edición de slug y SEO, verificación de dominio y SSL, persistencia y guard de servidor (issues.md del módulo).
 25. **Marketing** — planificado por audiencias y canales.
 
 ## Fase 8 — Gobierno y cierre frontend

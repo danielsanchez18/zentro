@@ -12,6 +12,9 @@
 | Si tu tarea es sobre | Lee primero | Archivos que tocarás |
 |---|---|---|
 | **Equipo y permisos** | `docs/frontend/modules/team/README.md` | `src/components/app/team/*`, `src/lib/mock/team.ts`, `src/app/app/[slug]/equipo/**` |
+| **Canales de venta** | `docs/frontend/modules/channels/README.md` | `src/components/app/channels/*`, `src/lib/mock/channels.ts`, `src/stores/channels-store.ts` |
+| **Constructor Web / Sitio web** | `docs/frontend/modules/presencia/README.md` | `src/components/app/presencia/*`, `src/lib/mock/web-presence.ts`, `src/stores/web-presence-store.ts` |
+| **Auditoría** | `docs/frontend/modules/audit/README.md` | `src/components/app/audit/*`, `src/lib/mock/audit.ts`, `src/stores/audit-store.ts` |
 | **Auth** (login, registro, forgot-password, protección de rutas) | `docs/agents/frontend/auth/README.md`, `docs/decisions/005-route-protection.md` | `src/app/(auth)/*`, `src/components/auth/*`, `src/components/forgot-password/*`, `src/hooks/use-*-guard*.ts`, `src/hooks/use-validate-email-param.ts` |
 | **Layout / Dashboard** | Notion 05 (Mapa Navegación) | `src/app/dashboard/layout.tsx`, `src/app/layout.tsx`, `src/hooks/use-require-auth.ts` |
 | **Catálogo / Productos** | Notion 04 + docs | `src/app/dashboard/catalog/*` |

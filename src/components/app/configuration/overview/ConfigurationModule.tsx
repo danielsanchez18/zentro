@@ -176,7 +176,7 @@ export const ConfigurationModule = ({ slug }: ConfigurationModuleProps) => {
     <div className="w-full space-y-7 px-5 py-7 md:px-7 xl:px-10">
       <ConfigurationHeader
         title="Centro de configuración"
-        description={`Configura la operación de ${orgName}: ubicaciones, datos fiscales y canales de venta.`}
+        description={`Configura ubicaciones, datos fiscales y canales de venta.`}
       />
 
       {/* Grid de Secciones Principales */}
