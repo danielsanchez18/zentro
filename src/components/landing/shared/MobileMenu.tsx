@@ -28,6 +28,7 @@ const navLinks = [
 
 const supportLinks = [
   { href: "/ayuda", label: "Centro de ayuda" },
+  { href: "/contacto", label: "Contacto" },
   { href: "/terminos-y-condiciones", label: "Términos y condiciones" },
   { href: "/politica-de-privacidad", label: "Política de privacidad" },
 ];
@@ -126,7 +127,7 @@ export function MobileMenu() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`text-lg uppercase font-oswald py-1 relative flex items-center gap-3 hover:bg-muted transition-colors group ${
+                    className={`text-lg font-inter-tight py-1 relative flex items-center gap-3 hover:bg-muted transition-colors group ${
                       isActive ? "bg-muted/50" : ""
                     }`}
                   >
@@ -153,7 +154,7 @@ export function MobileMenu() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`text-lg uppercase font-oswald py-1 relative flex items-center gap-3 hover:bg-muted transition-colors group ${
+                    className={`text-lg font-inter-tight py-1 relative flex items-center gap-3 hover:bg-muted transition-colors group ${
                       isActive ? "bg-muted/50" : ""
                     }`}
                   >

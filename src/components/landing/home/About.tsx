@@ -2,7 +2,7 @@ import { Store } from "lucide-react";
 
 export function About() {
   return (
-    <div className="max-w-7xl grid sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 lg:gap-8 mt-20 py-30 px-4 sm:px-7 xl:px-10 mx-auto">
+    <div className="max-w-7xl grid sm:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 lg:gap-8 mt-20 py-30 mx-auto">
       {/* Title & Description */}
       <div className="sm:col-span-2 lg:col-span-3 max-w-3xl mx-auto text-center space-y-3 mb-10">
         <p className="text-muted-foreground text-lg">¿Qué es Zentro?</p>
@@ -31,7 +31,7 @@ export function About() {
         </div>
 
         <div className="ms-6">
-          <h2 className="font-semibold mb-1">Todo en un solo lugar</h2>
+          <h3 className="font-semibold mb-1">Todo en un solo lugar</h3>
           <p className="text-muted-foreground leading-normal">
             Centraliza inventario, ventas, clientes y reportes en una única
             plataforma. Sin hojas de cálculo ni herramientas dispersas.
@@ -46,7 +46,7 @@ export function About() {
           <Store className="text-primary" />
         </div>
         <div className="ms-6">
-          <h2 className="font-semibold mb-1">Multi-sucursal de serie</h2>
+          <h3 className="font-semibold mb-1">Multi-sucursal de serie</h3>
           <p className="text-muted-foreground leading-normal">
             Gestiona una o varias sucursales con stock, caja y ventas
             independientes por sede, más una vista consolidada del negocio.
@@ -125,7 +125,7 @@ export function About() {
           </svg>
         </div>
         <div className="ms-6">
-          <h2 className="font-semibold mb-1">Modular a tu medida</h2>
+          <h3 className="font-semibold mb-1">Modular a tu medida</h3>
           <p className="text-muted-foreground">
             Activa solo los módulos que tu negocio necesita hoy: POS, catálogo,
             CRM, inventario o presencia digital. Crece cuando tú quieras.

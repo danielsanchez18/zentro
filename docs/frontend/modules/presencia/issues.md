@@ -74,7 +74,14 @@ ofrecer el bloque de agenda. Ahora es solo metadata.
 
 ## 9. Blog es módulo aparte (decisión de scope)
 
-El roadmap 24 decía "Blog vivía dentro de este módulo", pero Notion lo trata como
-capacidad separada con su propia clave de permiso y sus propias reglas. Se
-construyó solo el Constructor Web; el bloque Blog apunta a artículos que todavía
-no existen. `/blog` sigue siendo un enlace muerto del sidebar.
+Blog se documenta como capacidad separada, con su propia clave de permiso y sus
+propias reglas. Se construyó el Constructor Web; su bloque Blog apunta a
+artículos que todavía no existen. `/blog` sigue siendo un enlace sin ruta
+funcional en el sidebar.
+
+## 10. Analítica del overview
+
+`/presencia` ya muestra KPIs, tráfico diario, fuentes, regiones, páginas e
+interacciones para 7, 30 y 90 días. `presence-analytics.ts` genera datos mock:
+faltan instrumentar eventos del sitio público, distinguir visitantes de vistas,
+agregar los datos por organización y período y aplicar permisos en servidor.

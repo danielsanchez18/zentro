@@ -103,18 +103,26 @@ export function Plans() {
     <section className="py-20 space-y-10">
       {/* Title */}
       <div className="text-center space-y-3 sm:space-y-5">
-        <h1 className="text-4xl sm:text-5xl font-bold text-foreground">
+        <h1 className="text-4xl sm:text-5xl font-semibold uppercase text-foreground">
           Precios sencillos y transparentes
         </h1>
         <p className="text-foreground max-sm:text-sm md:text-lg">
-          Sea cual sea tu situación, nuestras ofertas se adaptan a tus necesidades.
+          Sea cual sea tu situación, nuestras ofertas se adaptan a tus
+          necesidades.
         </p>
       </div>
 
       {/* Monthly and yearly switch */}
       <div className="w-fit flex items-center gap-x-3 mx-auto">
-        <p className={`text-sm transition-colors ${!isAnnual ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Mensual</p>
-        <label htmlFor="hs-basic-usage" className="relative inline-block w-11 h-6 cursor-pointer">
+        <p
+          className={`text-sm transition-colors ${!isAnnual ? "text-foreground font-semibold" : "text-muted-foreground"}`}
+        >
+          Mensual
+        </p>
+        <label
+          htmlFor="hs-basic-usage"
+          className="relative inline-block w-11 h-6 cursor-pointer"
+        >
           <input
             type="checkbox"
             id="hs-basic-usage"
@@ -125,7 +133,11 @@ export function Plans() {
           <span className="absolute inset-0 bg-muted rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-primary dark:peer-checked:bg-primary peer-disabled:opacity-50 peer-disabled:pointer-events-none"></span>
           <span className="absolute top-1/2 inset-s-0.5 -translate-y-1/2 size-5 bg-white rounded-full transition-transform duration-200 ease-in-out dark:peer-checked:bg-background peer-checked:translate-x-full"></span>
         </label>
-        <p className={`text-sm transition-colors ${isAnnual ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Anual</p>
+        <p
+          className={`text-sm transition-colors ${isAnnual ? "text-foreground font-semibold" : "text-muted-foreground"}`}
+        >
+          Anual
+        </p>
       </div>
 
       {/* Plans */}
@@ -142,11 +154,17 @@ export function Plans() {
             >
               <div>
                 <div className="flex items-center gap-x-3">
-                  <h3 className="text-lg font-semibold text-foreground">{plan.name}</h3>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {plan.name}
+                  </h3>
                   {plan.highlighted && (
-                    <p className="text-xs font-semibold text-primary-foreground rounded-full bg-primary px-2.5 py-0.5">
-                      Más popular
-                    </p>
+                    <Button
+                      variant="default"
+                      size="xs"
+                      className="rounded-full"
+                    >
+                      Mas popular
+                    </Button>
                   )}
                 </div>
                 <p className="text-[13px] text-muted-foreground mt-1">
@@ -165,11 +183,11 @@ export function Plans() {
               </div>
 
               {plan.name === "Free" ? (
-                <Button variant="outline" className="w-full rounded-full bg-card hover:bg-muted">
+                <Button variant="glass" className="w-full rounded-full">
                   Empezar ahora
                 </Button>
               ) : (
-                <Button className="w-full shadow-sm rounded-full hover:shadow-md transition">
+                <Button variant="default" className="w-full rounded-full">
                   Empezar ahora
                 </Button>
               )}
@@ -188,16 +206,53 @@ export function Plans() {
       </div>
 
       {/* Contact */}
-      <div className="grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_auto] gap-x-5 gap-y-3 w-fit mx-auto border border-border bg-card rounded-xl px-5 py-5 items-center shadow-sm">
-        <MessageSquare className="max-sm:row-span-2 size-8 text-primary" />
+      <div className="grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_auto] gap-x-5 gap-y-3 w-fit mx-auto border border-border bg-card rounded-xl px-5 py-5 shadow-sm">
+        {/* <MessageSquare className="max-sm:row-span-2 size-8 text-primary" /> */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          className="max-sm:row-span-2 size-8 text-primary"
+        >
+          <g clipPath="url(#clip0_4418_9398)">
+            <path
+              d="M22 6.25V11.35C22 12.62 21.58 13.69 20.83 14.43C20.09 15.18 19.02 15.6 17.75 15.6V17.41C17.75 18.09 16.99 18.5 16.43 18.12L15.46 17.48C15.55 17.17 15.59 16.83 15.59 16.47V12.4C15.59 10.36 14.23 9 12.19 9H5.39999C5.25999 9 5.13 9.01002 5 9.02002V6.25C5 3.7 6.7 2 9.25 2H17.75C20.3 2 22 3.7 22 6.25Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M15.59 12.4V16.47C15.59 16.83 15.55 17.17 15.46 17.48C15.09 18.95 13.87 19.87 12.19 19.87H9.47L6.45 21.88C6 22.19 5.39999 21.86 5.39999 21.32V19.87C4.37999 19.87 3.53 19.53 2.94 18.94C2.34 18.34 2 17.49 2 16.47V12.4C2 10.5 3.18 9.19002 5 9.02002C5.13 9.01002 5.25999 9 5.39999 9H12.19C14.23 9 15.59 10.36 15.59 12.4Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_4418_9398">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
         <div className="space-y-1">
-          <h4 className="font-medium font-sans">¿Necesitas un plan personalizado?</h4>
+          <h4 className="font-medium font-sans">
+            ¿Necesitas un plan personalizado?
+          </h4>
           <p className="text-sm text-muted-foreground">
             Podemos personalizar un plan que se adapte a tus necesidades.
           </p>
         </div>
         <div className="self-center">
-          <Button variant="outline" className="py-1.5 h-fit rounded-full hover:bg-muted">
+          <Button
+            variant="glass"
+            className="py-1.5 h-fit rounded-full hover:bg-muted"
+          >
             Contáctanos
           </Button>
         </div>

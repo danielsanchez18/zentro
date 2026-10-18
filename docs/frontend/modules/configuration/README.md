@@ -1,6 +1,7 @@
 # Módulo Centro de configuración y ubicaciones
 
-Configuración del negocio: hub de secciones, gestión de la entidad **Ubicación**
+Configuración del negocio: hub de secciones (Canales de venta, Ubicaciones y
+Facturación), gestión de la entidad **Ubicación**
 (funciones "¿Qué sucede aquí?") y datos fiscales.
 
 **Estado:** prototipo frontend cerrado (mock). Pendientes de backend en [issues.md](./issues.md).
@@ -9,8 +10,10 @@ Configuración del negocio: hub de secciones, gestión de la entidad **Ubicació
 
 | Ruta | Descripción |
 |---|---|
-| `/app/[slug]/configuracion` | Hub: tarjetas de sección (Ubicaciones, Facturación) + atajos a configuraciones de otros módulos |
-| `/app/[slug]/configuracion/ubicaciones` | CRUD de ubicaciones: lista en cards, alta/edición, publicación y eliminación |
+| `/app/[slug]/configuracion` | Hub: tarjetas de Canales de venta, Ubicaciones y Facturación + atajos a configuraciones de otros módulos |
+| `/app/[slug]/configuracion/ubicaciones` | Lista en cards, publicación y eliminación de ubicaciones |
+| `/app/[slug]/configuracion/ubicaciones/nueva` | Alta de ubicación en una página propia |
+| `/app/[slug]/configuracion/ubicaciones/[locationId]` | Edición de ubicación en una página propia |
 | `/app/[slug]/configuracion/facturacion` | Datos fiscales (reusa `BillingSettingsModule` del módulo Facturación) |
 
 > `/configuracion/facturacion` también es el destino del botón "Gestionar" de la
@@ -20,16 +23,23 @@ Configuración del negocio: hub de secciones, gestión de la entidad **Ubicació
 
 ```
 src/components/app/configuration/
-├── ConfigurationModule.tsx          # Hub: tarjetas de sección + atajos por módulo
-├── ConfigurationHeader.tsx          # Encabezado estándar de sección
+├── overview/
+│   ├── ConfigurationModule.tsx      # Hub: tarjetas de sección + atajos por módulo
+│   ├── ConfigurationSectionCard.tsx # Card de Canales, Ubicaciones o Facturación
+│   └── ConfigurationModuleLinks.tsx # Accesos a Caja, Agenda y Equipo
+├── shared/ConfigurationHeader.tsx   # Encabezado estándar de sección
 └── locations/
-    ├── LocationsModule.tsx          # Contenedor: lista, empty state, alta/edición, toasts
+    ├── LocationsModule.tsx          # Lista, empty state, publicación y eliminación
     ├── LocationCard.tsx             # Card: estado, funciones, contacto, presencia pública
-    └── LocationFormDialog.tsx       # Alta/edición: datos + "¿Qué sucede aquí?" + ficha pública
+    ├── LocationForm.tsx             # Formulario compartido de alta y edición
+    ├── AddLocationPage.tsx          # Página de alta
+    └── EditLocationPage.tsx         # Página de edición
 
 src/app/app/[slug]/configuracion/
 ├── page.tsx                         # Hub
 ├── ubicaciones/page.tsx             # Ubicaciones
+├── ubicaciones/nueva/page.tsx       # Alta
+├── ubicaciones/[locationId]/page.tsx # Edición
 └── facturacion/page.tsx             # Datos fiscales (wrapper de BillingSettingsModule)
 ```
 

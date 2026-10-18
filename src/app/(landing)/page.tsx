@@ -6,6 +6,7 @@ import { Reviews } from "@/components/landing/home/Reviews";
 import { About } from "@/components/landing/home/About";
 import { Modules } from "@/components/landing/home/Modules";
 import { Features } from "@/components/landing/home/Features";
+import { HowItWorks } from "@/components/landing/home/HowItWorks";
 import { Stats } from "@/components/landing/home/Stats";
 import { Clients } from "@/components/landing/shared/Clients";
 import { Questions } from "@/components/landing/shared/Questions";
@@ -38,11 +39,12 @@ export default function Home() {
       </section>
       <section className="w-full py-10">
         <div className="w-full max-w-300 mx-auto px-4 sm:px-7 xl:px-10">
-          <Reviews />
           <About />
           <Modules />
           <Features />
+          <HowItWorks />
           <Stats />
+          <Reviews />
           <Clients />
           <div id="preguntas-frecuentes">
             <Questions />

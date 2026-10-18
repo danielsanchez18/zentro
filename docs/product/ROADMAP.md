@@ -23,7 +23,7 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
 
 ## Fase 3 — Base del workspace
 
-6. **Layout y selector de contexto** — selector implementado; navegación dinámica pendiente.
+6. **Layout y selector de contexto** — selector y navegación dinámica por permisos, capacidades y alcance implementados en mock; quedan el contexto de canal activo y el enforcement real.
 7. **WorkspaceContext mock** — implementado.
    - `src/lib/workspace/context.ts` resuelve el contexto compuesto: organización actual, membresía, rol efectivo (desde team-store, con fallback por roleKey), permisos por módulo, capacidades de la org, ubicaciones permitidas por alcance y ubicación activa persistida (puede ser `null`).
    - Sidebar filtra grupos e ítems por permiso efectivo (`view`+) y capacidad activa; oculta módulos no autorizados en lugar de mostrarlos con candados.
@@ -37,8 +37,8 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
    - Protecciones de producto: Owner no deshabilitable/eliminable y auto-protección.
    - Pendientes reales: endpoints, auditoría, transferencia de propiedad y enforcement en servidor (issues.md del módulo).
 9. **Centro de configuración y ubicaciones** — prototipo frontend cerrado.
-   - Hub `/configuracion` con tarjetas de sección (Ubicaciones, Facturación) y atajos a las configuraciones embebidas de otros módulos (caja, agenda, equipo).
-   - Sección `configuracion/ubicaciones`: CRUD completo de la entidad flexible "Ubicación" con funciones "¿Qué sucede aquí?" (atención, POS, inventario, preparación, recojo, delivery, citas, presencia pública), contacto, principal y ficha pública opcional.
+   - Hub `/configuracion` con tarjetas de sección (Canales de venta, Ubicaciones, Facturación) y atajos a las configuraciones embebidas de otros módulos (caja, agenda, equipo).
+   - Sección `configuracion/ubicaciones`: lista y CRUD de la entidad flexible "Ubicación", con páginas propias para alta y edición; funciones "¿Qué sucede aquí?" (atención, POS, inventario, preparación, recojo, delivery, citas, presencia pública), contacto, principal y ficha pública opcional.
    - `locations-store` es la fuente de verdad de ubicaciones del workspace: el selector del sidebar y el `WorkspaceContext` reflejan altas, ediciones, publicación y eliminaciones.
    - `configuracion/facturacion` reusa el formulario fiscal del módulo Facturación, cerrando el enlace del dashboard de suscripciones que estaba en 404.
    - Pendientes reales: persistencia y límites del plan por ubicación, validación de funciones contra capacidades y enforcement de permisos en servidor (issues.md del módulo).
@@ -98,6 +98,7 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
     - Pendientes reales: conectores (OAuth, sincronización de catálogo, recepción de pedidos, pagos, inventario), migración de las unions legacy, contexto de canal activo y guard de servidor (issues.md del módulo).
 23. **Marketplace Zentro** — planificado.
 24. **CMS/Sitio web (Constructor Web)** — prototipo frontend cerrado.
+    - `/app/:slug/presencia` muestra un overview de analítica mock (períodos de 7, 30 y 90 días; visitas, interacción, fuentes de tráfico, regiones y páginas). Desde ahí se accede a `/app/:slug/presencia/constructor`.
     - Constructor por bloques con los 10 bloques de la spec (encabezado, hero, catálogo, producto, formulario, blog, testimonios, galería, FAQ, footer), reordenables y ocultables.
     - **Editar no es publicar**: la spec exige que los cambios se editen en un entorno de desarrollo y se publiquen manualmente, así que el sitio tiene `lastPublishedAt` y las páginas quedan pendientes hasta que alguien pulsa Publicar.
     - El sitio pertenece a la organización, no a una sucursal, así que el módulo ignora el selector de ubicación a propósito.
@@ -107,6 +108,8 @@ Este roadmap ordena el prototipo frontend. “Completo” no significa listo par
     - Decisión de scope: se construyó solo el Constructor Web; Blog queda como módulo aparte (Notion lo trata como capacidad separada con su propia clave de permiso).
     - Pendientes reales: drag & drop y preview en tiempo real, bloques con contenido real del catálogo y formularios, edición de slug y SEO, verificación de dominio y SSL, persistencia y guard de servidor (issues.md del módulo).
 25. **Marketing** — planificado por audiencias y canales.
+
+**Blog** — planificado como módulo propio dentro de esta fase; el bloque Blog del Constructor Web queda pendiente de artículos reales. Su posición exacta en el roadmap se definirá al comenzar ese módulo.
 
 ## Fase 8 — Gobierno y cierre frontend
 

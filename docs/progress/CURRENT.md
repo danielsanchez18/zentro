@@ -2,22 +2,16 @@
 
 **Fuente detallada:** [Progreso del producto](../product/PROGRESS.md).
 
-## Módulo recién cerrado
+## Último módulo desarrollado
 
-Caja — prototipo frontend cerrado:
+Presencia Digital / Constructor Web — prototipo frontend implementado:
 
-- contrato mock para terminales, sesiones y movimientos;
-- KPIs de terminales, efectivo, cobros y salidas;
-- sesiones abiertas por terminal;
-- búsqueda y filtros de movimientos;
-- apertura de caja con fondo y responsable;
-- movimientos manuales;
-- arqueo, cierre y diferencia.
-- historial navegable y detalle por sesión;
-- conciliación por método de pago;
-- CRUD mock de terminales;
-- políticas de apertura, diferencias y métodos aceptados.
+- `/app/[slug]/presencia` muestra analítica mock del sitio: visitas, vistas, interacciones, tráfico, regiones y páginas;
+- `/app/[slug]/presencia/constructor` permite editar páginas, bloques y diseño, y publicar los cambios manualmente;
+- las reglas y los pendientes de integración están en [la documentación del módulo](../frontend/modules/presencia/README.md) y sus [issues](../frontend/modules/presencia/issues.md).
 
-No quedan issues de maquetación. Persistencia, concurrencia, permisos e integraciones reales permanecen documentados para backend.
+También están cerrados a nivel prototipo Caja, Facturación, Reportes, Centro de configuración y ubicaciones, Auditoría y Canales de venta. El backend continúa en pausa.
 
-No se está integrando el backend en esta etapa. El frontend continúa con contratos y datos mock centralizados.
+## Trabajo activo
+
+No hay un módulo en desarrollo documentado. Marketplace Zentro, Blog y Marketing siguen pendientes de prototipo; después corresponde el QA transversal y la auditoría final del frontend.

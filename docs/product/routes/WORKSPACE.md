@@ -54,7 +54,7 @@ Decisiones completas: [workspace y contexto](../../frontend/modules/workspace/RE
 
 **Estado:** prototipo frontend cerrado (mock).
 
-- Hub con tarjetas de sección (Ubicaciones, Facturación) y atajos a las configuraciones embebidas de otros módulos (caja, agenda, equipo).
+- Hub con tarjetas de sección (Canales de venta, Ubicaciones, Facturación) y atajos a las configuraciones embebidas de otros módulos (caja, agenda, equipo).
 - Visible solo para roles con permiso `view`+ en el módulo `configuracion`.
 
 ## `/app/[slug]/configuracion/ubicaciones`
@@ -64,6 +64,7 @@ Decisiones completas: [workspace y contexto](../../frontend/modules/workspace/RE
 - CRUD de la entidad flexible **Ubicación**: una ubicación no tiene tipo rígido; sus funciones se configuran con "¿Qué sucede aquí?" (atención al público, POS, inventario, preparación, recojo, delivery, citas, presencia pública).
 - Datos de contacto, marca de ubicación principal y ficha pública opcional (publicar/ocultar, título y descripción).
 - `locations-store` es la fuente de verdad de ubicaciones del workspace: el selector del sidebar y el `WorkspaceContext` reflejan el CRUD.
+- El alta se realiza en `/configuracion/ubicaciones/nueva` y la edición en `/configuracion/ubicaciones/[locationId]`.
 
 ## `/app/[slug]/configuracion/facturacion`
 
@@ -84,6 +85,25 @@ Decisiones completas: [centro de configuración y ubicaciones](../../frontend/mo
 
 Decisiones completas: [auditoría del workspace](../../frontend/modules/audit/README.md).
 
+## `/app/[slug]/facturacion`
+
+**Estado:** prototipo frontend cerrado (mock).
+
+- Overview global de comprobantes con KPIs, búsqueda, filtros y paginación.
+- `/app/[slug]/facturacion/[invoiceId]`: detalle, estados, ítems, notas y trazabilidad al pedido y pago.
+- `/app/[slug]/facturacion/configuracion`: datos fiscales, IGV y correlativos. La emisión desde Pedidos registra el comprobante aquí.
+
+Alcance e issues: [Facturación](../../frontend/modules/billing/README.md).
+
+## `/app/[slug]/reportes`
+
+**Estado:** prototipo frontend cerrado (mock).
+
+- Consolidado de ventas, pedidos, clientes, inventario, compras, citas y canales; período y contexto de ubicación.
+- Exportación CSV local. La agregación de servidor y el PDF real están pendientes.
+
+Alcance e issues: [Reportes](../../frontend/modules/reportes/README.md).
+
 ## `/app/[slug]/canales`
 
 **Estado:** prototipo frontend cerrado (mock).
@@ -99,6 +119,12 @@ Decisiones completas: [canales de venta](../../frontend/modules/channels/README.
 ## `/app/[slug]/presencia`
 
 **Estado:** prototipo frontend cerrado (mock).
+
+- Overview de analítica mock del sitio: períodos de 7/30/90 días, KPIs de visitantes, vistas e interacciones, tráfico diario, fuentes, regiones, páginas e interacciones. Enlace al constructor.
+
+## `/app/[slug]/presencia/constructor`
+
+**Estado:** prototipo frontend implementado (mock).
 
 - Constructor de sitios por bloques ("Mi sitio web"). Los 10 bloques de la spec, reordenables y ocultables, con preview de solo lectura.
 - **Editar no es publicar.** La spec exige entorno de desarrollo y publicación manual, así que el sitio tiene `lastPublishedAt`; lo editado después queda pendiente y el visitante no lo ve hasta pulsar Publicar.

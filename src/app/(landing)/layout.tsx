@@ -4,8 +4,8 @@ import "./landing.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Zentro — Tu negocio, en un solo lugar",
-    template: "%s | Zentro",
+    default: "Zentro - Tu negocio, en un solo lugar",
+    template: "%s",
   },
 };
 

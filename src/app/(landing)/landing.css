@@ -10,16 +10,16 @@
      1. COLOR PRINCIPAL / PRIMARIO (Landing)
      ======================================================================== */
   /* Color primario en modo claro (tono lima más profundo para textos, acentos e iconos) */
-  --primary: #72BF16;
+  --primary: #72bf16;
 
   /* Color del texto sobre elementos con fondo primario */
   --primary-foreground: #070b02;
 
   /* Color de enfoque y anillos de selección */
-  --ring: #72BF16;
+  --ring: #72bf16;
 
   /* Color primario exclusivo para botones (mantiene el lima vibrante de dark mode) */
-  --btn-primary-bg: #91E62F;
+  --btn-primary-bg: #91e62f;
   --btn-primary-fg: #070b02;
   --btn-primary-hover: #82d822;
 
@@ -29,16 +29,24 @@
   /* ========================================================================
      2. TIPOGRAFÍA BASE (Párrafos y textos regulares)
      ======================================================================== */
-  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    var(--font-inter-tight),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 /* Soporte para modo oscuro en la landing (se mantiene el lima eléctrico vibrante) */
 .dark .landing-scope {
-  --primary: #91E62F;
+  --primary: #91e62f;
   --primary-foreground: #070b02;
-  --ring: #91E62F;
+  --ring: #91e62f;
   --landing-glow: rgba(145, 230, 47, 0.18);
-  --btn-primary-bg: #91E62F;
+  --btn-primary-bg: #91e62f;
   --btn-primary-fg: #070b02;
   --btn-primary-hover: #82d822;
 }
@@ -52,7 +60,13 @@
 .landing-scope h1,
 .landing-scope .font-title-lg,
 .landing-scope .font-oswald {
-  font-family: var(--font-oswald), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    var(--font-oswald),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   letter-spacing: -0.015em;
 }
 
@@ -65,7 +79,13 @@
 .landing-scope h6,
 .landing-scope .font-title-sm,
 .landing-scope .font-inter {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    var(--font-inter),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 /* PÁRRAFOS Y TEXTOS COMUNES: Inter Tight */
@@ -76,7 +96,13 @@
 .landing-scope label,
 .landing-scope blockquote,
 .landing-scope .font-inter-tight {
-  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    var(--font-inter-tight),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 /* ==========================================================================
@@ -85,15 +111,18 @@
 
 /* Clases directas de tipografía por si quieres forzarlas en algún elemento */
 .font-oswald {
-  font-family: var(--font-oswald), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-oswald), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 .font-inter {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-inter), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 .font-inter-tight {
-  font-family: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif !important;
+  font-family:
+    var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 /* Botón con efecto glow en hover (opcional) */
@@ -119,7 +148,7 @@
 .landing-scope [data-slot="button"].bg-primary,
 .landing-scope button.bg-primary,
 .landing-scope a.bg-primary {
-  background-color: var(--btn-primary-bg, #91E62F) !important;
+  background-color: var(--btn-primary-bg, #91e62f) !important;
   color: var(--btn-primary-fg, #070b02) !important;
 }
 
@@ -142,7 +171,7 @@
 
 /* Selección de texto con el color primario de la marca */
 .landing-scope ::selection {
-  background-color: #91E62F;
+  background-color: #91e62f;
   color: #090e03;
 }
 
@@ -160,7 +189,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9),
     0 4px 20px -2px rgba(0, 0, 0, 0.05);
 }
@@ -171,7 +200,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.2),
     0 8px 32px 0 rgba(0, 0, 0, 0.35);
 }
@@ -184,18 +213,47 @@
 .glass-interactive:hover {
   background-color: rgba(255, 255, 255, 0.85);
   border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 2px 0 rgba(255, 255, 255, 1),
     0 8px 30px -4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .dark .glass-interactive:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.22);
-  box-shadow: 
+  box-shadow:
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.3),
     0 12px 36px 0 rgba(0, 0, 0, 0.45);
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
+/* ==========================================================================
+   6. MARQUESINA CONTINUA (.landing-marquee)
+   ==========================================================================
+   El track debe contener el contenido duplicado dos veces: se desplaza -50%
+   para que el bucle sea continuo. Se pausa al pasar el mouse.
+   ========================================================================== */
+
+@keyframes landing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.landing-marquee {
+  animation: landing-marquee 60s linear infinite;
+}
+
+.landing-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-marquee {
+    animation: none;
+  }
+}
