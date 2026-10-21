@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "¿Tienes dudas sobre Zentro? Ponte en contacto con nuestro equipo. Te responderemos lo antes posible.",
   openGraph: {
-    title: "Contacto | Zentro",
+    title: "Contacto - Zentro",
     description:
       "¿Tienes dudas sobre Zentro? Ponte en contacto con nuestro equipo. Te responderemos lo antes posible.",
   },

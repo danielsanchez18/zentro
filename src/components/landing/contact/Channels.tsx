@@ -19,7 +19,7 @@ const channels = [
   {
     icon: Share2,
     title: "Redes sociales",
-    description: "Novedades, tips y casos de negocios que ya usan Zentro.",
+    description: "Novedades del producto, tips para tu negocio y promociones.",
     links: [
       { label: "Instagram", href: "https://www.instagram.com/hi_zentro/" },
       {

@@ -7,34 +7,64 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { showSuccess } from "@/components/ui/toast-message";
+import { showError, showSuccess } from "@/components/ui/toast-message";
+import {
+  submitContactMessage,
+  type ContactTopic,
+} from "@/lib/services/contact.service";
 
-const topics = [
+const topics: Array<{ id: ContactTopic; label: string }> = [
   { id: "demo", label: "Ventas y demo" },
   { id: "soporte", label: "Soporte" },
   { id: "alianzas", label: "Alianzas" },
   { id: "otro", label: "Otro" },
 ];
 
-// Etapa de prototipado: el envío es simulado (sin backend todavía)
 export function ContactForm() {
-  const [topic, setTopic] = useState(topics[0].id);
+  const [topic, setTopic] = useState<ContactTopic>(topics[0].id);
   const [isSending, setIsSending] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const name = String(data.get("nombre") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const organization = String(data.get("empresa") ?? "").trim();
+    const phone = String(data.get("telefono") ?? "").trim();
+    const message = String(data.get("mensaje") ?? "").trim();
+
+    if (message.length < 10) {
+      showError("Mensaje muy corto", "Cuéntanos un poco más (mínimo 10 caracteres).");
+      return;
+    }
 
     setIsSending(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSending(false);
+    try {
+      await submitContactMessage({
+        topic,
+        name,
+        email,
+        organization: organization || undefined,
+        phone: phone || undefined,
+        message,
+      });
 
-    form.reset();
-    setTopic(topics[0].id);
-    showSuccess(
-      "Mensaje enviado",
-      "Gracias por escribirnos. Te responderemos lo antes posible.",
-    );
+      form.reset();
+      setTopic(topics[0].id);
+      showSuccess(
+        "Mensaje enviado",
+        "Gracias por escribirnos. Te responderemos lo antes posible.",
+      );
+    } catch (error) {
+      showError(
+        "No se pudo enviar",
+        error instanceof Error ? error.message : "Inténtalo de nuevo en unos minutos.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (

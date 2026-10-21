@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Empresas que confían en Zentro para centralizar su gestión, optimizar su inventario y multiplicar sus ventas.",
   openGraph: {
-    title: "Clientes | Zentro",
+    title: "Clientes - Zentro",
     description:
       "Empresas que confían en Zentro para centralizar su gestión, optimizar su inventario y multiplicar sus ventas.",
   },

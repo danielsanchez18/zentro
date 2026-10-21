@@ -15,7 +15,7 @@ import { Footer } from "@/components/landing/shared/Footer";
 import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
-  title: "Zentro - Tu negocio, en un solo lugar",
+  title: { absolute: "Zentro - Tu negocio, en un solo lugar" },
   description:
     "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma. Prueba Zentro gratis.",
   openGraph: {

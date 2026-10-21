@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Resuelve tus dudas sobre Zentro: precios, funcionalidades, implementación y soporte.",
   openGraph: {
-    title: "Preguntas frecuentes | Zentro",
+    title: "Preguntas frecuentes - Zentro",
     description:
       "Resuelve tus dudas sobre Zentro: precios, funcionalidades, implementación y soporte.",
   },

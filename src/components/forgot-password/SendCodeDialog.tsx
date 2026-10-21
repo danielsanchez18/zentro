@@ -62,7 +62,7 @@ export function SendCodeDialog({ email }: SendCodeDialogProps) {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="auth-scope sm:max-w-md">
           <DialogHeader className="px-1 py-1">
             <DialogTitle className="text-base flex items-center gap-2">
               <Lock size={16} className="text-primary" />

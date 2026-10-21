@@ -9,7 +9,7 @@ import { Industries } from "@/components/landing/use-cases/Industries";
 import { OtherIndustries } from "@/components/landing/use-cases/OtherIndustries";
 
 export const metadata: Metadata = {
-  title: "Casos de uso - Zentro",
+  title: "Casos de uso",
   description:
     "Zentro se adapta a cualquier tipo de negocio: comercio, servicios, restaurantes y más.",
   openGraph: {

@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useGuestGuard } from '@/hooks/use-guest-guard';
+import './auth.css';
 
 /**
  * Layout del grupo (auth).
@@ -17,5 +18,5 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
   useGuestGuard({ enabled: isGuestOnly });
 
-  return <>{children}</>;
+  return <div className="auth-scope min-h-dvh">{children}</div>;
 }

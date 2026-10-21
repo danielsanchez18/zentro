@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Zentro — Centraliza y multiplica tu negocio",
-    template: "%s | Zentro",
+    template: "%s - Zentro",
   },
   description:
     "Centraliza tu inventario, gestiona múltiples tiendas y aumenta tus ingresos en una única plataforma. Prueba Zentro gratis.",

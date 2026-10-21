@@ -11,7 +11,7 @@ import { Navbar } from "@/components/landing/shared/Nabar";
 import { UpArrowButton } from "@/components/landing/shared/UpArrowButton";
 
 export const metadata: Metadata = {
-  title: "Servicios - Zentro",
+  title: "Servicios",
   description:
     "Descubre los servicios de Zentro: POS, inventario, catálogo, CRM, presencia digital y reportes integrados en una sola plataforma para tu negocio.",
   openGraph: {

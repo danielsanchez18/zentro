@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Elige el plan perfecto para tu negocio. Desde el plan gratuito hasta el plan empresarial, Zentro escala contigo.",
   openGraph: {
-    title: "Planes y precios | Zentro",
+    title: "Planes y precios - Zentro",
     description:
       "Elige el plan perfecto para tu negocio. Desde el plan gratuito hasta el plan empresarial, Zentro escala contigo.",
   },
