@@ -65,7 +65,7 @@ export function RegisterForm() {
         setEmailError("");
         showError(
           "Este correo ya está registrado",
-          "Inicia sesión con tu cuenta existente."
+          "Inicia sesión con tu cuenta existente.",
         );
         return;
       }
@@ -113,7 +113,10 @@ export function RegisterForm() {
     }
 
     return (
-      <form onSubmit={handleRegisterSubmit} className="w-full max-w-md space-y-5 px-5">
+      <form
+        onSubmit={handleRegisterSubmit}
+        className="w-full max-w-md space-y-5 px-5"
+      >
         <div className="px-4 py-2.5 flex items-center gap-x-3 bg-muted rounded-full border border-border">
           <Mail className="size-4.5 text-muted-foreground shrink-0" />
           <span className="truncate text-foreground">{emailParam}</span>
@@ -155,12 +158,18 @@ export function RegisterForm() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); setPasswordError(""); clearError(); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError("");
+              clearError();
+            }}
             placeholder="Crea una contraseña"
             required
             aria-label="Contraseña"
             className={`text-base! pl-11 pr-5 h-fit py-2 rounded-full ${
-              passwordError ? "border-destructive focus-visible:ring-destructive" : ""
+              passwordError
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
           />
           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
@@ -170,7 +179,11 @@ export function RegisterForm() {
           <p className="text-sm text-destructive">{passwordError}</p>
         )}
 
-        <Button type="submit" className="w-full py-2 rounded-full h-fit text-base" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-full py-2 rounded-full h-fit text-base"
+          disabled={isLoading}
+        >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Crear cuenta
         </Button>
@@ -195,7 +208,9 @@ export function RegisterForm() {
             autoFocus
             aria-label="Correo electrónico"
             className={`text-base! pl-13 pr-5 rounded-full h-fit py-2.5 ${
-              emailError ? "border-destructive focus-visible:ring-destructive" : ""
+              emailError
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
             }`}
           />
           <Mail
@@ -205,11 +220,13 @@ export function RegisterForm() {
           />
         </div>
 
-        {emailError && (
-          <p className="text-sm text-destructive">{emailError}</p>
-        )}
+        {emailError && <p className="text-sm text-destructive">{emailError}</p>}
 
-        <Button type="submit" className="w-full py-2 h-fit mt-5 rounded-full text-base" disabled={isLoading || checkingEmail}>
+        <Button
+          type="submit"
+          className="w-full py-2 h-fit mt-5 rounded-full text-base"
+          disabled={isLoading || checkingEmail}
+        >
           {checkingEmail ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -226,9 +243,12 @@ export function RegisterForm() {
       <SocialLogin />
 
       <div className="w-full px-5 text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground">
           ¿Ya tienes cuenta?{" "}
-          <Link href="/ingresar" className="text-primary font-semibold hover:underline">
+          <Link
+            href="/ingresar"
+            className="text-primary font-semibold hover:underline"
+          >
             Inicia sesión
           </Link>
         </p>

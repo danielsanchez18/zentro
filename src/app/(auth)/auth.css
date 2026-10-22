@@ -2,73 +2,27 @@
    CONFIGURACIÓN VISUAL EXCLUSIVA DEL FLUJO AUTH DE ZENTRO
    ==========================================================================
    Aplica a /ingresar, /registrar, /forgot-password y /reset-password.
-   Usa el mismo lima de marca que la landing (#91E62F / #72BF16).
+   Fondo, tarjetas, bordes e inputs usan el tema global (sin tinte verde).
+   Solo se sobrescribe el color primario, igual que en la landing:
+   - Textos y enlaces: #72BF16 en claro (legible) y #91E62F en oscuro.
+   - Botones primarios: siempre #91E62F con texto oscuro.
    Cualquier cambio aquí NO afecta el dashboard ni la landing.
    ========================================================================== */
 
 .auth-scope {
-  /* Color primario para textos, enlaces e iconos (lima profundo, legible en claro) */
-  --primary: #5fa30f;
+  /* Color primario para textos, enlaces e iconos (lima más profundo en claro) */
+  --primary: #72bf16;
   --primary-foreground: #070b02;
 
-  /* Superficies con un ligero tinte verde */
-  --background: #f7fbf1;
-  --card: #ffffff;
-  --popover: #ffffff;
-  --foreground: #13200a;
-  --card-foreground: #13200a;
-  --popover-foreground: #13200a;
-  --muted: #eef6e3;
-  --muted-foreground: #5b6b4c;
-  --accent: #e6f5d2;
-  --accent-foreground: #1d3a05;
-  --border: #dbe8cb;
-  --input: #d3e3c0;
-  --ring: #91e62f;
-
-  /* Botones primarios: lima vibrante con texto oscuro */
+  /* Color primario exclusivo para botones (lima vibrante en ambos modos) */
   --btn-primary-bg: #91e62f;
   --btn-primary-fg: #070b02;
   --btn-primary-hover: #82d822;
-  --auth-glow: rgba(145, 230, 47, 0.35);
-
-  color: var(--foreground);
-  background:
-    radial-gradient(60rem 30rem at 50% -10%, rgba(145, 230, 47, 0.22), transparent 70%),
-    radial-gradient(40rem 24rem at 100% 110%, rgba(114, 191, 22, 0.12), transparent 70%),
-    var(--background);
 }
 
 .dark .auth-scope {
   --primary: #91e62f;
   --primary-foreground: #070b02;
-
-  --background: #0b1205;
-  --card: #111b08;
-  --popover: #111b08;
-  --foreground: #eef7e2;
-  --card-foreground: #eef7e2;
-  --popover-foreground: #eef7e2;
-  --muted: #17230d;
-  --muted-foreground: #9db08a;
-  --accent: #1d2e10;
-  --accent-foreground: #d8f3b4;
-  --border: #253813;
-  --input: #2c4217;
-  --ring: #91e62f;
-
-  --auth-glow: rgba(145, 230, 47, 0.18);
-
-  background:
-    radial-gradient(60rem 30rem at 50% -10%, rgba(145, 230, 47, 0.14), transparent 70%),
-    radial-gradient(40rem 24rem at 100% 110%, rgba(114, 191, 22, 0.08), transparent 70%),
-    var(--background);
-}
-
-/* Diálogos (se renderizan en un portal): solo heredan la paleta, sin degradado */
-[data-slot="dialog-content"].auth-scope,
-.dark [data-slot="dialog-content"].auth-scope {
-  background: var(--popover);
 }
 
 /* ==========================================================================
@@ -77,49 +31,10 @@
 .auth-scope [data-slot="button"].bg-primary {
   background-color: var(--btn-primary-bg) !important;
   color: var(--btn-primary-fg) !important;
-  box-shadow: 0 4px 18px -4px var(--auth-glow);
-  transition:
-    background-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
 }
 
 .auth-scope [data-slot="button"].bg-primary:hover:not(:disabled) {
   background-color: var(--btn-primary-hover) !important;
-  box-shadow: 0 6px 24px -2px var(--auth-glow);
-  transform: translateY(-1px);
-}
-
-/* Botones secundarios (outline): fondo de tarjeta y borde verdoso */
-.auth-scope [data-slot="button"]:not(.bg-primary) {
-  background-color: var(--card);
-  border-color: var(--border);
-}
-
-.auth-scope [data-slot="button"]:not(.bg-primary):hover:not(:disabled) {
-  background-color: var(--accent);
-  border-color: color-mix(in srgb, var(--btn-primary-bg) 45%, var(--border));
-}
-
-/* ==========================================================================
-   INPUTS Y OTP
-   ========================================================================== */
-.auth-scope [data-slot="input"] {
-  background-color: var(--card);
-}
-
-.auth-scope [data-slot="input"]:focus-visible {
-  border-color: var(--ring);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
-}
-
-.auth-scope [data-slot="input-otp-slot"] {
-  background-color: var(--card);
-}
-
-.auth-scope [data-slot="input-otp-slot"][data-active="true"] {
-  border-color: var(--ring);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 30%, transparent);
 }
 
 /* Selección de texto con el color de la marca */

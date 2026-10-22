@@ -34,7 +34,7 @@ export function AuthHeader({ title, description }: AuthHeaderProps) {
         <h1 className="text-3xl font-heading font-semibold tracking-tight">
           {title}
         </h1>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground">{description}</p>
       </div>
     </div>
   );

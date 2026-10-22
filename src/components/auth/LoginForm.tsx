@@ -63,7 +63,7 @@ export function LoginForm() {
         setEmailError("");
         showError(
           "Este correo no está registrado",
-          "Revisa que esté bien escrito o crea una cuenta nueva."
+          "Revisa que esté bien escrito o crea una cuenta nueva.",
         );
         return;
       }
@@ -104,10 +104,15 @@ export function LoginForm() {
     }
 
     return (
-      <form onSubmit={handlePasswordSubmit} className="w-full max-w-sm space-y-5 px-5">
+      <form
+        onSubmit={handlePasswordSubmit}
+        className="w-full max-w-sm space-y-5 px-5"
+      >
         <div className="px-5 py-2.5 flex items-center gap-x-3 bg-muted p-2 rounded-full border border-border">
           <Mail className="size-4.5 text-muted-foreground" />
-          <span className="truncate text-foreground text-base">{emailParam}</span>
+          <span className="truncate text-foreground text-base">
+            {emailParam}
+          </span>
         </div>
 
         <div className="relative">
@@ -115,7 +120,10 @@ export function LoginForm() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); clearError(); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              clearError();
+            }}
             placeholder="Ingrese su contraseña"
             required
             autoFocus
@@ -125,15 +133,18 @@ export function LoginForm() {
           <Lock className="absolute left-5.5 top-1/2 -translate-y-1/2 size-4.5 text-muted-foreground pointer-events-none" />
         </div>
 
-        <Button type="submit" className="w-full h-fit rounded-full py-2 text-base" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-full h-fit rounded-full py-2 text-base"
+          disabled={isLoading}
+        >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isLoading ? "Verificando…" : "Iniciar sesión"}
         </Button>
 
         <div className="w-full text-center">
-          <p className="text-sm text-muted-foreground">
-            ¿Olvidaste tu contraseña?{" "}
-            <SendCodeDialog email={emailParam} />
+          <p className="text-muted-foreground">
+            ¿Olvidaste tu contraseña? <SendCodeDialog email={emailParam} />
           </p>
         </div>
       </form>
@@ -142,7 +153,11 @@ export function LoginForm() {
 
   return (
     <div className="flex flex-col gap-y-10 max-w-sm w-full">
-      <form onSubmit={handleEmailSubmit} noValidate className="w-full space-y-2 px-5">
+      <form
+        onSubmit={handleEmailSubmit}
+        noValidate
+        className="w-full space-y-2 px-5"
+      >
         <div className="relative">
           <Input
             type="email"
@@ -169,11 +184,13 @@ export function LoginForm() {
           />
         </div>
 
-        {emailError && (
-          <p className="text-sm text-destructive">{emailError}</p>
-        )}
+        {emailError && <p className="text-sm text-destructive">{emailError}</p>}
 
-        <Button type="submit" className="w-full h-fit rounded-full py-2 mt-5 text-base" disabled={isLoading || checkingEmail}>
+        <Button
+          type="submit"
+          className="w-full h-fit rounded-full py-2 mt-5 text-base"
+          disabled={isLoading || checkingEmail}
+        >
           {checkingEmail ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -190,9 +207,12 @@ export function LoginForm() {
       <SocialLogin />
 
       <div className="w-full px-5 text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground">
           ¿No tienes cuenta?{" "}
-          <Link href="/registrar" className="text-primary font-semibold hover:underline">
+          <Link
+            href="/registrar"
+            className="text-primary font-semibold hover:underline"
+          >
             Empieza ahora
           </Link>
         </p>
