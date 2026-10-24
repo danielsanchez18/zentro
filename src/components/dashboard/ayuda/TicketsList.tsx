@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MessagesSquare } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { cn } from "@/lib/utils";
@@ -40,23 +40,19 @@ const formatDate = (iso: string) =>
  * TODO(0.2): conectar con el backend (`GET /support-tickets`).
  */
 export const TicketsList = () => {
-  const [tickets, setTickets] = useState<SupportTicket[]>(SEED_TICKETS);
-
-  useEffect(() => {
-    setTickets(loadTickets());
-  }, []);
+  // El Hub solo se renderiza en cliente (tras el guard de auth), así que se puede leer storage al iniciar.
+  const [tickets] = useState<SupportTicket[]>(() =>
+    typeof window === "undefined" ? SEED_TICKETS : loadTickets(),
+  );
 
   return (
-    <div className="space-y-6 w-full">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-base font-medium">Mis tickets</h2>
-        <p className="text-sm text-muted-foreground">
-          Historial de los mensajes que enviaste al equipo de soporte.
-        </p>
-      </div>
+    <div className="space-y-3 w-full">
+      <p className="text-sm text-muted-foreground">
+        Historial de los mensajes que enviaste al equipo de soporte.
+      </p>
 
       {tickets.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border">
+        <div className="rounded-sm border border-dashed border-border">
           <EmptyState
             icon={MessagesSquare}
             title="Sin tickets"
@@ -64,13 +60,13 @@ export const TicketsList = () => {
           />
         </div>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-2">
           {tickets.map((ticket) => {
             const status = STATUS_META[ticket.status];
             return (
               <li
                 key={ticket.id}
-                className="rounded-xl border border-border bg-card p-4"
+                className="rounded-sm border border-border p-3"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
@@ -79,7 +75,7 @@ export const TicketsList = () => {
                     </span>
                     <span
                       className={cn(
-                        "rounded-full px-2.5 py-1 text-xs font-medium uppercase tracking-wide",
+                        "flex h-8 items-center rounded-sm border border-border px-2.5 py-1 text-[13px] font-medium uppercase tracking-wide",
                         status.className,
                       )}
                     >

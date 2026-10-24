@@ -22,8 +22,8 @@ export const StatusChip = ({ status }: { status: SubscriptionStatus }) => {
   return (
     <span
       className={cn(
-        "rounded-full px-2.5 py-1 text-xs font-medium uppercase tracking-wide",
-        STYLES[status]
+        "flex items-center justify-center rounded-sm px-2.5 h-8 border border-border py-1 text-[13px] font-medium uppercase tracking-wide",
+        STYLES[status],
       )}
     >
       {LABELS[status]}

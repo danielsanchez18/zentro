@@ -1,0 +1,28 @@
+/* ==========================================================================
+   CONFIGURACIÓN VISUAL EXCLUSIVA DEL HUB PERSONAL (/dashboard)
+   ==========================================================================
+   Fondo gris claro con superficies blancas (bg-card) para que las tarjetas,
+   el sidebar y los drawers se distingan. No afecta workspace, landing ni auth.
+   ========================================================================== */
+
+.hub-scope {
+  --background: oklch(0.955 0.003 55);
+  --card: oklch(1 0 0);
+  --popover: oklch(1 0 0);
+  --border: oklch(0.915 0.004 55);
+  --muted: oklch(0.965 0.003 55);
+  --radius: 0.75rem;
+
+  /* Acento de marca (mismo lima de los botones de la landing) para
+     contadores e indicadores. Texto oscuro para mantener el contraste. */
+  --hub-accent: #91e62f;
+  --hub-accent-foreground: #070b02;
+}
+
+.dark .hub-scope {
+  --background: oklch(0.15 0.005 55);
+  --card: oklch(0.205 0.006 55);
+  --popover: oklch(0.205 0.006 55);
+  --border: oklch(0.28 0.006 55);
+  --muted: oklch(0.25 0.006 55);
+}

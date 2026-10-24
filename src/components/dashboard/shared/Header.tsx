@@ -1,96 +1,172 @@
-"use client"
+"use client";
 
-import { ThemeToggle } from "@/components/landing/shared/ThemeToggle"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Bell, CreditCard, LogOut, User } from "lucide-react"
-import Link from "next/link"
-import { useDashboardStore } from "@/stores/dashboard-store"
-import { useAuthStore } from "@/stores/auth-store"
-import { useRouter } from "next/navigation"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Bell, CreditCard, LogOut, UserRound } from "lucide-react";
+import { ThemeToggle } from "@/components/dashboard/shared/ThemeToggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useIsDesktop } from "@/hooks/use-media-query";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { HubLogo } from "@/components/dashboard/shared/HubLogo";
+import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
+import { getActiveNavItem } from "@/components/dashboard/shared/nav";
+import {
+  useLogout,
+  usePendingInvitations,
+} from "@/components/dashboard/shared/Sidebar";
+
+const ACCOUNT_LINKS = [
+  { href: "/dashboard/cuenta", label: "Mi cuenta", icon: UserRound },
+  {
+    href: "/dashboard/suscripciones",
+    label: "Suscripciones",
+    icon: CreditCard,
+  },
+];
+
+const AccountMenu = () => {
+  const isDesktop = useIsDesktop();
+  const user = useDashboardStore((state) => state.currentUser);
+  const handleLogout = useLogout();
+  const trigger = (
+    <span className="flex size-10 items-center justify-center rounded-full">
+      <UserAvatar name={user.name} />
+    </span>
+  );
+
+  if (isDesktop) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          aria-label="Menú de cuenta"
+          className="cursor-pointer rounded-full"
+        >
+          {trigger}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56 p-1">
+          <div className="px-3 py-2">
+            <p className="truncate text-sm font-medium">{user.name}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {user.email}
+            </p>
+          </div>
+          <DropdownMenuSeparator />
+          {ACCOUNT_LINKS.map((link) => (
+            <DropdownMenuItem
+              key={link.href}
+              render={<Link href={link.href} />}
+              className="cursor-pointer px-3 py-2"
+            >
+              <link.icon className="size-4" />
+              {link.label}
+            </DropdownMenuItem>
+          ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="cursor-pointer px-3 py-2"
+            onClick={handleLogout}
+          >
+            <LogOut className="size-4" />
+            Cerrar sesión
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <Drawer>
+      <DrawerTrigger
+        aria-label="Menú de cuenta"
+        className="cursor-pointer rounded-full"
+      >
+        {trigger}
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="flex-row items-center gap-3">
+          <UserAvatar name={user.name} className="size-11" />
+          <div className="min-w-0">
+            <DrawerTitle className="truncate">{user.name}</DrawerTitle>
+            <p className="truncate text-sm text-muted-foreground">
+              {user.email}
+            </p>
+          </div>
+        </DrawerHeader>
+        <div className="space-y-1 px-3 pb-5">
+          {ACCOUNT_LINKS.map((link) => (
+            <DrawerClose
+              key={link.href}
+              render={<Link href={link.href} />}
+              className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-muted"
+            >
+              <link.icon className="size-5 text-muted-foreground" />
+              {link.label}
+            </DrawerClose>
+          ))}
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-destructive hover:bg-muted"
+          >
+            <LogOut className="size-5" />
+            Cerrar sesión
+          </button>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
 
 export const Header = () => {
-  const dashboard = useDashboardStore();
-  const pendingInvitations = dashboard.getInvitationSummaries().filter((invitation) => invitation.status === "PENDING").length;
-  const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
+  const pathname = usePathname();
+  const pendingInvitations = usePendingInvitations();
+  const current = getActiveNavItem(pathname);
 
-  const handleLogout = () => {
-    logout();
-    router.replace("/ingresar");
-  };
   return (
-    <header className="w-full border-b border-border bg-background">
-        <div className="w-full max-w-350 mx-auto px-5 py-2 md:px-7 xl:px-10 flex items-center gap-x-5">
+    <div className="p-2">
+      <header className="sticky top-0 z-30 bg-card rounded-sm">
+        <div className="flex items-center gap-3 px-4 py-2">
+          <HubLogo className="lg:hidden" />
+          {/* <h1 className="hidden text-lg font-semibold lg:block">
+            {current?.label ?? "Hub"}
+          </h1> */}
 
-            {/* Logo */}
-            <Link href="/dashboard">
-                <span className="font-semibold text-xl">Zentro</span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <ThemeToggle />
+            <Link
+              href="/dashboard/invitaciones"
+              aria-label={
+                pendingInvitations > 0
+                  ? "Notificaciones: tienes novedades sin leer"
+                  : "Notificaciones"
+              }
+              className="relative flex size-10 items-center justify-center rounded-sm bg-muted text-foreground transition-colors hover:bg-muted"
+            >
+              <Bell className="size-4.5" />
+              {/* Notificaciones: solo un punto de "sin leer"; el número vive en Invitaciones.
+                  TODO(0.2): usar el conteo real cuando exista la entidad de notificaciones. */}
+              {pendingInvitations > 0 && (
+                <span className="absolute top-2 right-2 size-2.5 rounded-full bg-(--hub-accent) ring-2 ring-muted" />
+              )}
             </Link>
-
-            <div className="ml-auto flex items-center gap-x-1">
-                
-                <ThemeToggle />
-
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Notificaciones"
-                    nativeButton={false}
-                    render={<Link href="/dashboard/invitaciones" />}
-                >
-                    <Bell />  
-                </Button>
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="relative size-10 rounded-full flex items-center justify-center p-0 cursor-pointer bg-secondary text-secondary-foreground hover:bg-secondary/80">
-                            <svg className="size-5" 
-                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path d="M0 0h24v24H0z" fill="none" />
-                                <g fill="none" stroke="currentColor" strokeWidth="1.5">
-                                    <circle cx="12" cy="6" r="4" />
-                                    <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" />
-                                </g>
-                            </svg>
-                            {pendingInvitations > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 text-white flex size-4 items-center justify-center rounded-full bg-red-500 dark:bg-destructive text-[0.6rem] font-semibold text-destructive-foreground ring-2 ring-background">
-                                    {pendingInvitations}
-                                </span>
-                            )}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48 p-1">
-                        <DropdownMenuItem render={<Link href="/dashboard/cuenta" />} className="cursor-pointer px-3 py-2">
-                            <User className="size-4" />
-                            Mi cuenta
-                        </DropdownMenuItem>
-                        <DropdownMenuItem render={<Link href="/dashboard/suscripciones" />} className="cursor-pointer px-3 py-2">
-                            <CreditCard className="size-4" />
-                            Suscripciones
-                        </DropdownMenuItem>
-                        <DropdownMenuItem render={<Link href="/dashboard/organizaciones" />} className="cursor-pointer px-3 py-2">
-                            <svg className="size-4" 
-                                xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path d="M0 0h24v24H0z" fill="none" />
-                                <g fill="none" stroke="currentColor" strokeWidth="1.5">
-                                    <path d="M3 21h18" />
-                                    <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
-                                    <path d="M9 7h1M9 11h1M9 15h1" />
-                                    <path d="M14 7h1M14 11h1M14 15h1" />
-                                </g>
-                            </svg>
-                            Cambiar de tenant
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer px-3 py-2" onClick={handleLogout}>
-                            <LogOut className="size-4" />
-                            Cerrar sesión
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-            </div>
-
+            <AccountMenu />
+          </div>
         </div>
-    </header>
-  )
-}
+      </header>
+    </div>
+  );
+};

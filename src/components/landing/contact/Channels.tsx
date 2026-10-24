@@ -1,32 +1,35 @@
-import { Clock, Mail, MessageCircle, Share2 } from "lucide-react";
+import { Clock, Mail, MessageCircle, Share2, type LucideIcon } from "lucide-react";
+import { SUPPORT } from "@/lib/content/support";
 
-// Mismos canales que el Footer
-const channels = [
+
+// Canales desde la fuente única (también la usan Footer y la Ayuda del Hub)
+type Channel = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  label?: string;
+  href?: string;
+  links?: readonly { label: string; href: string }[];
+};
+
+const channels: Channel[] = [
   {
     icon: MessageCircle,
     title: "WhatsApp",
     description: "La forma más rápida de resolver una duda o pedir una demo.",
-    label: "+51 919 728 725",
-    href: "https://wa.me/51919728725",
+    ...SUPPORT.whatsapp,
   },
   {
     icon: Mail,
     title: "Correo",
     description: "Para consultas detalladas, planes empresariales o soporte.",
-    label: "usezentroapp@gmail.com",
-    href: "mailto:usezentroapp@gmail.com",
+    ...SUPPORT.email,
   },
   {
     icon: Share2,
     title: "Redes sociales",
     description: "Novedades del producto, tips para tu negocio y promociones.",
-    links: [
-      { label: "Instagram", href: "https://www.instagram.com/hi_zentro/" },
-      {
-        label: "Facebook",
-        href: "https://www.facebook.com/profile.php?id=61594794815182",
-      },
-    ],
+    links: SUPPORT.social,
   },
 ];
 
@@ -95,7 +98,7 @@ export function Channels() {
 
       <p className="flex items-center gap-x-3 text-muted-foreground">
         <Clock className="size-4" />
-        Respondemos en un plazo de 24 a 48 horas hábiles.
+        {SUPPORT.responseTime}
       </p>
     </div>
   );

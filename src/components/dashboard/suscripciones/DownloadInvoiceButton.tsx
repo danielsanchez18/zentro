@@ -45,9 +45,9 @@ export const DownloadInvoiceButton = ({
   return (
     <Button
       type="button"
-      variant="outline"
+      variant="ghost"
       size="sm"
-      className="rounded-full h-fit py-1.5 px-3"
+      className="h-fit rounded-sm bg-muted px-2.5 py-1.5 text-sm hover:bg-muted/70"
       onClick={handleDownload}
       disabled={downloading}
     >

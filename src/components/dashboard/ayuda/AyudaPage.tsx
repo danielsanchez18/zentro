@@ -2,21 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Rocket, Sparkles } from "lucide-react";
+import { Rocket, Search, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { ContactSection } from "@/components/dashboard/ayuda/ContactSection";
 import { FaqAccordion } from "@/components/dashboard/ayuda/FaqAccordion";
 import { TicketsList } from "@/components/dashboard/ayuda/TicketsList";
-import {
-  SearchInput,
-  SupportForm,
-} from "@/components/dashboard/ayuda/SupportForm";
+import { SupportForm } from "@/components/dashboard/ayuda/SupportForm";
 
 const TABS = [
   { id: "faq", label: "Preguntas frecuentes" },
   { id: "contacto", label: "Contacto" },
-  { id: "mensaje", label: "Mensaje" },
+  { id: "mensaje", label: "Escribir a soporte" },
   { id: "tickets", label: "Mis tickets" },
 ] as const;
 
@@ -25,6 +21,7 @@ type TabId = (typeof TABS)[number]["id"];
 export const AyudaPage = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>("faq");
+  const [query, setQuery] = useState("");
 
   const handleReopenOnboarding = () => {
     sessionStorage.removeItem("zentro-onboarding-skipped");
@@ -37,86 +34,91 @@ export const AyudaPage = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-1">
-        <h1 className="text-xl font-medium">Ayuda y soporte</h1>
-        <p className="text-sm text-muted-foreground">
-          Todo lo que necesitas para resolver tus dudas.
-        </p>
-      </div>
-
-      <div
-        role="tablist"
-        aria-label="Secciones de ayuda"
-        className="flex w-full flex-wrap gap-1 rounded-xl border border-border bg-muted/50 p-1 sm:inline-flex sm:w-auto"
-      >
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "flex-1 rounded-lg px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors sm:flex-none",
-              activeTab === tab.id
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {activeTab === "faq" && (
-        <div className="space-y-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card p-4">
-            <div className="flex gap-3">
-              <div className="flex size-9 min-w-9 mt-0.5 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-                <Rocket className="size-4" />
-              </div>
-              <div>
-                <p className="text-sm font-medium">¿Empezando con Zentro?</p>
-                <p className="text-sm text-muted-foreground">
-                  Reabre la guía de primeros pasos para configurar tu cuenta y
-                  organizaciones.
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-full text-sm"
-                onClick={handleStartDemo}
-              >
-                <Sparkles className="size-4" />
-                Explorar demo
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-full text-sm"
-                onClick={handleReopenOnboarding}
-              >
-                Reabrir guía
-              </Button>
-            </div>
-          </div>
-
-          <div className="max-w-full">
-            <SearchInput />
-          </div>
-          <FaqAccordion />
+    <div className="space-y-2">
+      <div className="space-y-4 rounded-sm bg-card px-4 py-3">
+        <div>
+          <h1 className="font-sans text-lg font-medium">Ayuda y soporte</h1>
+          <p className="text-sm text-muted-foreground">
+            Resuelve tus dudas o escríbenos si necesitas ayuda con tu cuenta u organizaciones.
+          </p>
         </div>
-      )}
+        <label className="relative block">
+          <span className="sr-only">Buscar en la ayuda</span>
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setActiveTab("faq");
+            }}
+            placeholder="Buscar en preguntas frecuentes…"
+            className="h-10 w-full rounded-sm border border-border bg-card pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/40"
+          />
+        </label>
+      </div>
 
-      {activeTab === "contacto" && <ContactSection />}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-sm bg-card px-4 py-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted text-foreground">
+            <Rocket className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-sm font-medium">¿Empezando con Zentro?</p>
+            <p className="text-sm text-muted-foreground">
+              Reabre la guía de primeros pasos o recorre el panel con la demo.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={handleReopenOnboarding}
+            className="rounded-sm px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            Reabrir guía
+          </button>
+          <button
+            type="button"
+            onClick={handleStartDemo}
+            className="flex items-center gap-1.5 rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
+          >
+            <Sparkles className="size-4" />
+            Explorar demo
+          </button>
+        </div>
+      </div>
 
-      {activeTab === "mensaje" && <SupportForm />}
+      <section aria-label="Contenido de ayuda" className="space-y-5 rounded-sm bg-card px-4 py-3">
+        <div
+          role="tablist"
+          aria-label="Secciones de ayuda"
+          className="-mx-1 flex gap-1 overflow-x-auto px-1 sm:mx-0 sm:w-fit sm:rounded-sm sm:bg-muted sm:p-1"
+        >
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "shrink-0 rounded-sm px-2.5 py-1 text-sm font-medium whitespace-nowrap transition-colors",
+                activeTab === tab.id
+                  ? "bg-foreground text-background sm:bg-card sm:text-foreground sm:shadow-xs"
+                  : "bg-muted text-muted-foreground hover:text-foreground sm:bg-transparent",
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-      {activeTab === "tickets" && <TicketsList />}
+        {activeTab === "faq" && <FaqAccordion query={query} />}
+        {activeTab === "contacto" && <ContactSection />}
+        {activeTab === "mensaje" && <SupportForm />}
+        {activeTab === "tickets" && <TicketsList />}
+      </section>
     </div>
   );
 };

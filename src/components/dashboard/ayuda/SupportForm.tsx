@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeCheck, Loader2, Search } from "lucide-react";
+import { BadgeCheck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -76,7 +76,7 @@ export const SupportForm = () => {
 
   if (submitted) {
     return (
-      <div className="rounded-xl border border-border bg-card p-6 text-center sm:p-10">
+      <div className="rounded-sm border border-border p-6 text-center sm:p-10">
         <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
           <BadgeCheck className="size-7" />
         </div>
@@ -85,29 +85,28 @@ export const SupportForm = () => {
           Recibimos tu mensaje. Te responderemos por correo con esta
           referencia de seguimiento.
         </p>
-        <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2">
+        <div className="mt-6 inline-flex items-center gap-2 rounded-sm bg-muted px-3 py-1.5">
           <span className="text-sm text-muted-foreground">Referencia:</span>
           <span className="font-mono text-sm font-medium text-foreground">
             {reference}
           </span>
         </div>
         <div className="mt-6">
-          <Button
+          <button
             type="button"
-            variant="outline"
-            className="rounded-full px-4 text-sm"
             onClick={handleReset}
+            className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
           >
             Enviar otro mensaje
-          </Button>
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden md:rounded-xl md:border border-border md:bg-card">
-      <div className="flex items-start gap-3 pb-7 md:p-5 md:pb-0">
+    <div className="rounded-sm border border-border p-3">
+      <div className="flex items-start gap-3 pb-5">
         <div>
           <h3 className="text-base font-sans font-medium">¿No encontraste lo que buscas?</h3>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -118,7 +117,7 @@ export const SupportForm = () => {
       </div>
 
       <form
-        className="space-y-4 md:p-5"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           handleSubmit();
@@ -136,7 +135,7 @@ export const SupportForm = () => {
             >
               <SelectTrigger
                 id="support-category"
-                className="w-full h-fit rounded-lg px-3 py-2"
+                className="w-full h-fit rounded-sm px-3 py-2"
               >
                 <SelectValue placeholder="Selecciona una categoría" />
               </SelectTrigger>
@@ -163,7 +162,7 @@ export const SupportForm = () => {
             >
               <SelectTrigger
                 id="support-tenant"
-                className="w-full h-fit rounded-lg px-3 py-2"
+                className="w-full h-fit rounded-sm px-3 py-2"
               >
                 <SelectValue placeholder="Selecciona una organización" />
               </SelectTrigger>
@@ -217,27 +216,13 @@ export const SupportForm = () => {
           <Button
             type="submit"
             disabled={sending || !subject.trim() || !message.trim()}
-            className="px-4 py-2 text-sm h-fit rounded-full font-semibold"
+            className="h-fit rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background hover:bg-foreground/90"
           >
             {sending && <Loader2 className="size-4 animate-spin" />}
             {sending ? "Enviando…" : "Enviar mensaje"}
           </Button>
         </div>
       </form>
-    </div>
-  );
-};
-
-export const SearchInput = () => {
-  return (
-    <div className="relative w-full">
-      <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 text-muted-foreground" />
-      <Input
-        type="search"
-        placeholder="Buscar en la ayuda…"
-        className="pl-10 text-base! rounded-lg w-full py-2 h-fit"
-        aria-label="Buscar en la ayuda"
-      />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
+import { SUPPORT } from "@/lib/content/support";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -157,7 +158,7 @@ export function Footer() {
 
           <article className="flex items-center max-sm:mx-auto">
             <Link
-              href="https://www.facebook.com/profile.php?id=61594794815182"
+              href={SUPPORT.social[1].href}
               className="rounded-full"
             >
               <Button
@@ -181,7 +182,7 @@ export function Footer() {
             </Link>
 
             <Link
-              href="https://www.instagram.com/hi_zentro/"
+              href={SUPPORT.social[0].href}
               target="_blank"
               className="rounded-full"
             >
@@ -205,7 +206,7 @@ export function Footer() {
               </Button>
             </Link>
             <Link
-              href="https://wa.me/51919728725"
+              href={SUPPORT.whatsapp.href}
               target="_blank"
               className="rounded-full"
             >
@@ -240,7 +241,7 @@ export function Footer() {
               </Button>
             </Link>
             <Link
-              href="mailto:usezentroapp@gmail.com"
+              href={SUPPORT.email.href}
               target="_blank"
               className="rounded-full"
             >

@@ -1,67 +1,69 @@
-import { Clock, Mail, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Clock, Mail, MessageCircle, Share2 } from "lucide-react";
+import { SUPPORT } from "@/lib/content/support";
 
-const CONTACTS = [
-  {
-    icon: Mail,
-    title: "Correo",
-    value: "soporte@zentro.com",
-    hint: "Respuesta en 24 h hábiles",
-    href: "mailto:soporte@zentro.com",
-  },
+/** Canales de contacto: misma fuente que la página /contacto de la landing. */
+const CHANNELS = [
   {
     icon: MessageCircle,
     title: "WhatsApp",
-    value: "+51 999 999 999",
-    hint: "Atención el mismo día",
-    href: "https://wa.me/51999999999",
+    description: "La forma más rápida de resolver una duda.",
+    ...SUPPORT.whatsapp,
   },
   {
-    icon: Clock,
-    title: "Horario",
-    value: "Lun a Vie · 9:00 a 18:00",
-    hint: "Hora Perú (GMT-5)",
+    icon: Mail,
+    title: "Correo",
+    description: "Para consultas detalladas o soporte.",
+    ...SUPPORT.email,
   },
 ];
 
 export const ContactSection = () => {
   return (
-    <section aria-labelledby="contacto-title">
-      <h2 id="contacto-title" className="text-base font-medium">
-        Contacto
-      </h2>
-      <ul className="mt-4 grid gap-4 sm:grid-cols-3">
-        {CONTACTS.map((contact) => {
-          const content = (
-            <>
-              <div className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-                <contact.icon className="size-4.5" />
+    <div className="space-y-2">
+      <ul className="grid gap-2 sm:grid-cols-2">
+        {CHANNELS.map((channel) => (
+          <li key={channel.title}>
+            <a
+              href={channel.href}
+              target={channel.href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              className="group flex h-full items-center gap-3 rounded-sm border border-border p-2 transition-colors hover:bg-muted/50"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted text-foreground">
+                <channel.icon className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium">{channel.title}</p>
+                <p className="truncate text-sm text-muted-foreground">{channel.label}</p>
               </div>
-              <h3 className="mt-4 text-sm font-medium">{contact.title}</h3>
-              <p className="mt-1 text-sm">{contact.value}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {contact.hint}
-              </p>
-            </>
-          );
-
-          return (
-            <li key={contact.title}>
-              {contact.href ? (
-                <a
-                  href={contact.href}
-                  className="block h-full rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/40"
-                >
-                  {content}
-                </a>
-              ) : (
-                <div className="h-full rounded-xl border border-border bg-card p-5">
-                  {content}
-                </div>
-              )}
-            </li>
-          );
-        })}
+              <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
+            </a>
+          </li>
+        ))}
       </ul>
-    </section>
+
+      <div className="flex flex-wrap items-center gap-3 rounded-sm border border-border p-2">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted text-foreground">
+          <Share2 className="size-5" />
+        </span>
+        <p className="mr-auto text-sm font-medium">Redes sociales</p>
+        {SUPPORT.social.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      <p className="flex items-center gap-2 px-1 pt-2 text-sm text-muted-foreground">
+        <Clock className="size-4" />
+        {SUPPORT.responseTime}
+      </p>
+    </div>
   );
 };

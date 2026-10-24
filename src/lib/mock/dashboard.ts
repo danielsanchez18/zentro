@@ -196,7 +196,7 @@ export const dashboardPlans: PlanDefinition[] = [
 ];
 
 export const dashboardSubscriptions: OrganizationSubscription[] = [
-  { id: "sub_001", organizationId: "org_001", planId: "plan_001", status: "TRIAL", currentPeriodStart: "2026-08-18T05:00:00.000Z", currentPeriodEnd: "2026-09-01T04:59:59.000Z", trialEndsAt: "2026-09-01T04:59:59.000Z", cancelAtPeriodEnd: false, createdAt: "2026-08-18T05:00:00.000Z" },
+  { id: "sub_001", organizationId: "org_001", planId: "plan_001", status: "TRIAL", currentPeriodStart: "2026-08-18T05:00:00.000Z", currentPeriodEnd: "2026-09-17T04:59:59.000Z", trialEndsAt: "2026-09-17T04:59:59.000Z", cancelAtPeriodEnd: false, createdAt: "2026-08-18T05:00:00.000Z" },
   { id: "sub_002", organizationId: "org_002", planId: "plan_002", status: "ACTIVE", currentPeriodStart: "2026-08-15T05:00:00.000Z", currentPeriodEnd: "2026-09-15T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-06-15T05:00:00.000Z" },
   { id: "sub_003", organizationId: "org_003", planId: "plan_001", status: "ACTIVE", currentPeriodStart: "2026-08-01T05:00:00.000Z", currentPeriodEnd: "2026-09-01T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-05-01T05:00:00.000Z" },
 ];
@@ -234,6 +234,8 @@ export const getUserOrganizationSummaries = (userId = CURRENT_USER_ID): Dashboar
         status: subscription.status,
         members: dashboardMemberships.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
         branches: dashboardBranches.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
+        logoUrl: organization.logoUrl ?? null,
+        coverUrl: organization.coverUrl ?? null,
       };
     });
 

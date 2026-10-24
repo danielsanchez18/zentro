@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SUPPORT } from "@/lib/content/support";
 import Link from "next/link";
 import {
   Boxes,
@@ -17,6 +18,10 @@ export type FaqCategory = {
   questions: { question: string; answer: ReactNode }[];
 };
 
+/**
+ * FAQ única de Zentro: la usan la landing (/faq) y la Ayuda del Hub
+ * (/dashboard/ayuda). Cualquier cambio de producto se corrige solo aquí.
+ */
 export const faqCategories: FaqCategory[] = [
   {
     id: "general",
@@ -61,14 +66,15 @@ export const faqCategories: FaqCategory[] = [
       {
         question: "¿Puedo probar Zentro gratis?",
         answer:
-          "Sí. Crea tu cuenta y prueba Zentro 30 días gratis, sin tarjeta de crédito y sin compromiso.",
+          `Sí. Crea tu cuenta y prueba Zentro ${SUPPORT.trialDays} días gratis, sin tarjeta de crédito y sin compromiso.`,
       },
       {
         question: "¿Puedo cambiar de plan cuando quiera?",
         answer: (
           <>
-            Sí. Puedes subir o bajar de plan en cualquier momento. Los cambios
-            se aplican según tu ciclo de facturación actual. Compara opciones en{" "}
+            Sí. El plan pertenece a cada organización: lo cambias desde su
+            configuración, en Facturación. Los cambios se aplican según tu ciclo
+            de facturación actual. Compara opciones en{" "}
             <Link href="/planes">Planes</Link>.
           </>
         ),
@@ -76,12 +82,17 @@ export const faqCategories: FaqCategory[] = [
       {
         question: "¿Puedo cancelar mi suscripción?",
         answer:
-          "Sí. Puedes cancelar desde tu panel de suscripciones cuando quieras. No hay permanencia forzosa y mantienes el acceso hasta el final del periodo pagado.",
+          "Sí. Cancelas desde la configuración de la organización, en Facturación. No hay permanencia forzosa y mantienes el acceso hasta el final del periodo pagado.",
+      },
+      {
+        question: "¿Qué métodos de pago aceptan?",
+        answer:
+          "Tarjetas de crédito y débito, Yape y Plin. Los métodos disponibles se muestran al activar o renovar el plan de tu organización.",
       },
       {
         question: "¿Cómo funciona la facturación?",
         answer:
-          "Según el plan elegido, la facturación puede ser mensual o anual. Recibirás tu factura automáticamente por correo electrónico.",
+          "Según el plan elegido, la facturación puede ser mensual o anual. Recibes cada factura por correo y también puedes verla y descargarla desde Suscripciones, en tu panel.",
       },
     ],
   },
@@ -134,12 +145,22 @@ export const faqCategories: FaqCategory[] = [
       {
         question: "¿Puedo tener varias organizaciones?",
         answer:
-          "Sí. Con un solo usuario puedes crear varias organizaciones y alternar entre ellas desde tu panel principal.",
+          "Sí. Con un solo usuario puedes crear varias organizaciones o aceptar invitaciones de otras, y entrar a cualquiera desde tu panel principal.",
+      },
+      {
+        question: "¿Cómo cambio mi contraseña?",
+        answer:
+          "Desde Mi cuenta, en la sección Seguridad. Te pediremos tu contraseña actual antes de guardar la nueva.",
+      },
+      {
+        question: "No recibo el correo de verificación",
+        answer:
+          "Revisa tu carpeta de spam. Si no aparece, puedes reenviar la verificación desde Mi cuenta, en tu perfil.",
       },
       {
         question: "¿Cómo invito a mi equipo?",
         answer:
-          "Desde Configuración → Invitaciones envías invitaciones por correo con un rol específico y su alcance: toda la organización o una sucursal.",
+          "Dentro de tu organización, en Equipo y permisos, envías invitaciones por correo con un perfil de acceso y su alcance: toda la organización o ubicaciones específicas. La persona las acepta desde Invitaciones, en su panel.",
       },
     ],
   },

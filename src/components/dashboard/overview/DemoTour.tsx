@@ -20,16 +20,6 @@ const DEMO_STEPS: DriveStep[] = [
     },
   },
   {
-    element: "[data-demo='tenant']",
-    popover: {
-      title: "Tu organización",
-      description:
-        "Entra directamente a tu organización o, si tienes varias, elige con este selector a dónde quieres ir.",
-      side: "bottom",
-      align: "center",
-    },
-  },
-  {
     element: "[data-demo='onboarding']",
     popover: {
       title: "Primeros pasos",
@@ -44,7 +34,7 @@ const DEMO_STEPS: DriveStep[] = [
     popover: {
       title: "Mis organizaciones",
       description:
-        "Desde aquí administras las organizaciones donde participas. Crea una nueva o abre una existente.",
+        "Entra a cualquiera de tus organizaciones, continúa las que tienes pendientes o crea una nueva.",
       side: "bottom",
       align: "center",
     },

@@ -1,7 +1,10 @@
 "use client";
 
-import { ArrowUpRight, Building2 } from "lucide-react";
+import Link from "next/link";
+import { CalendarClock } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
+import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import type { Subscription } from "@/components/dashboard/suscripciones/types";
 
 const METRICS = [
@@ -9,40 +12,34 @@ const METRICS = [
   { key: "branches", label: "Sucursales" },
 ] as const;
 
-export const SubscriptionCard = ({
-  subscription,
-}: {
-  subscription: Subscription;
-}) => {
+export const SubscriptionCard = ({ subscription }: { subscription: Subscription }) => {
   return (
-    <article className="flex h-full flex-col rounded-xl border border-border bg-card p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex size-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-          <Building2 className="size-5" />
+    <article className="flex h-full flex-col gap-4 rounded-sm border border-border p-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted text-foreground">
+            <CompanyIcon className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <h3 className="truncate text-sm font-medium">{subscription.orgName}</h3>
+            <p className="text-sm text-muted-foreground">Plan {subscription.plan}</p>
+          </div>
         </div>
         <StatusChip status={subscription.status} />
       </div>
 
-      <h3 className="mt-4 text-base font-medium">{subscription.orgName}</h3>
-      <p className="text-sm text-muted-foreground">
-        Plan {subscription.plan} · {subscription.period}
-      </p>
+      <div className="rounded-sm bg-muted/60 px-3 py-2.5">
+        <p className="text-lg font-medium tabular-nums">
+          {subscription.price}
+          <span className="text-sm font-normal text-muted-foreground"> / mes</span>
+        </p>
+        <p className="text-sm text-muted-foreground">{subscription.period}</p>
+      </div>
 
-      <p className="mt-4 text-lg font-medium">
-        {subscription.price}
-        <span className="text-sm text-muted-foreground"> / mes</span>
-      </p>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Próximo cobro: {subscription.nextCharge}
-      </p>
-
-      <ul className="mt-4 space-y-2.5">
+      <ul className="space-y-3 px-1">
         {METRICS.map((metric) => {
           const usage = subscription.usage[metric.key];
-          const percentage = Math.min(
-            100,
-            Math.round((usage.used / usage.limit) * 100),
-          );
+          const percentage = Math.min(100, Math.round((usage.used / usage.limit) * 100));
           return (
             <li key={metric.key}>
               <div className="flex items-center justify-between text-sm">
@@ -51,9 +48,9 @@ export const SubscriptionCard = ({
                   {usage.used}/{usage.limit}
                 </span>
               </div>
-              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
-                  className="h-full rounded-full bg-primary"
+                  className={cn("h-full rounded-full", percentage >= 100 ? "bg-amber-500" : "bg-foreground")}
                   style={{ width: `${percentage}%` }}
                 />
               </div>
@@ -62,12 +59,18 @@ export const SubscriptionCard = ({
         })}
       </ul>
 
-      <a
-        href={`/app/${subscription.slug}/configuracion/facturacion`}
-        className="mt-auto inline-flex items-center gap-1 pt-4 text-sm w-fit font-medium hover:underline"
-      >
-        Gestionar <ArrowUpRight className="size-3.5" />
-      </a>
+      <div className="mt-auto flex items-center gap-1.5">
+        <span className="mr-auto inline-flex h-8 items-center gap-1.5 rounded-sm bg-muted px-2.5 text-[13px] font-medium text-muted-foreground">
+          <CalendarClock className="size-3.5" />
+          {subscription.nextCharge}
+        </span>
+        <Link
+          href={`/app/${subscription.slug}/configuracion/facturacion`}
+          className="rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+        >
+          Gestionar
+        </Link>
+      </div>
     </article>
   );
 };

@@ -1,94 +1,104 @@
 "use client";
 
+import { useState } from "react";
+import { SearchX } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { faqCategories } from "@/components/landing/faq/data";
 
-interface FaqItem {
-  q: string;
-  a: string;
-}
+/**
+ * Preguntas frecuentes del Hub.
+ * Usa la misma fuente que /faq de la landing para que las respuestas no diverjan.
+ */
+export const FaqAccordion = ({ query }: { query: string }) => {
+  const [categoryId, setCategoryId] = useState<string>("ALL");
+  const normalized = query.trim().toLowerCase();
 
-interface FaqGroup {
-  topic: string;
-  items: FaqItem[];
-}
+  const groups = faqCategories
+    .filter((category) => categoryId === "ALL" || category.id === categoryId)
+    .map((category) => ({
+      ...category,
+      questions: category.questions.filter((item) => {
+        if (!normalized) return true;
+        const answer = typeof item.answer === "string" ? item.answer : "";
+        return `${item.question} ${answer}`.toLowerCase().includes(normalized);
+      }),
+    }))
+    .filter((category) => category.questions.length > 0);
 
-// TODO(0.2): mover a datos dinámicos (GET /faq) si hace falta
-const FAQ_GROUPS: FaqGroup[] = [
-  {
-    topic: "Suscripciones y pagos",
-    items: [
-      {
-        q: "¿Cuándo se renueva mi suscripción?",
-        a: "El cobro se realiza el primer día de cada período. Puedes ver tus fechas y próximos cobros en la página de Suscripciones.",
-      },
-      {
-        q: "¿Puedo cambiar de plan?",
-        a: "Sí. La gestión de plan se hace desde la configuración de cada organización, en la sección Facturación.",
-      },
-      {
-        q: "¿Qué métodos de pago aceptan?",
-        a: "Estamos integrando Culqi y Mercado Pago para tarjetas de crédito/débito y métodos como Yape y Plin. Pronto estarán disponibles.",
-      },
-    ],
-  },
-  {
-    topic: "Cuenta y acceso",
-    items: [
-      {
-        q: "¿Cómo cambio mi contraseña?",
-        a: "Entra a tu perfil (avatar arriba a la derecha) y busca la sección de contraseña. Te pediremos tu contraseña actual.",
-      },
-      {
-        q: "No recibo el correo de verificación",
-        a: "Revisa la carpeta de spam. Si no aparece, puedes reenviar la verificación desde tu perfil.",
-      },
-    ],
-  },
-  {
-    topic: "Organizaciones e invitaciones",
-    items: [
-      {
-        q: "¿Cómo invito a alguien a mi organización?",
-        a: "Abre la organización y entra a la sección Miembros. Ahí puedes enviar invitaciones por correo con un rol asignado.",
-      },
-      {
-        q: "¿Puedo pertenecer a varias organizaciones?",
-        a: "Sí. Puedes aceptar invitaciones de varias organizaciones y cambiar entre ellas con el selector de organización.",
-      },
-    ],
-  },
-];
+  const chips = [{ id: "ALL", label: "Todas" }, ...faqCategories.map(({ id, label }) => ({ id, label }))];
 
-export const FaqAccordion = () => {
   return (
-    <div className="space-y-8">
-      {FAQ_GROUPS.map((group, groupIndex) => (
-        <section key={group.topic} aria-labelledby={`faq-${groupIndex}`} className="space-y-5">
-          <h3
-            id={`faq-${groupIndex}`}
-            className="font-medium text-muted-foreground font-sans"
+    <div className="space-y-5">
+      <div role="tablist" aria-label="Categorías de preguntas" className="flex flex-wrap gap-1.5">
+        {chips.map((chip) => (
+          <button
+            key={chip.id}
+            type="button"
+            role="tab"
+            aria-selected={categoryId === chip.id}
+            onClick={() => setCategoryId(chip.id)}
+            className={cn(
+              "rounded-sm px-2.5 py-1.5 text-sm font-medium transition-colors",
+              categoryId === chip.id
+                ? "bg-foreground text-background"
+                : "bg-muted text-muted-foreground hover:text-foreground",
+            )}
           >
-            0{groupIndex + 1}. {group.topic}
-          </h3>
-          <Accordion className="mt-2">
-            {group.items.map((item) => (
-              <AccordionItem key={item.q} value={item.q}>
-                <AccordionTrigger className="font-sans py-3 text-base">
-                  {item.q}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-muted-foreground text-base">{item.a}</p>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </section>
-      ))}
+            {chip.label}
+          </button>
+        ))}
+      </div>
+
+      {groups.length === 0 ? (
+        <div className="rounded-sm border border-dashed border-border">
+          <EmptyState
+            icon={SearchX}
+            title="Sin resultados"
+            description="Prueba con otras palabras o escríbenos desde la pestaña Escribir a soporte."
+          />
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {groups.map((group) => (
+            <section
+              key={group.id}
+              aria-labelledby={`faq-${group.id}`}
+              className="rounded-sm border border-border px-3 py-2"
+            >
+              <div className="flex items-center gap-2.5 py-1.5">
+                <span className="flex size-8 items-center justify-center rounded-sm bg-muted text-foreground">
+                  <group.icon className="size-4" />
+                </span>
+                <div>
+                  <h3 id={`faq-${group.id}`} className="text-sm font-medium">
+                    {group.label}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">{group.description}</p>
+                </div>
+              </div>
+              <Accordion>
+                {group.questions.map((item) => (
+                  <AccordionItem key={item.question} value={item.question} className="border-border">
+                    <AccordionTrigger className="py-3 font-sans text-sm">{item.question}</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="text-sm text-muted-foreground [&_a]:font-medium [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-4">
+                        {item.answer}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </section>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

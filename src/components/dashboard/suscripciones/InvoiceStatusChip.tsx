@@ -17,7 +17,7 @@ export const InvoiceStatusChip = ({ status }: { status: InvoiceStatus }) => {
   return (
     <span
       className={cn(
-        "rounded-full px-2.5 py-1.5 text-xs font-medium uppercase tracking-wide",
+        "inline-flex h-8 items-center justify-center rounded-sm border border-border px-2.5 py-1 text-[13px] font-medium uppercase tracking-wide",
         STYLES[status],
       )}
     >

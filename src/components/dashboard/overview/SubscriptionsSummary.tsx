@@ -1,9 +1,10 @@
 "use client";
 
-import { CreditCard } from "lucide-react";
+import Link from "next/link";
+import { CalendarClock, CreditCard } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
-import { Button } from "@/components/ui/button";
+import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import { getSubscriptionSummaries } from "@/lib/mock/dashboard";
 
 /**
@@ -12,24 +13,32 @@ import { getSubscriptionSummaries } from "@/lib/mock/dashboard";
  */
 export const SubscriptionsSummary = () => {
   const subscriptions = getSubscriptionSummaries();
+
   return (
-    <section data-demo="subscriptions" aria-labelledby="suscripciones-title">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="suscripciones-title" className="text-base font-medium">
-          Suscripciones
-        </h2>
-        <a
+    <section
+      data-demo="subscriptions"
+      aria-labelledby="suscripciones-title"
+      className="rounded-sm bg-card px-4 py-3 space-y-5"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 id="suscripciones-title" className="font-sans text-base font-medium">
+            Suscripciones
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Planes y próximos cobros de tus organizaciones.
+          </p>
+        </div>
+        <Link
           href="/dashboard/suscripciones"
-          className="rounded-full"
+          className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70"
         >
-          <Button variant="outline" className="text-sm px-3 py-2 rounded-full">
-            Ver todas
-          </Button>
-        </a>
+          Ver todas
+        </Link>
       </div>
 
       {subscriptions.length === 0 ? (
-        <div className="mt-4 rounded-xl border border-dashed border-border">
+        <div className="rounded-sm border border-dashed border-border">
           <EmptyState
             icon={CreditCard}
             title="Sin suscripciones"
@@ -37,34 +46,28 @@ export const SubscriptionsSummary = () => {
           />
         </div>
       ) : (
-        <div className="mt-4 rounded-xl border border-border bg-card">
-          <ul className="divide-y divide-border">
-            {subscriptions.map((subscription) => (
-              <li
-                key={subscription.id}
-                className="flex flex-wrap items-center justify-between gap-3 p-4"
-              >
-                <div className="flex gap-3">
-                  <div className="flex mt-0.5 size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-                    <CreditCard className="size-4" />
-                  </div>
-                  <div>
-                    <p className="text-base font-medium">{subscription.orgName}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Próximo cobro: {subscription.nextCharge}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">
-                    Plan {subscription.plan}
+        <ul className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {subscriptions.map((subscription) => (
+            <li key={subscription.id} className="flex flex-col gap-3 rounded-sm border border-border p-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-muted text-foreground">
+                    <CompanyIcon className="size-5" />
                   </span>
-                  <StatusChip status={subscription.status} />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{subscription.orgName}</p>
+                    <p className="text-sm text-muted-foreground">Plan {subscription.plan}</p>
+                  </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                <StatusChip status={subscription.status} />
+              </div>
+              <span className="inline-flex h-8 w-fit items-center gap-1.5 rounded-sm bg-muted px-2.5 text-[13px] font-medium text-muted-foreground">
+                <CalendarClock className="size-3.5" />
+                Próximo cobro: {subscription.nextCharge}
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
     </section>
   );

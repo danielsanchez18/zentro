@@ -74,6 +74,10 @@ export interface DashboardOrganization {
   countryCode: string;
   currencyCode: string;
   timezone: string;
+  /** Logo cuadrado de la organización (opcional, se sube desde su configuración). */
+  logoUrl?: string | null;
+  /** Imagen de portada para cards y ficha pública (opcional). */
+  coverUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -166,6 +170,8 @@ export interface DashboardOrganizationSummary {
   members: number;
   branches: number;
   setupStatus?: OrganizationSetupStatus;
+  logoUrl: string | null;
+  coverUrl: string | null;
 }
 
 export interface DashboardInvitationSummary {

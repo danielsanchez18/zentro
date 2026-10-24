@@ -4,7 +4,7 @@ export default async function OrganizationOnboardingPage({ params }: { params: P
   const { organizationId } = await params;
 
   return (
-    <div className="mx-auto w-full max-w-350 px-5 py-10 sm:px-7 xl:px-10">
+    <div className="mx-auto w-full max-w-350 px-4 pt-2 pb-6 lg:px-6">
       <OnboardingWizard organizationId={organizationId} />
     </div>
   );

@@ -142,6 +142,8 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
           members: state.memberships.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
           branches: state.branches.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
           setupStatus: state.organizationSetups.find((item) => item.organizationId === organization.id)?.status,
+          logoUrl: organization.logoUrl ?? null,
+          coverUrl: organization.coverUrl ?? null,
         };
       });
   },

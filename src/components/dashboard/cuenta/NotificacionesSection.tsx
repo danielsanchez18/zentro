@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { SettingsBlock, SettingsRow } from "@/components/dashboard/cuenta/ui";
 import type { NotificationPreferenceKey } from "@/types/dashboard";
 
 const PREFERENCE_COPY: Record<NotificationPreferenceKey, { label: string; description: string }> = {
@@ -30,7 +31,7 @@ const Switch = ({ checked, onChange, label, disabled = false }: SwitchProps) => 
       onClick={() => onChange(!checked)}
       className={cn(
         "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors",
-        checked ? "bg-primary" : "bg-muted-foreground/30",
+        checked ? "bg-foreground" : "bg-muted-foreground/30",
         disabled && "cursor-not-allowed opacity-60",
       )}
     >
@@ -48,35 +49,29 @@ export const NotificacionesSection = () => {
   const { notificationPreferences: preferences, toggleEmailPreference } = useDashboardStore();
 
   return (
-    <div className="w-full space-y-6">
-      <div className="max-lg:pt-3 lg:pl-5">
-        <h2 className="text-base font-medium font-sans">Notificaciones</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Elige qué avisos quieres recibir por correo.
-        </p>
-
-        <ul className="mt-5 divide-y divide-border">
-          {preferences.map((pref) => (
-            <li
-              key={pref.key}
-              className="flex items-center justify-between gap-3 py-5"
+    <SettingsBlock
+      title="Notificaciones por correo"
+      description="Elige qué avisos quieres recibir. Los de recuperación y seguridad son obligatorios."
+    >
+      <ul className="space-y-2">
+        {preferences.map((pref) => (
+          <li key={pref.key}>
+            <SettingsRow
+              label={PREFERENCE_COPY[pref.key].label}
+              action={
+                <Switch
+                  checked={pref.emailEnabled}
+                  onChange={() => toggleEmailPreference(pref.key)}
+                  label={PREFERENCE_COPY[pref.key].label}
+                  disabled={pref.required}
+                />
+              }
             >
-              <div>
-                <p className="text-sm font-medium">{PREFERENCE_COPY[pref.key].label}</p>
-                <p className="text-sm text-muted-foreground">
-                  {PREFERENCE_COPY[pref.key].description}
-                </p>
-              </div>
-              <Switch
-                checked={pref.emailEnabled}
-                onChange={() => toggleEmailPreference(pref.key)}
-                label={PREFERENCE_COPY[pref.key].label}
-                disabled={pref.required}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+              {PREFERENCE_COPY[pref.key].description}
+            </SettingsRow>
+          </li>
+        ))}
+      </ul>
+    </SettingsBlock>
   );
 };

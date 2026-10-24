@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, TextAlignEnd, X } from "lucide-react";
+import { SUPPORT } from "@/lib/content/support";
 import { Button } from "@/components/ui/button";
 import { oswald } from "@/app/(landing)/fonts";
 import {
@@ -175,7 +176,7 @@ export function MobileMenu() {
                 <ThemeToggle />
 
                 <Link
-                  href="https://www.facebook.com/profile.php?id=61594794815182"
+                  href={SUPPORT.social[1].href}
                   target="_blank"
                   className="ml-auto"
                 >
@@ -199,7 +200,7 @@ export function MobileMenu() {
                   </Button>
                 </Link>
                 <Link
-                  href="https://www.instagram.com/hi_zentro/"
+                  href={SUPPORT.social[0].href}
                   target="_blank"
                 >
                   <Button
@@ -221,7 +222,7 @@ export function MobileMenu() {
                     </svg>
                   </Button>
                 </Link>
-                <Link href="https://wa.me/51919728725" target="_blank">
+                <Link href={SUPPORT.whatsapp.href} target="_blank">
                   <Button
                     variant="glass"
                     size="icon-lg"
@@ -252,7 +253,7 @@ export function MobileMenu() {
                     </svg>
                   </Button>
                 </Link>
-                <Link href="mailto:usezentroapp@gmail.com" target="_blank">
+                <Link href={SUPPORT.email.href} target="_blank">
                   <Button
                     variant="glass"
                     size="icon-lg"

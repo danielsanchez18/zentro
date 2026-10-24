@@ -1,8 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Building2, Copy, LogOut, MapPin, MoreHorizontal, Settings, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  ArrowUpRight,
+  Copy,
+  LogOut,
+  MapPin,
+  MoreHorizontal,
+  Settings,
+  Users,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,40 +20,103 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
+import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import type { Organization } from "@/components/dashboard/organizaciones/types";
 
-export const OrganizationCard = ({ org }: { org: Organization }) => {
-  return (
-    <article className="flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/40">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex size-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
-          <Building2 className="size-5" />
-        </div>
+export const getOrganizationHref = (org: Organization) =>
+  org.setupStatus === "DRAFT"
+    ? `/dashboard/organizaciones/${org.id}/onboarding`
+    : `/app/${org.slug}`;
 
-        <div className="flex items-center gap-2">
-          {org.setupStatus === "DRAFT" ? (
-            <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
-              Configuración pendiente
+/** Portada: foto si existe; si no, un patrón neutro para no dejar el bloque vacío. */
+const Cover = ({ org }: { org: Organization }) => (
+  <div className="relative h-24 overflow-hidden rounded-sm bg-muted">
+    {org.coverUrl ? (
+      <Image
+        src={org.coverUrl}
+        alt=""
+        fill
+        unoptimized
+        className="object-cover"
+      />
+    ) : (
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-60 [background-image:radial-gradient(currentColor_1px,transparent_1px)] [background-size:14px_14px] text-muted-foreground/25"
+      />
+    )}
+  </div>
+);
+
+/** Logo: imagen si existe; si no, el ícono de empresa. */
+const Logo = ({ org }: { org: Organization }) => (
+  <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-card ring-4 ring-card">
+    {org.logoUrl ? (
+      <Image
+        src={org.logoUrl}
+        alt={`Logo de ${org.name}`}
+        fill
+        unoptimized
+        className="object-cover"
+      />
+    ) : (
+      <span className="flex size-full items-center justify-center rounded-sm bg-muted text-foreground">
+        <CompanyIcon className="size-6" />
+      </span>
+    )}
+  </div>
+);
+
+const Meta = ({ children }: { children: React.ReactNode }) => (
+  <span className="inline-flex items-center gap-1.5 rounded-sm bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+    {children}
+  </span>
+);
+
+interface OrganizationCardProps {
+  org: Organization;
+  /** Resalta la card (por ejemplo, la última organización abierta). */
+  highlighted?: boolean;
+}
+
+export const OrganizationCard = ({
+  org,
+  highlighted,
+}: OrganizationCardProps) => {
+  const isDraft = org.setupStatus === "DRAFT";
+  const href = getOrganizationHref(org);
+
+  return (
+    <article
+      className={cn(
+        "group flex h-full flex-col rounded-sm bg-card border border-border p-2",
+        highlighted && "ring-2 ring-foreground/80",
+      )}
+    >
+      <div className="relative">
+        <Link href={href} aria-label={`Abrir ${org.name}`} tabIndex={-1}>
+          <Cover org={org} />
+        </Link>
+
+        <div className="absolute top-2 right-2 flex items-center gap-1.5">
+          {isDraft ? (
+            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800 dark:bg-amber-500/20 dark:text-amber-300">
+              Pendiente
             </span>
           ) : (
             <StatusChip status={org.status} />
           )}
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Acciones de ${org.name}`}
-                />
-              }
+              aria-label={`Acciones de ${org.name}`}
+              className="flex size-8 cursor-pointer items-center justify-center rounded-sm bg-card border border-border text-muted-foreground transition-colors hover:text-foreground"
             >
-              <MoreHorizontal />
+              <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem render={<Link href={org.setupStatus === "DRAFT" ? `/dashboard/organizaciones/${org.id}/onboarding` : `/app/${org.slug}`} />}>
+              <DropdownMenuItem render={<Link href={href} />}>
                 <ArrowUpRight />
-                {org.setupStatus === "DRAFT" ? "Continuar configuración" : "Abrir workspace"}
+                {isDraft ? "Continuar configuración" : "Abrir workspace"}
               </DropdownMenuItem>
               <DropdownMenuItem disabled>
                 <Settings /> Configuración
@@ -63,39 +135,44 @@ export const OrganizationCard = ({ org }: { org: Organization }) => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+
+        <div className="absolute -bottom-7 left-3">
+          <Logo org={org} />
+        </div>
       </div>
 
-      <h3 className="mt-4 text-base font-medium">{org.name}</h3>
-      <p className="text-sm text-muted-foreground">/{org.slug}</p>
+      <div className="flex flex-1 flex-col px-3 pt-9 pb-2">
+        <Link href={href} className="w-fit">
+          <h3 className="font-heading text-base font-semibold leading-tight hover:underline">
+            {org.name}
+          </h3>
+        </Link>
+        <p className="text-sm text-muted-foreground">/{org.slug}</p>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm pt-5 border-t border-border">
-        <div className="flex items-center gap-1.5">
-          <dt className="font-medium text-foreground">Plan:</dt>
-          <dd>{org.plan}</dd>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <Meta>{org.role}</Meta>
+          <Meta>Plan {org.plan}</Meta>
+          <Meta>
+            <Users className="size-3.5" />
+            {org.members}
+          </Meta>
+          <Meta>
+            <MapPin className="size-3.5" />
+            {org.branches}
+          </Meta>
         </div>
-        <div className="flex items-center gap-1.5">
-          <dt className="font-medium text-foreground">Rol:</dt>
-          <dd>{org.role}</dd>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Users className="size-3.5" />
-          <dd>
-            {org.members} miembro{org.members === 1 ? "" : "s"}
-          </dd>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <MapPin className="size-3.5" />
-          <dd>
-            {org.branches} sucursal{org.branches === 1 ? "" : "es"}
-          </dd>
-        </div>
-      </dl>
+      </div>
 
       <Link
-        href={org.setupStatus === "DRAFT" ? `/dashboard/organizaciones/${org.id}/onboarding` : `/app/${org.slug}`}
-        className="mt-auto inline-flex items-center gap-1 pt-4 text-sm w-fit font-medium hover:underline"
+        href={href}
+        className={cn(
+          "mt-2 flex items-center justify-center gap-1.5 rounded-sm px-2.5 py-1.5 text-sm font-medium transition-colors",
+          isDraft
+            ? "bg-muted text-foreground hover:bg-muted/70"
+            : "bg-foreground text-background hover:bg-foreground/90",
+        )}
       >
-        {org.setupStatus === "DRAFT" ? "Continuar configuración" : "Abrir"} <ArrowUpRight className="size-3.5" />
+        {isDraft ? "Continuar configuración" : "Entrar"}
       </Link>
     </article>
   );
