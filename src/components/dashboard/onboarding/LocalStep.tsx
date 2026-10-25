@@ -4,12 +4,7 @@ import { useState } from "react";
 import { Clock, MapPin, Pencil, Phone, Plus, Store, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import {
-  ResponsiveDialog,
-  ResponsiveDialogContent,
-  ResponsiveDialogDescription,
-  ResponsiveDialogTitle,
-} from "@/components/ui/responsive-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 import { hubButton, hubStatus, hubTone } from "@/components/dashboard/shared/styles";
 import { cn } from "@/lib/utils";
@@ -49,22 +44,22 @@ const LocationDialog = ({
   const valid = form.nombre.trim().length > 0;
 
   return (
-    <ResponsiveDialog open={open} onOpenChange={(next) => !next && onCancel()}>
-      <ResponsiveDialogContent className="md:max-w-lg">
+    <Dialog open={open} onOpenChange={(next) => !next && onCancel()}>
+      <DialogContent className="max-h-[90dvh] overflow-y-auto p-5 sm:max-w-lg">
         <form
-          className="flex flex-col gap-5 px-4 pb-4 md:px-0 md:pb-0"
+          className="flex flex-col gap-5"
           onSubmit={(event) => {
             event.preventDefault();
             if (valid) onSave(form);
           }}
         >
           <div>
-            <ResponsiveDialogTitle className="font-sans text-base font-medium">
+            <DialogTitle className="font-sans text-base font-medium">
               {isEditing ? "Editar ubicación" : "Nueva ubicación"}
-            </ResponsiveDialogTitle>
-            <ResponsiveDialogDescription className="mt-1 text-sm">
+            </DialogTitle>
+            <DialogDescription className="mt-1 text-sm">
               Puede ser una tienda, consultorio, almacén o punto de atención.
-            </ResponsiveDialogDescription>
+            </DialogDescription>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -101,8 +96,8 @@ const LocationDialog = ({
             </button>
           </div>
         </form>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 

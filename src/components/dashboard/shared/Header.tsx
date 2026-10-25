@@ -11,23 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useIsDesktop } from "@/hooks/use-media-query";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { NotificationsMenu } from "@/components/dashboard/shared/NotificationsMenu";
 import { HubLogo } from "@/components/dashboard/shared/HubLogo";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
 import { getActiveNavItem } from "@/components/dashboard/shared/nav";
 import { useLogout } from "@/components/dashboard/shared/Sidebar";
-import { hubMenuItem } from "@/components/dashboard/shared/styles";
-import { cn } from "@/lib/utils";
 
 const ACCOUNT_LINKS = [
   { href: "/dashboard/cuenta", label: "Mi cuenta", icon: UserRound },
@@ -39,7 +28,6 @@ const ACCOUNT_LINKS = [
 ];
 
 const AccountMenu = () => {
-  const isDesktop = useIsDesktop();
   const user = useDashboardStore((state) => state.currentUser);
   const handleLogout = useLogout();
   const trigger = (
@@ -48,8 +36,8 @@ const AccountMenu = () => {
     </span>
   );
 
-  if (isDesktop) {
-    return (
+  // Dropdown en todos los tamaños: para 3 opciones un drawer es excesivo.
+  return (
       <DropdownMenu>
         <DropdownMenuTrigger
           data-demo="account"
@@ -86,51 +74,6 @@ const AccountMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    );
-  }
-
-  return (
-    <Drawer>
-      <DrawerTrigger
-        data-demo="account"
-          aria-label="Menú de cuenta"
-        className="cursor-pointer rounded-full"
-      >
-        {trigger}
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="flex-row items-center gap-3">
-          <UserAvatar name={user.name} className="size-11" />
-          <div className="min-w-0">
-            <DrawerTitle className="truncate">{user.name}</DrawerTitle>
-            <p className="truncate text-sm text-muted-foreground">
-              {user.email}
-            </p>
-          </div>
-        </DrawerHeader>
-        <div className="space-y-1 px-3 pb-5">
-          {ACCOUNT_LINKS.map((link) => (
-            <DrawerClose
-              key={link.href}
-              nativeButton={false}
-              render={<Link href={link.href} />}
-              className={hubMenuItem}
-            >
-              <link.icon className="size-5 text-muted-foreground" />
-              {link.label}
-            </DrawerClose>
-          ))}
-          <button
-            type="button"
-            onClick={handleLogout}
-            className={cn(hubMenuItem, "text-destructive")}
-          >
-            <LogOut className="size-5" />
-            Cerrar sesión
-          </button>
-        </div>
-      </DrawerContent>
-    </Drawer>
   );
 };
 

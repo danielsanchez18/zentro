@@ -6,12 +6,7 @@ import { LogOut } from "lucide-react";
 import { create } from "zustand";
 import { useAuthStore } from "@/stores/auth-store";
 import { useTenantStore } from "@/stores/tenant-store";
-import {
-  ResponsiveDialog,
-  ResponsiveDialogContent,
-  ResponsiveDialogDescription,
-  ResponsiveDialogTitle,
-} from "@/components/ui/responsive-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { hubButton } from "@/components/dashboard/shared/styles";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
 
@@ -66,18 +61,18 @@ const LogoutDialog = () => {
   };
 
   return (
-    <ResponsiveDialog open={open} onOpenChange={setOpen}>
-      <ResponsiveDialogContent className="md:max-w-sm">
-        <div className="flex flex-col items-center px-4 pb-4 text-center md:px-0 md:pb-0">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent showCloseButton={false} className="p-6 sm:max-w-sm">
+        <div className="flex flex-col items-center text-center">
           <span className="flex size-12 items-center justify-center rounded-(--hub-radius-control) bg-destructive/10 text-destructive">
             <LogOut className="size-5" />
           </span>
-          <ResponsiveDialogTitle className="mt-4 font-sans text-base font-medium">
+          <DialogTitle className="mt-4 font-sans text-base font-medium">
             ¿Cerrar sesión?
-          </ResponsiveDialogTitle>
-          <ResponsiveDialogDescription className="mt-1 text-sm">
+          </DialogTitle>
+          <DialogDescription className="mt-1 text-sm">
             Tendrás que volver a iniciar sesión para entrar a tu cuenta y a tus organizaciones.
-          </ResponsiveDialogDescription>
+          </DialogDescription>
           <div data-hub-footer className="mt-5 flex w-full">
             <button type="button" className={hubButton.secondary} onClick={() => setOpen(false)}>
               Cancelar
@@ -87,8 +82,8 @@ const LogoutDialog = () => {
             </button>
           </div>
         </div>
-      </ResponsiveDialogContent>
-    </ResponsiveDialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 
