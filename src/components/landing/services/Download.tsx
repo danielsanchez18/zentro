@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
-// Cambiar a true cuando las apps estén publicadas en las tiendas
-const appsAvailable = false;
+import { APPS_AVAILABLE, APP_STORE_URLS } from "@/components/landing/shared/apps";
 
 const stores = [
   {
@@ -10,7 +9,7 @@ const stores = [
     logo: "/logos/Logo_AppStore.png",
     alt: "Logo App Store",
     storeName: "App Store",
-    url: "#", // <-- URL real del App Store cuando esté publicada
+    url: APP_STORE_URLS.appStore,
     description:
       "Tu inventario, ventas y clientes desde tu iPhone o iPad. Próximamente en el App Store.",
   },
@@ -19,7 +18,7 @@ const stores = [
     logo: "/logos/Logo_GooglePlay.png",
     alt: "Logo Google Play",
     storeName: "Google Play",
-    url: "#", // <-- URL real de Google Play cuando esté publicada
+    url: APP_STORE_URLS.googlePlay,
     description:
       "Todo tu negocio en el bolsillo, desde cualquier celular Android. Próximamente en Google Play.",
   },
@@ -58,7 +57,7 @@ export function Download() {
             </h3>
             <p className="text-sm text-muted-foreground">{store.description}</p>
 
-            {appsAvailable ? (
+            {APPS_AVAILABLE ? (
               <a
                 href={store.url}
                 className="text-sm flex items-center gap-x-3 group text-foreground"

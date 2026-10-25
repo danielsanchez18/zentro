@@ -1,3 +1,4 @@
+import { SUPPORT } from "@/lib/content/support";
 import type { LegalDoc } from "./types";
 
 export const privacy: LegalDoc = {
@@ -37,7 +38,7 @@ export const privacy: LegalDoc = {
       id: "contacto",
       title: "Contacto",
       paragraphs: [
-        "Para ejercer tus derechos o resolver dudas sobre esta política, escríbenos a usezentroapp@gmail.com o desde nuestra página de contacto.",
+        `Para ejercer tus derechos o resolver dudas sobre esta política, escríbenos a ${SUPPORT.email.label} o desde nuestra página de contacto.`,
       ],
     },
   ],

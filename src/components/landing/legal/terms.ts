@@ -1,3 +1,4 @@
+import { SUPPORT } from "@/lib/content/support";
 import type { LegalDoc } from "./types";
 
 export const terms: LegalDoc = {
@@ -37,7 +38,7 @@ export const terms: LegalDoc = {
       id: "contacto",
       title: "Contacto",
       paragraphs: [
-        "Si tienes dudas sobre estos términos, puedes escribirnos a usezentroapp@gmail.com o desde nuestra página de contacto.",
+        `Si tienes dudas sobre estos términos, puedes escribirnos a ${SUPPORT.email.label} o desde nuestra página de contacto.`,
       ],
     },
   ],

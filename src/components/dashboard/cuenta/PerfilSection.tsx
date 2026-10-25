@@ -32,7 +32,7 @@ export const PerfilSection = () => {
           icon={UserRound}
           label="Foto de perfil"
           action={
-            <button type="button" className={btnSecondary} title="Disponible al conectar el almacenamiento de archivos">
+            <button type="button" className={btnSecondary} disabled title="Disponible próximamente">
               <Upload className="size-4" />
               Subir foto
             </button>

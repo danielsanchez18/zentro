@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { SUPPORT } from "@/lib/content/support";
 
 export function CTA() {
   return (
@@ -11,7 +12,7 @@ export function CTA() {
       </h2>
 
       <p className="text-center text-muted-foreground max-w-md">
-        Crea tu cuenta y prueba Zentro 30 días gratis, sin tarjeta de crédito.
+        Crea tu cuenta y prueba Zentro {SUPPORT.trialDays} días gratis, sin tarjeta de crédito.
       </p>
 
       <div className="flex items-center justify-center gap-x-2 mt-5">

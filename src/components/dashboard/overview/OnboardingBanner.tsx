@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toastMsg } from "@/components/ui/toast-message";
-import { dashboardOnboarding } from "@/lib/mock/dashboard";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { hubButton } from "@/components/dashboard/shared/styles";
 
 /**
  * Primeros pasos (onboarding) — banner del hub.
- * TODO(0.2): leer progreso real desde `GET /users/me/onboarding`.
+ * Los pasos se derivan de las organizaciones y su configuración; la omisión se
+ * guarda en el store. TODO(0.2): `GET/PUT /users/me/onboarding`.
  */
 const STEP_LABELS = {
   CREATE_ORGANIZATION: "Crea tu organización",
@@ -17,26 +17,18 @@ const STEP_LABELS = {
   REVIEW_CAPABILITIES: "Revisa las capacidades de tu negocio",
 } as const;
 
-const SKIP_FLAG = "zentro-onboarding-skipped";
 const DEMO_START_EVENT = "zentro:demo-start";
 
 export const OnboardingBanner = () => {
-  const steps = dashboardOnboarding.steps.map((step) => ({
-    ...step,
-    label: STEP_LABELS[step.key],
-    done: step.completedAt !== null,
-  }));
-  const [skipped, setSkipped] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem(SKIP_FLAG) === "1";
-  });
+  const dashboard = useDashboardStore();
+  const steps = dashboard.getHubOnboardingSteps().map((step) => ({ ...step, label: STEP_LABELS[step.key] }));
+  const skipped = dashboard.onboardingSkippedAt !== null;
 
   const doneCount = steps.filter((step) => step.done).length;
 
   const handleSkip = () => {
-    sessionStorage.setItem(SKIP_FLAG, "1");
-    setSkipped(true);
-    toastMsg.info("Guía oculta", "Puedes reabrirla desde Ayuda → Preguntas frecuentes.");
+    dashboard.skipHubOnboarding();
+    toastMsg.info("Guía oculta", "Puedes reabrirla desde Ayuda → ¿Empezando con Zentro?");
   };
 
   const handleStartDemo = () => {
@@ -44,7 +36,8 @@ export const OnboardingBanner = () => {
     window.dispatchEvent(new CustomEvent(DEMO_START_EVENT));
   };
 
-  if (skipped) return null;
+  // Se oculta si el usuario la omitió o ya completó todo.
+  if (skipped || doneCount === steps.length) return null;
 
   return (
     <section

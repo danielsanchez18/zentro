@@ -77,6 +77,7 @@ export const AccesoSection = () => {
           if (!open) setPendingIdentity(null);
         }}
         providerName={pendingIdentity ? PROVIDER_COPY[pendingIdentity.provider].name : ""}
+        hasPasswordAccess={identities.some((identity) => identity.provider === "PASSWORD" && identity.status === "ACTIVE")}
         onConfirm={() => {
           if (pendingIdentity) handleDisconnect(pendingIdentity);
         }}

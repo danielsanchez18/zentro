@@ -1,4 +1,5 @@
 import type {
+  OrganizationInvoice,
   DashboardInvitationSummary,
   DashboardOrganization,
   DashboardOrganizationSummary,
@@ -96,8 +97,8 @@ export const userSessions: UserSession[] = [
     approximateLocation: "Lima, Perú",
     ipAddress: "192.0.2.10",
     isCurrent: true,
-    createdAt: "2026-09-08T18:00:00.000Z",
-    lastActiveAt: "2026-09-08T20:00:00.000Z",
+    createdAt: "2026-10-22T09:12:00.000Z",
+    lastActiveAt: "2026-10-24T13:00:00.000Z",
     revokedAt: null,
   },
   {
@@ -109,8 +110,8 @@ export const userSessions: UserSession[] = [
     approximateLocation: "Lima, Perú",
     ipAddress: "192.0.2.20",
     isCurrent: false,
-    createdAt: "2026-09-01T14:00:00.000Z",
-    lastActiveAt: "2026-09-06T18:00:00.000Z",
+    createdAt: "2026-10-01T14:00:00.000Z",
+    lastActiveAt: "2026-10-20T18:00:00.000Z",
     revokedAt: null,
   },
 ];
@@ -179,10 +180,10 @@ export const dashboardOrganizations: DashboardOrganization[] = [
 ];
 
 export const dashboardBranches: OrganizationBranch[] = [
-  { id: "branch_001", organizationId: "org_001", name: "Monsefú", status: "ACTIVE", isPrimary: true },
-  { id: "branch_002", organizationId: "org_002", name: "Miraflores", status: "ACTIVE", isPrimary: true },
-  { id: "branch_003", organizationId: "org_002", name: "Barranco", status: "ACTIVE", isPrimary: false },
-  { id: "branch_004", organizationId: "org_003", name: "Barranco", status: "ACTIVE", isPrimary: true },
+  { id: "branch_001", organizationId: "org_001", name: "Monsefú", status: "ACTIVE", isPrimary: true, address: "Calle Real 245, Monsefú, Chiclayo", phone: "+51 974 112 300", openingHours: "Lun-Dom 12:00-22:00" },
+  { id: "branch_002", organizationId: "org_002", name: "Miraflores", status: "ACTIVE", isPrimary: true, address: "Av. Larco 1234, Miraflores, Lima", phone: "+51 987 220 145", openingHours: "Lun-Sáb 07:00-21:00" },
+  { id: "branch_003", organizationId: "org_002", name: "Barranco", status: "ACTIVE", isPrimary: false, address: "Av. Grau 310, Barranco, Lima", phone: null, openingHours: "Lun-Dom 08:00-20:00" },
+  { id: "branch_004", organizationId: "org_003", name: "Barranco", status: "ACTIVE", isPrimary: true, address: "Jr. San Martín 45, Barranco, Lima", phone: "+51 955 410 220", openingHours: "Mar-Dom 12:00-23:00" },
 ];
 
 export const dashboardMemberships: Membership[] = [
@@ -197,20 +198,36 @@ export const dashboardPlans: PlanDefinition[] = [
 ];
 
 export const dashboardSubscriptions: OrganizationSubscription[] = [
-  { id: "sub_001", organizationId: "org_001", planId: "plan_001", status: "TRIAL", currentPeriodStart: "2026-08-18T05:00:00.000Z", currentPeriodEnd: "2026-09-17T04:59:59.000Z", trialEndsAt: "2026-09-17T04:59:59.000Z", cancelAtPeriodEnd: false, createdAt: "2026-08-18T05:00:00.000Z" },
-  { id: "sub_002", organizationId: "org_002", planId: "plan_002", status: "ACTIVE", currentPeriodStart: "2026-08-15T05:00:00.000Z", currentPeriodEnd: "2026-09-15T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-06-15T05:00:00.000Z" },
-  { id: "sub_003", organizationId: "org_003", planId: "plan_001", status: "ACTIVE", currentPeriodStart: "2026-08-01T05:00:00.000Z", currentPeriodEnd: "2026-09-01T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-05-01T05:00:00.000Z" },
+  // Fechas coherentes con el "hoy" del prototipo (oct 2026). Trial de 30 días (SUPPORT.trialDays).
+  { id: "sub_001", organizationId: "org_001", planId: "plan_001", status: "TRIAL", currentPeriodStart: "2026-10-08T05:00:00.000Z", currentPeriodEnd: "2026-11-07T04:59:59.000Z", trialEndsAt: "2026-11-07T04:59:59.000Z", cancelAtPeriodEnd: false, createdAt: "2026-10-08T05:00:00.000Z" },
+  { id: "sub_002", organizationId: "org_002", planId: "plan_002", status: "ACTIVE", currentPeriodStart: "2026-10-15T05:00:00.000Z", currentPeriodEnd: "2026-11-15T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-06-15T05:00:00.000Z" },
+  { id: "sub_003", organizationId: "org_003", planId: "plan_001", status: "ACTIVE", currentPeriodStart: "2026-10-01T05:00:00.000Z", currentPeriodEnd: "2026-11-01T04:59:59.000Z", trialEndsAt: null, cancelAtPeriodEnd: false, createdAt: "2026-05-01T05:00:00.000Z" },
+];
+
+/** Emisor de las facturas de suscripción. TODO(0.2): vendrá de la configuración fiscal del backend. */
+export const ZENTRO_ISSUER = {
+  name: "Zentro S.A.C.",
+  taxId: "RUC 20601849235",
+  address: "Av. Javier Prado Este 550, San Isidro, Lima",
+};
+
+// Montos con IGV 18% incluido: 99.00 = 83.90 + 15.10; 49.00 = 41.53 + 7.47.
+export const dashboardInvoices: OrganizationInvoice[] = [
+  { id: "inv_004", organizationId: "org_003", subscriptionId: "sub_003", number: "INV-0004", seriesNumber: "F001-0004", status: "OPEN", currencyCode: "PEN", subtotalInMinorUnits: 4153, taxInMinorUnits: 747, totalInMinorUnits: 4900, taxLabel: "IGV (18%)", periodStart: "2026-10-01T05:00:00.000Z", periodEnd: "2026-11-01T04:59:59.000Z", issuedAt: "2026-10-01T15:00:00.000Z", dueAt: "2026-10-31T15:00:00.000Z", paidAt: null, paymentMethod: null, notes: "Recuerda pagar antes del vencimiento para evitar la suspensión del servicio.", pdfUrl: null },
+  { id: "inv_003", organizationId: "org_002", subscriptionId: "sub_002", number: "INV-0003", seriesNumber: "F001-0003", status: "PAID", currencyCode: "PEN", subtotalInMinorUnits: 8390, taxInMinorUnits: 1510, totalInMinorUnits: 9900, taxLabel: "IGV (18%)", periodStart: "2026-10-15T05:00:00.000Z", periodEnd: "2026-11-15T04:59:59.000Z", issuedAt: "2026-10-15T15:00:00.000Z", dueAt: "2026-10-22T15:00:00.000Z", paidAt: "2026-10-15T15:05:00.000Z", paymentMethod: "Tarjeta de crédito ···· 4242 (VISA)", notes: "Gracias por tu suscripción. Este comprobante se emitió electrónicamente.", pdfUrl: null },
+  { id: "inv_002", organizationId: "org_002", subscriptionId: "sub_002", number: "INV-0002", seriesNumber: "F001-0002", status: "PAID", currencyCode: "PEN", subtotalInMinorUnits: 8390, taxInMinorUnits: 1510, totalInMinorUnits: 9900, taxLabel: "IGV (18%)", periodStart: "2026-09-15T05:00:00.000Z", periodEnd: "2026-10-15T04:59:59.000Z", issuedAt: "2026-09-15T15:00:00.000Z", dueAt: "2026-09-22T15:00:00.000Z", paidAt: "2026-09-15T15:04:00.000Z", paymentMethod: "Tarjeta de crédito ···· 4242 (VISA)", notes: null, pdfUrl: null },
+  { id: "inv_001", organizationId: "org_003", subscriptionId: "sub_003", number: "INV-0001", seriesNumber: "F001-0001", status: "PAID", currencyCode: "PEN", subtotalInMinorUnits: 4153, taxInMinorUnits: 747, totalInMinorUnits: 4900, taxLabel: "IGV (18%)", periodStart: "2026-09-01T05:00:00.000Z", periodEnd: "2026-10-01T04:59:59.000Z", issuedAt: "2026-09-01T15:00:00.000Z", dueAt: "2026-09-30T15:00:00.000Z", paidAt: "2026-09-10T18:20:00.000Z", paymentMethod: "Yape", notes: null, pdfUrl: null },
 ];
 
 export const dashboardInvitations: OrganizationInvitation[] = [
-  { id: "invite_001", organizationId: "org_004", email: "admin@lasrocas.com", invitedByUserId: "usr_002", roleKey: "MEMBER", roleName: "Miembro", status: "PENDING", createdAt: "2026-09-07T15:00:00.000Z", expiresAt: "2026-09-14T15:00:00.000Z", respondedAt: null },
+  { id: "invite_001", organizationId: "org_004", email: "admin@lasrocas.com", invitedByUserId: "usr_002", roleKey: "MEMBER", roleName: "Miembro", status: "PENDING", createdAt: "2026-10-24T14:30:00.000Z", expiresAt: "2026-10-31T14:30:00.000Z", respondedAt: null },
 ];
 
 export const dashboardNotifications: UserNotification[] = [
   { id: "ntf_001", userId: CURRENT_USER_ID, type: "INVITATION", title: "Nueva invitación", body: "Lucía Torres te invitó a La Fonda del Chef como Miembro.", href: "/dashboard/invitaciones", createdAt: "2026-10-24T14:30:00.000Z", readAt: null },
-  { id: "ntf_002", userId: CURRENT_USER_ID, type: "BILLING", title: "Factura pendiente", body: "Fonda La Abuela tiene la factura INV-0001 por S/ 49.00 por pagar.", href: "/dashboard/suscripciones", createdAt: "2026-10-23T16:00:00.000Z", readAt: null },
+  { id: "ntf_002", userId: CURRENT_USER_ID, type: "BILLING", title: "Factura pendiente", body: "Fonda La Abuela tiene la factura INV-0004 por S/ 49.00 que vence el 31 de octubre.", href: "/dashboard/suscripciones", createdAt: "2026-10-23T16:00:00.000Z", readAt: null },
   { id: "ntf_003", userId: CURRENT_USER_ID, type: "SECURITY", title: "Nuevo inicio de sesión", body: "Se inició sesión desde Chrome en Windows, Lima (aproximada).", href: "/dashboard/cuenta", createdAt: "2026-10-22T09:12:00.000Z", readAt: null },
-  { id: "ntf_004", userId: CURRENT_USER_ID, type: "ORGANIZATION", title: "Prueba por terminar", body: "La prueba gratuita de Las Rocas Restaurante termina en 5 días.", href: "/dashboard/suscripciones", createdAt: "2026-10-20T12:00:00.000Z", readAt: "2026-10-20T18:00:00.000Z" },
+  { id: "ntf_004", userId: CURRENT_USER_ID, type: "ORGANIZATION", title: "Prueba por terminar", body: "La prueba gratuita de Las Rocas Restaurante termina el 6 de noviembre.", href: "/dashboard/suscripciones", createdAt: "2026-10-20T12:00:00.000Z", readAt: "2026-10-20T18:00:00.000Z" },
   { id: "ntf_005", userId: CURRENT_USER_ID, type: "PRODUCT", title: "Novedad en Zentro", body: "Ya puedes publicar tu sitio web desde Presencia digital.", href: null, createdAt: "2026-10-15T10:00:00.000Z", readAt: "2026-10-16T08:00:00.000Z" },
 ];
 
@@ -226,66 +243,3 @@ export const dashboardOnboarding: OnboardingProgress = {
 
 export const getCurrentDashboardUser = () =>
   dashboardUsers.find((user) => user.id === CURRENT_USER_ID)!;
-
-export const getUserOrganizationSummaries = (userId = CURRENT_USER_ID): DashboardOrganizationSummary[] =>
-  dashboardMemberships
-    .filter((membership) => membership.userId === userId && membership.status === "ACTIVE")
-    .map((membership) => {
-      const organization = dashboardOrganizations.find((item) => item.id === membership.organizationId)!;
-      const subscription = dashboardSubscriptions.find((item) => item.organizationId === organization.id)!;
-      const plan = dashboardPlans.find((item) => item.id === subscription.planId)!;
-      return {
-        id: organization.id,
-        name: organization.name,
-        slug: organization.slug,
-        plan: plan.name,
-        role: membership.roleName,
-        status: subscription.status,
-        members: dashboardMemberships.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
-        branches: dashboardBranches.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
-        logoUrl: organization.logoUrl ?? null,
-        coverUrl: organization.coverUrl ?? null,
-      };
-    });
-
-export const getInvitationSummaries = (userId = CURRENT_USER_ID): DashboardInvitationSummary[] => {
-  const user = dashboardUsers.find((item) => item.id === userId)!;
-  return dashboardInvitations
-    .filter((invitation) => invitation.email.toLowerCase() === user.email.toLowerCase())
-    .map((invitation) => ({
-      id: invitation.id,
-      orgName: dashboardOrganizations.find((item) => item.id === invitation.organizationId)!.name,
-      invitedBy: dashboardUsers.find((item) => item.id === invitation.invitedByUserId)!.name,
-      role: invitation.roleName,
-      status: invitation.status,
-      expiresIn: invitation.status === "PENDING" ? "6 días" : undefined,
-      receivedAt: "hace 1 día",
-    }));
-};
-
-export const getPendingInvitationSummaries = (userId = CURRENT_USER_ID) =>
-  getInvitationSummaries(userId).filter((invitation) => invitation.status === "PENDING");
-
-export const getSubscriptionSummaries = (userId = CURRENT_USER_ID): DashboardSubscriptionSummary[] => {
-  const organizationIds = new Set(
-    dashboardMemberships
-      .filter((membership) => membership.userId === userId && membership.status === "ACTIVE")
-      .map((membership) => membership.organizationId),
-  );
-
-  return dashboardSubscriptions
-    .filter((subscription) => organizationIds.has(subscription.organizationId))
-    .map((subscription) => {
-      const organization = dashboardOrganizations.find((item) => item.id === subscription.organizationId)!;
-      const plan = dashboardPlans.find((item) => item.id === subscription.planId)!;
-      return {
-        id: subscription.id,
-        organizationId: organization.id,
-        orgName: organization.name,
-        slug: organization.slug,
-        plan: plan.name,
-        status: subscription.status,
-        nextCharge: new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long", timeZone: organization.timezone }).format(new Date(subscription.currentPeriodEnd)),
-      };
-    });
-};

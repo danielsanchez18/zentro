@@ -32,12 +32,12 @@ export const SEED_TICKETS: SupportTicket[] = [
 export const loadTickets = (): SupportTicket[] => {
   if (typeof window === "undefined") return SEED_TICKETS;
   const raw = window.localStorage.getItem(TICKETS_STORAGE_KEY);
-  if (raw) {
+  if (raw !== null) {
     try {
       const parsed = JSON.parse(raw) as SupportTicket[];
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed)) return parsed;
     } catch {
-      // ignorar datos corruptos y re-seedear
+      // datos corruptos: se vuelve a sembrar
     }
   }
   window.localStorage.setItem(TICKETS_STORAGE_KEY, JSON.stringify(SEED_TICKETS));

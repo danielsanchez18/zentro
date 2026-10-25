@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
+import { Globe } from "lucide-react";
+import { APPS_AVAILABLE, APP_STORE_URLS } from "@/components/landing/shared/apps";
 
 export function Hero() {
   return (
@@ -35,33 +36,28 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="max-lg:hidden w-full max-w-sm ml-auto">
-        <p className="mb-5">Descarga la app en</p>
+      {APPS_AVAILABLE ? (
+        <div className="max-lg:hidden w-full max-w-sm ml-auto">
+          <p className="mb-5">Descarga la app en</p>
 
-        <button className="flex items-center justify-between px-5 py-3.5 border border-b-transparent border-gray-200 hover:border-gray-300 dark:border-neutral-600 dark:border-b-transparent dark:hover:border-neutral-500 transition rounded-t-xl w-full">
-          <div className="flex items-center gap-x-2">
+          <a
+            href={APP_STORE_URLS.appStore}
+            className="flex items-center gap-x-2 px-5 py-3.5 border border-b-transparent border-gray-200 hover:border-gray-300 dark:border-neutral-600 dark:border-b-transparent dark:hover:border-neutral-500 transition rounded-t-xl w-full"
+          >
             <Image
               src="/logos/Logo_AppStore.png"
               alt="Logo App Store"
               width={20}
               height={20}
               className="object-contain"
-              priority
             />
             <p className="text-sm font-semibold text-nowrap">App Store</p>
-          </div>
+          </a>
 
-          <div className="flex items-center gap-x-0.5">
-            <Star className="stroke-0 fill-foreground size-3.5" />
-            <p className="text-[13px] font-semibold text-nowrap">4.9</p>
-            <p className="text-[13px] text-muted-foreground text-nowrap ml-1.5">
-              1.2M reseñas
-            </p>
-          </div>
-        </button>
-
-        <button className="flex items-center justify-between px-5 py-3.5 border border-gray-200 hover:border-gray-300 dark:border-neutral-600 dark:hover:border-neutral-500 transition rounded-b-xl w-full">
-          <div className="flex items-center gap-x-2">
+          <a
+            href={APP_STORE_URLS.googlePlay}
+            className="flex items-center gap-x-2 px-5 py-3.5 border border-gray-200 hover:border-gray-300 dark:border-neutral-600 dark:hover:border-neutral-500 transition rounded-b-xl w-full"
+          >
             <Image
               src="/logos/Logo_GooglePlay.png"
               alt="Logo Google Play"
@@ -70,17 +66,23 @@ export function Hero() {
               className="object-contain"
             />
             <p className="text-sm font-semibold text-nowrap">Google Play</p>
+          </a>
+        </div>
+      ) : (
+        <div className="max-lg:hidden w-full max-w-sm ml-auto">
+          <div className="flex items-center gap-x-3 px-5 py-3.5 border border-gray-200 dark:border-neutral-600 rounded-xl w-full">
+            <Globe className="size-5 text-primary" />
+            <div>
+              <p className="text-sm font-semibold">
+                Disponible desde cualquier navegador
+              </p>
+              <p className="text-[13px] text-muted-foreground">
+                En computadora, tablet o celular. Sin instalar nada.
+              </p>
+            </div>
           </div>
-
-          <div className="flex items-center gap-x-0.5">
-            <Star className="stroke-0 fill-foreground size-3.5" />
-            <p className="text-[13px] font-semibold text-nowrap">4.9</p>
-            <p className="text-[13px] text-muted-foreground text-nowrap ml-1.5">
-              367k reseñas
-            </p>
-          </div>
-        </button>
-      </div>
+        </div>
+      )}
     </section>
   );
 }

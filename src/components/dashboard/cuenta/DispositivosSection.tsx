@@ -4,6 +4,7 @@ import { Laptop, MonitorCheck, Smartphone } from "lucide-react";
 import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 import { SettingsBlock, SettingsRow, btnSecondary } from "@/components/dashboard/cuenta/ui";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { formatRelative } from "@/lib/format/dates";
 
 /** Sesiones activas en otros dispositivos. */
 export const DispositivosSection = () => {
@@ -32,7 +33,7 @@ export const DispositivosSection = () => {
               }
             >
               {session.approximateLocation ?? "Ubicación desconocida"} ·{" "}
-              {session.isCurrent ? "Activa ahora" : "Hace 2 días"}
+              {session.isCurrent ? "Activa ahora" : `Activa ${formatRelative(session.lastActiveAt)}`}
             </SettingsRow>
           </li>
         ))}

@@ -5,7 +5,7 @@ import { CalendarClock, CreditCard } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
-import { getSubscriptionSummaries } from "@/lib/mock/dashboard";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { hubButton, hubChip } from "@/components/dashboard/shared/styles";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,8 @@ import { cn } from "@/lib/utils";
  * TODO(0.2): leer desde `GET /users/me/subscriptions`.
  */
 export const SubscriptionsSummary = () => {
-  const subscriptions = getSubscriptionSummaries();
+  const dashboard = useDashboardStore();
+  const subscriptions = dashboard.getSubscriptionSummaries();
 
   return (
     <section

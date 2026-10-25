@@ -49,6 +49,11 @@ export const ChangePasswordDialog = ({
 
   const handleVerifyCurrent = () => {
     setError("");
+    // TODO(0.2): POST /users/me/password valida en el servidor; aquí el store local.
+    if (useDashboardStore.getState().localPassword !== current) {
+      setError("La contraseña actual es incorrecta.");
+      return;
+    }
     setStep("new");
   };
 

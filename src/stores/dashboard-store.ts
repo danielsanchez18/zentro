@@ -4,6 +4,7 @@ import {
   CURRENT_USER_ID,
   dashboardBranches,
   dashboardInvitations,
+  dashboardInvoices,
   dashboardNotifications,
   dashboardMemberships,
   dashboardOrganizations,
@@ -31,7 +32,10 @@ import type {
   UserIdentity,
   UserSession,
   UserNotification,
+  OrganizationInvoice,
+  DashboardSubscriptionSummary,
 } from "@/types/dashboard";
+import { daysUntil, formatLongDate, formatRelative } from "@/lib/format/dates";
 
 interface DashboardState {
   currentUser: DashboardUser;
@@ -45,6 +49,15 @@ interface DashboardState {
   organizationSetups: OrganizationSetup[];
   invitations: OrganizationInvitation[];
   notifications: UserNotification[];
+  /** Guía de primeros pasos del Hub omitida por el usuario (persistida, no por pestaña). */
+  onboardingSkippedAt: string | null;
+  skipHubOnboarding: () => void;
+  resumeHubOnboarding: () => void;
+  getHubOnboardingSteps: () => Array<{ key: "CREATE_ORGANIZATION" | "COMPLETE_BUSINESS_PROFILE" | "REVIEW_CAPABILITIES"; done: boolean }>;
+  /** Suscripciones de las organizaciones donde el usuario es miembro activo. */
+  getSubscriptionSummaries: () => DashboardSubscriptionSummary[];
+  /** Facturas de esas organizaciones (TODO(0.2): filtrar por permiso de facturación en el servidor). */
+  getInvoices: () => OrganizationInvoice[];
   markNotificationRead: (notificationId: string) => void;
   markAllNotificationsRead: () => void;
   createOrganizationDraft: (input: { name: string; slug: string }) => string;
@@ -90,6 +103,53 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
   })),
   invitations: dashboardInvitations,
   notifications: dashboardNotifications,
+  onboardingSkippedAt: null,
+  skipHubOnboarding: () => set({ onboardingSkippedAt: new Date().toISOString() }),
+  resumeHubOnboarding: () => set({ onboardingSkippedAt: null }),
+  getHubOnboardingSteps: () => {
+    const state = get();
+    const ownedIds = state.memberships
+      .filter((membership) => membership.userId === CURRENT_USER_ID && membership.roleKey === "OWNER" && membership.status === "ACTIVE")
+      .map((membership) => membership.organizationId);
+    const setups = state.organizationSetups.filter((setup) => ownedIds.includes(setup.organizationId));
+    return [
+      { key: "CREATE_ORGANIZATION", done: ownedIds.length > 0 },
+      { key: "COMPLETE_BUSINESS_PROFILE", done: setups.some((setup) => setup.industry !== null) },
+      { key: "REVIEW_CAPABILITIES", done: setups.some((setup) => setup.status === "READY" && setup.capabilities.length > 0) },
+    ];
+  },
+  getSubscriptionSummaries: () => {
+    const state = get();
+    const memberOf = new Set(
+      state.memberships
+        .filter((membership) => membership.userId === CURRENT_USER_ID && membership.status === "ACTIVE")
+        .map((membership) => membership.organizationId),
+    );
+    return dashboardSubscriptions
+      .filter((subscription) => memberOf.has(subscription.organizationId))
+      .map((subscription) => {
+        const organization = state.organizations.find((item) => item.id === subscription.organizationId)!;
+        const plan = dashboardPlans.find((item) => item.id === subscription.planId)!;
+        return {
+          id: subscription.id,
+          organizationId: organization.id,
+          orgName: organization.name,
+          slug: organization.slug,
+          plan: plan.name,
+          status: subscription.status,
+          nextCharge: formatLongDate(subscription.currentPeriodEnd, organization.timezone),
+        };
+      });
+  },
+  getInvoices: () => {
+    const state = get();
+    const memberOf = new Set(
+      state.memberships
+        .filter((membership) => membership.userId === CURRENT_USER_ID && membership.status === "ACTIVE")
+        .map((membership) => membership.organizationId),
+    );
+    return dashboardInvoices.filter((invoice) => memberOf.has(invoice.organizationId));
+  },
   markNotificationRead: (notificationId) =>
     set((state) => ({
       notifications: state.notifications.map((notification) =>
@@ -157,7 +217,7 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
           id: organization.id,
           name: organization.name,
           slug: organization.slug,
-          plan: plan?.name ?? "Sin configurar",
+          plan: plan?.name ?? "Sin plan",
           role: membership.roleName,
           status: subscription?.status ?? "TRIAL",
           members: state.memberships.filter((item) => item.organizationId === organization.id && item.status === "ACTIVE").length,
@@ -227,16 +287,23 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
         orgName: state.organizations.find((organization) => organization.id === invitation.organizationId)?.name ?? "Organización",
         invitedBy: dashboardUsers.find((item) => item.id === invitation.invitedByUserId)?.name ?? "Un miembro",
         role: invitation.roleName,
-        status: invitation.status,
-        expiresIn: invitation.status === "PENDING" ? "6 días" : undefined,
-        receivedAt: "hace 1 día",
+        // Una invitación pendiente cuya fecha ya pasó se muestra como vencida.
+        status:
+          invitation.status === "PENDING" && new Date(invitation.expiresAt).getTime() < Date.now()
+            ? "EXPIRED"
+            : invitation.status,
+        expiresIn:
+          invitation.status === "PENDING"
+            ? `${daysUntil(invitation.expiresAt)} día${daysUntil(invitation.expiresAt) === 1 ? "" : "s"}`
+            : undefined,
+        receivedAt: formatRelative(invitation.createdAt),
       }));
   },
   respondToInvitation: (invitationId, response) => {
     const now = new Date().toISOString();
     set((state) => {
       const invitation = state.invitations.find((item) => item.id === invitationId);
-      if (!invitation || invitation.status !== "PENDING") return state;
+      if (!invitation || invitation.status !== "PENDING" || new Date(invitation.expiresAt).getTime() < Date.now()) return state;
       const alreadyMember = state.memberships.some((membership) => membership.organizationId === invitation.organizationId && membership.userId === CURRENT_USER_ID && membership.status === "ACTIVE");
       return {
         invitations: state.invitations.map((item) => item.id === invitationId ? { ...item, status: response, respondedAt: now } : item),
@@ -297,4 +364,10 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
     set({ localPassword: newPassword });
     return { ok: true };
   },
-}), { name: "zentro-dashboard-mock" }));
+}), {
+  name: "zentro-dashboard-mock",
+  // v2: datos de prueba con fechas coherentes (oct 2026), facturas y guía persistida.
+  // Al cambiar la versión se descarta el estado guardado y se usa la semilla nueva.
+  version: 2,
+  migrate: () => ({}) as DashboardState,
+}));

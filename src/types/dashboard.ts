@@ -179,6 +179,35 @@ export interface UserNotification {
   readAt: string | null;
 }
 
+export type InvoiceStatus = "OPEN" | "PAID" | "VOID";
+
+/**
+ * Factura de Zentro a una organización (cobro de su suscripción).
+ * Montos en unidades menores (céntimos) + currencyCode; fechas ISO 8601.
+ * El impuesto lo calcula el backend / proveedor de facturación electrónica.
+ */
+export interface OrganizationInvoice {
+  id: EntityId;
+  organizationId: EntityId;
+  subscriptionId: EntityId;
+  number: string;
+  seriesNumber: string;
+  status: InvoiceStatus;
+  currencyCode: string;
+  subtotalInMinorUnits: number;
+  taxInMinorUnits: number;
+  totalInMinorUnits: number;
+  taxLabel: string;
+  periodStart: string;
+  periodEnd: string;
+  issuedAt: string;
+  dueAt: string;
+  paidAt: string | null;
+  paymentMethod: string | null;
+  notes: string | null;
+  pdfUrl: string | null;
+}
+
 export interface DashboardOrganizationSummary {
   id: EntityId;
   name: string;

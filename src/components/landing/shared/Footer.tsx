@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
 import { SUPPORT } from "@/lib/content/support";
+import { APPS_AVAILABLE, APP_STORE_URLS } from "@/components/landing/shared/apps";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -82,11 +83,12 @@ export function Footer() {
             </Link>
           </article>
 
+          {APPS_AVAILABLE && (
           <article className="text-sm flex flex-col gap-y-3">
             <h3 className="font-semibold mb-3">Descarga la app</h3>
 
             <Link
-              href=""
+              href={APP_STORE_URLS.appStore}
               className="flex gap-x-2 lg:gap-x-3 rounded-xl py-3 px-3 lg:px-5 pr-8 w-fit bg-card border border-border hover:border-border hover:shadow-xs"
             >
               <Image
@@ -108,7 +110,7 @@ export function Footer() {
             </Link>
 
             <Link
-              href=""
+              href={APP_STORE_URLS.googlePlay}
               className="flex gap-x-2 lg:gap-x-3 rounded-xl py-3 px-3 lg:px-5 pr-8 w-fit bg-card border border-border hover:border-border hover:shadow-xs"
             >
               <Image
@@ -129,6 +131,7 @@ export function Footer() {
               </div>
             </Link>
           </article>
+          )}
         </div>
 
         {/* Privacy and terms */}

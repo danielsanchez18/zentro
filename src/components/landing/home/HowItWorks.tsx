@@ -1,9 +1,11 @@
+import { SUPPORT } from "@/lib/content/support";
+
 const steps = [
   {
     number: "01",
     title: "Crea tu cuenta",
     description:
-      "Regístrate gratis en minutos, sin tarjeta de crédito. Tu organización queda lista con 30 días de prueba.",
+      `Regístrate gratis en minutos, sin tarjeta de crédito. Tu organización queda lista con ${SUPPORT.trialDays} días de prueba.`,
   },
   {
     number: "02",

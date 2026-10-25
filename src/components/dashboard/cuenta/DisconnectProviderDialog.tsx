@@ -16,6 +16,8 @@ interface DisconnectProviderDialogProps {
   onOpenChange: (open: boolean) => void;
   providerName: string;
   onConfirm: () => void;
+  /** Si el usuario conserva el acceso con correo y contraseña. */
+  hasPasswordAccess?: boolean;
 }
 
 export const DisconnectProviderDialog = ({
@@ -23,6 +25,7 @@ export const DisconnectProviderDialog = ({
   onOpenChange,
   providerName,
   onConfirm,
+  hasPasswordAccess = true,
 }: DisconnectProviderDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -30,8 +33,10 @@ export const DisconnectProviderDialog = ({
         <DialogHeader className="sm:px-1">
           <DialogTitle className="font-sans">¿Desconectar {providerName}?</DialogTitle>
           <DialogDescription>
-            Dejarás de poder iniciar sesión con {providerName}. Seguirás
-            teniendo acceso con tu correo y contraseña.
+            Dejarás de poder iniciar sesión con {providerName}.{" "}
+            {hasPasswordAccess
+              ? "Seguirás teniendo acceso con tu correo y contraseña."
+              : "Seguirás teniendo acceso con tus otros métodos conectados."}
           </DialogDescription>
         </DialogHeader>
 

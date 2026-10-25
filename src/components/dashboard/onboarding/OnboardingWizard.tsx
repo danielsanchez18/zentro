@@ -29,8 +29,18 @@ export const OnboardingWizard = ({ organizationId }: { organizationId: string })
     ...EMPTY_MODULES,
     ...Object.fromEntries((setup?.capabilities ?? []).map((key) => [key, true])),
   }));
-  const [locationEnabled, setLocationEnabled] = useState(false);
-  const [locations, setLocations] = useState<LocalData[]>([]);
+  // Al retomar, se precargan las sucursales existentes: guardar el setup las reemplaza.
+  const allBranches = useDashboardStore((state) => state.branches);
+  const existingBranches = allBranches.filter((branch) => branch.organizationId === organizationId);
+  const [locations, setLocations] = useState<LocalData[]>(() =>
+    existingBranches.map((branch) => ({
+      nombre: branch.name,
+      direccion: branch.address ?? "",
+      telefono: branch.phone ?? "",
+      horario: branch.openingHours ?? "",
+    })),
+  );
+  const [locationEnabled, setLocationEnabled] = useState(() => existingBranches.length > 0);
 
   const showLocationStep = Boolean(industry && (RUBROS_BY_CODE[industry].physicalSetupHelpful || selected.ventas || selected.inventario));
   const visibleSteps = useMemo(() => STEPS.filter((item) => item.id !== "local" || showLocationStep), [showLocationStep]);

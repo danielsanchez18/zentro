@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Rocket, Search, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { ContactSection } from "@/components/dashboard/ayuda/ContactSection";
 import { FaqAccordion } from "@/components/dashboard/ayuda/FaqAccordion";
 import { TicketsList } from "@/components/dashboard/ayuda/TicketsList";
@@ -24,8 +25,10 @@ export const AyudaPage = () => {
   const [activeTab, setActiveTab] = useState<TabId>("faq");
   const [query, setQuery] = useState("");
 
+  const resumeHubOnboarding = useDashboardStore((state) => state.resumeHubOnboarding);
+
   const handleReopenOnboarding = () => {
-    sessionStorage.removeItem("zentro-onboarding-skipped");
+    resumeHubOnboarding();
     router.push("/dashboard");
   };
 

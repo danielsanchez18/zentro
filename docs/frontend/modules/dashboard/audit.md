@@ -21,11 +21,18 @@
 
 ### Pendiente funcional
 
-- Abrir el diálogo de nueva organización desde el overview.
-- Persistir aceptación/rechazo de invitaciones.
-- Ejecutar cierre de sesión desde el header y cuenta.
-- Notificaciones aún no tienen entidad ni panel.
-- El tour depende de selectores del DOM y debe probarse tras cambios de layout.
+- El tour depende de selectores del DOM (`data-demo`) y debe probarse tras cambios de layout.
+
+### Resuelto (24/10/2026)
+
+- Nueva organización desde el overview; aceptación/rechazo persistidos en el store.
+- Cierre de sesión con confirmación desde header, menú móvil y cuenta.
+- Notificaciones con entidad propia (`UserNotification`), panel en la campana y estado leído; separadas de invitaciones.
+- Saludo, Primeros pasos y resumen de suscripciones leen del store (antes del mock estático). La guía se deriva de las organizaciones/configuración y su omisión se persiste.
+- Suscripciones y facturas salen de una sola fuente (`dashboardSubscriptions` + `dashboardInvoices`, montos en céntimos y fechas ISO) vía `suscripciones/data.ts`; el uso se calcula con miembros y sucursales.
+- Invitaciones: "recibida" y "expira en" se calculan desde `createdAt`/`expiresAt`; las vencidas se muestran como Expiradas y no se pueden aceptar.
+- Onboarding: precarga las sucursales existentes, así retomar o repetir la configuración no las borra.
+- Datos de prueba con fechas coherentes al "hoy" del prototipo; el store persistido pasó a `version: 2` (descarta datos viejos).
 
 ## Cuenta — auditada
 
