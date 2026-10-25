@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RUBROS, type IndustryCode } from "./constants";
@@ -8,24 +9,20 @@ interface ActivityStepProps {
 }
 
 /**
- * Paso 1 — Selector de rubro/industria.
+ * Paso 1 — Actividad del negocio, con fotos reales del rubro.
  */
 export const ActivityStep = ({ rubro, onSelect }: ActivityStepProps) => {
   return (
-    <section className="space-y-7">
+    <section className="space-y-6">
       <div>
         <h2 className="text-lg font-medium tracking-tight">¿A qué se dedica tu negocio?</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Elige la opción que mejor lo describa. Solo usaremos esta elección para sugerirte capacidades.
+          Elige la opción que mejor lo describa. Solo la usamos para sugerirte capacidades.
         </p>
       </div>
 
-      <div
-        role="list"
-        className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"
-      >
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {RUBROS.map((r) => {
-          const Icon = r.icon;
           const isActive = rubro === r.code;
           const moduleCount = r.suggested.length;
 
@@ -36,43 +33,33 @@ export const ActivityStep = ({ rubro, onSelect }: ActivityStepProps) => {
               aria-pressed={isActive}
               onClick={() => onSelect(r.code)}
               className={cn(
-                "group relative flex flex-col gap-3 rounded-xl border p-4 text-left transition-all duration-200",
-                isActive
-                  ? "border-foreground bg-card"
-                  : "border-border bg-card hover:border-foreground/30"
+                "group flex flex-col overflow-hidden rounded-sm border bg-card p-2 text-left transition-colors",
+                isActive ? "border-hub-accent ring-2 ring-hub-accent/40" : "border-border hover:border-foreground/30",
               )}
             >
-              {isActive && (
-                <span
-                  className="absolute top-3 right-3 flex size-5 items-center justify-center rounded-full bg-foreground text-background"
-                  aria-hidden="true"
-                >
-                  <Check className="size-3.5" strokeWidth={2.5} />
-                </span>
-              )}
-
-              <span className="flex items-center justify-start gap-3">
-                <span
+              <span className="relative block aspect-[16/9] overflow-hidden rounded-(--hub-radius-control) bg-muted">
+                <Image
+                  src={r.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className={cn(
-                    "flex size-10 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                    isActive
-                      ? "border-foreground bg-foreground text-background"
-                      : "border-border bg-muted/40 text-foreground/70"
+                    "object-cover transition-transform duration-500",
+                    isActive ? "scale-105" : "group-hover:scale-105",
                   )}
-                >
-                  <Icon className="size-5" strokeWidth={2} />
-                </span>
+                />
+                {isActive && (
+                  <span className="absolute top-2 right-2 flex size-6 items-center justify-center rounded-full bg-hub-accent text-hub-accent-foreground shadow-sm">
+                    <Check className="size-3.5" strokeWidth={3} />
+                  </span>
+                )}
               </span>
 
-              <span className="text-base font-medium tracking-tight">{r.label}</span>
-              <span className="text-sm leading-relaxed text-muted-foreground">
-                {r.description}
-              </span>
-
-              <span className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="inline-flex items-center rounded-full border border-border bg-muted px-2 py-1 text-xs font-medium text-foreground">
-                  {moduleCount} módulo{moduleCount === 1 ? "" : "s"} recomendado
-                  {moduleCount === 1 ? "" : "s"}
+              <span className="flex flex-1 flex-col px-1.5 pt-3 pb-1">
+                <span className="text-sm font-medium">{r.label}</span>
+                <span className="mt-1 text-sm leading-relaxed text-muted-foreground">{r.description}</span>
+                <span className="mt-3 text-xs text-muted-foreground">
+                  Sugerimos {moduleCount} capacidad{moduleCount === 1 ? "" : "es"}
                 </span>
               </span>
             </button>

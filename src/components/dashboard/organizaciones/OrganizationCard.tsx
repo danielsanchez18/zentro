@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEnterOrganization } from "@/components/dashboard/shared/HubOverlays";
 import {
   ArrowUpRight,
   Copy,
@@ -22,6 +23,8 @@ import {
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import type { Organization } from "@/components/dashboard/organizaciones/types";
+import { hubButton, hubChip } from "@/components/dashboard/shared/styles";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 
 export const getOrganizationHref = (org: Organization) =>
   org.setupStatus === "DRAFT"
@@ -68,7 +71,7 @@ const Logo = ({ org }: { org: Organization }) => (
 );
 
 const Meta = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-flex items-center gap-1.5 rounded-sm bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+  <span className={cn(hubChip, "bg-muted text-muted-foreground")}>
     {children}
   </span>
 );
@@ -85,6 +88,13 @@ export const OrganizationCard = ({
 }: OrganizationCardProps) => {
   const isDraft = org.setupStatus === "DRAFT";
   const href = getOrganizationHref(org);
+  const enterOrganization = useEnterOrganization();
+  // Las organizaciones listas entran con la animación; los borradores van al onboarding.
+  const handleEnter = (event: React.MouseEvent) => {
+    if (isDraft) return;
+    event.preventDefault();
+    enterOrganization({ id: org.id, slug: org.slug, name: org.name });
+  };
 
   return (
     <article
@@ -94,15 +104,13 @@ export const OrganizationCard = ({
       )}
     >
       <div className="relative">
-        <Link href={href} aria-label={`Abrir ${org.name}`} tabIndex={-1}>
+        <Link href={href} onClick={handleEnter} aria-label={`Abrir ${org.name}`} tabIndex={-1}>
           <Cover org={org} />
         </Link>
 
         <div className="absolute top-2 right-2 flex items-center gap-1.5">
           {isDraft ? (
-            <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-800 dark:bg-amber-500/20 dark:text-amber-300">
-              Pendiente
-            </span>
+            <HubStatusChip tone="warning" label="Por configurar" />
           ) : (
             <StatusChip status={org.status} />
           )}
@@ -114,7 +122,7 @@ export const OrganizationCard = ({
               <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem render={<Link href={href} />}>
+              <DropdownMenuItem render={<Link href={href} />} onClick={handleEnter}>
                 <ArrowUpRight />
                 {isDraft ? "Continuar configuración" : "Abrir workspace"}
               </DropdownMenuItem>
@@ -142,7 +150,7 @@ export const OrganizationCard = ({
       </div>
 
       <div className="flex flex-1 flex-col px-3 pt-9 pb-2">
-        <Link href={href} className="w-fit">
+        <Link href={href} onClick={handleEnter} className="w-fit">
           <h3 className="font-heading text-base font-semibold leading-tight hover:underline">
             {org.name}
           </h3>
@@ -165,11 +173,10 @@ export const OrganizationCard = ({
 
       <Link
         href={href}
+        onClick={handleEnter}
         className={cn(
-          "mt-2 flex items-center justify-center gap-1.5 rounded-sm px-2.5 py-1.5 text-sm font-medium transition-colors",
-          isDraft
-            ? "bg-muted text-foreground hover:bg-muted/70"
-            : "bg-foreground text-background hover:bg-foreground/90",
+          "mt-2 w-full",
+          isDraft ? hubButton.secondary : hubButton.primary,
         )}
       >
         {isDraft ? "Continuar configuración" : "Entrar"}

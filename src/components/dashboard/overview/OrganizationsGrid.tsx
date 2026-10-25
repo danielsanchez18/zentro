@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Building2, Plus } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { useTenantStore } from "@/stores/tenant-store";
+import { useEnterOrganization } from "@/components/dashboard/shared/HubOverlays";
 import { NewOrganizationDialog } from "@/components/dashboard/organizaciones/NewOrganizationDialog";
 import { OrganizationCard } from "@/components/dashboard/organizaciones/OrganizationCard";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 const REDIRECT_FLAG = "zentro-hub-redirected";
 /** En el overview se muestran como máximo estas cards; el resto en /organizaciones. */
@@ -20,9 +20,8 @@ const MAX_VISIBLE = 6;
  * TODO(0.2): leer desde `GET /me/memberships?include=organization,subscription`.
  */
 export const OrganizationsGrid = () => {
-  const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const setActiveTenant = useTenantStore((state) => state.setActiveTenant);
+  const enterOrganization = useEnterOrganization();
   const dashboard = useDashboardStore();
   const organizations = dashboard.getOrganizationSummaries();
   const ready = organizations.filter((org) => org.setupStatus !== "DRAFT");
@@ -33,13 +32,8 @@ export const OrganizationsGrid = () => {
   useEffect(() => {
     if (!singleReady || sessionStorage.getItem(REDIRECT_FLAG)) return;
     sessionStorage.setItem(REDIRECT_FLAG, "1");
-    setActiveTenant({
-      orgId: singleReady.id,
-      slug: singleReady.slug,
-      name: singleReady.name,
-    });
-    router.replace(`/app/${singleReady.slug}`);
-  }, [singleReady, router, setActiveTenant]);
+    enterOrganization({ id: singleReady.id, slug: singleReady.slug, name: singleReady.name });
+  }, [singleReady, enterOrganization]);
 
   const visible = organizations.slice(0, MAX_VISIBLE);
 
@@ -64,7 +58,7 @@ export const OrganizationsGrid = () => {
           {organizations.length > MAX_VISIBLE && (
             <Link
               href="/dashboard/organizaciones"
-              className="rounded-sm px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className={hubButton.ghost}
             >
               Ver todas
             </Link>
@@ -72,7 +66,7 @@ export const OrganizationsGrid = () => {
           <button
             type="button"
             onClick={() => setDialogOpen(true)}
-            className="flex items-center rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+            className={hubButton.primary}
           >
             <p>
               Nueva <span className="hidden sm:inline">organización</span>

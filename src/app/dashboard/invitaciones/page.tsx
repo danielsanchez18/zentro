@@ -1,4 +1,10 @@
 import { InvitationsPage } from "@/components/dashboard/invitaciones/InvitationsPage";
+import { hubMetadata } from "@/app/dashboard/metadata";
+
+export const metadata = hubMetadata(
+  "Invitaciones",
+  "Acepta o rechaza las invitaciones para unirte a otras organizaciones.",
+);
 
 export default function InvitacionesPage() {
   return (

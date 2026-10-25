@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Mail, Phone, Upload, UserRound } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { VerifyEmailDialog } from "@/components/dashboard/cuenta/VerifyEmailDialog";
-import { SettingsBlock, SettingsRow, btnPrimary, btnSecondary, chip } from "@/components/dashboard/cuenta/ui";
+import { SettingsBlock, SettingsRow, btnPrimary, btnSecondary } from "@/components/dashboard/cuenta/ui";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { cn } from "@/lib/utils";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 
 export const PerfilSection = () => {
   const { currentUser, updateProfile, verifyEmail } = useDashboardStore();
@@ -50,17 +50,10 @@ export const PerfilSection = () => {
           label={
             <span className="flex flex-wrap items-center gap-2">
               Correo electrónico
-              <span
-                className={cn(
-                  chip,
-                  "h-6 px-2 text-[11px]",
-                  emailVerified
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                    : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400",
-                )}
-              >
-                {emailVerified ? "Verificado" : "Sin verificar"}
-              </span>
+              <HubStatusChip
+                tone={emailVerified ? "success" : "warning"}
+                label={emailVerified ? "Verificado" : "Sin verificar"}
+              />
             </span>
           }
           action={

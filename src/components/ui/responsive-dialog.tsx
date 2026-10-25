@@ -15,7 +15,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
-  Drawer,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -43,10 +42,12 @@ const useDesktop = () => React.useContext(ResponsiveContext)
 
 function ResponsiveDialog(props: React.ComponentProps<typeof Dialog>) {
   const isDesktop = useIsDesktop()
-  const Root = isDesktop ? Dialog : Drawer
+  // La raíz es siempre la misma (Dialog y Drawer comparten el primitivo de
+  // Base UI). Así, al cruzar el breakpoint con el diálogo abierto, solo cambia
+  // el contenido y no se desmonta/reabre todo el componente.
   return (
     <ResponsiveContext.Provider value={isDesktop}>
-      <Root {...props} />
+      <Dialog {...props} />
     </ResponsiveContext.Provider>
   )
 }

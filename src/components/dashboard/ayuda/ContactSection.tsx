@@ -1,5 +1,6 @@
 import { ArrowUpRight, Clock, Mail, MessageCircle, Share2 } from "lucide-react";
 import { SUPPORT } from "@/lib/content/support";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 /** Canales de contacto: misma fuente que la página /contacto de la landing. */
 const CHANNELS = [
@@ -53,7 +54,7 @@ export const ContactSection = () => {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
+            className={hubButton.secondary}
           >
             {link.label}
           </a>

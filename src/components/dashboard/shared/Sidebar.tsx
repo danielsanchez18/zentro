@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/stores/auth-store";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { HubLogo } from "@/components/dashboard/shared/HubLogo";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
@@ -21,14 +19,7 @@ export const usePendingInvitations = () =>
       ).length,
   );
 
-export const useLogout = () => {
-  const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
-  return () => {
-    logout();
-    router.replace("/ingresar");
-  };
-};
+export { useLogout } from "@/components/dashboard/shared/HubOverlays";
 
 /**
  * Sidebar del Hub (desde `lg`). En pantallas menores la navegación vive en
@@ -38,16 +29,16 @@ export const Sidebar = () => {
   const pathname = usePathname();
   const pendingInvitations = usePendingInvitations();
   const user = useDashboardStore((state) => state.currentUser);
-  const handleLogout = useLogout();
 
   return (
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 p-2 pr-0 lg:block">
-      <div className="flex h-full flex-col rounded-md bg-card">
+      <div className="flex h-full flex-col rounded-sm bg-card">
         <div className="px-6 pt-5 pb-4">
           <HubLogo />
         </div>
 
         <nav
+          data-demo="navigation"
           aria-label="Navegación del hub"
           className="flex-1 space-y-5 overflow-y-auto px-3 py-2"
         >
@@ -66,7 +57,7 @@ export const Sidebar = () => {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors",
+                      "flex h-10 items-center gap-3 rounded-(--hub-radius-control) px-3 text-sm font-medium text-muted-foreground transition-colors",
                       active
                         ? "bg-muted text-foreground"
                         : "hover:bg-muted hover:text-foreground",
@@ -77,8 +68,8 @@ export const Sidebar = () => {
                     {count > 0 && (
                       <span
                         className={cn(
-                          "flex h-5 min-w-5 items-center justify-center rounded-lg px-1.5 text-xs font-semibold",
-                          "bg-(--hub-accent) text-(--hub-accent-foreground)",
+                          "flex h-5 min-w-5 items-center justify-center rounded-(--hub-radius-inner) px-1.5 text-xs font-semibold",
+                          "bg-hub-accent text-hub-accent-foreground",
                         )}
                       >
                         {count}

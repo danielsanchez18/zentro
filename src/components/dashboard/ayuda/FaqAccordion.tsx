@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { faqCategories } from "@/components/landing/faq/data";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 /**
  * Preguntas frecuentes del Hub.
@@ -45,10 +46,10 @@ export const FaqAccordion = ({ query }: { query: string }) => {
             aria-selected={categoryId === chip.id}
             onClick={() => setCategoryId(chip.id)}
             className={cn(
-              "rounded-sm px-2.5 py-1.5 text-sm font-medium transition-colors",
+              hubButton.ghost,
               categoryId === chip.id
-                ? "bg-foreground text-background"
-                : "bg-muted text-muted-foreground hover:text-foreground",
+                ? "bg-hub-accent text-hub-accent-foreground"
+                : "bg-muted text-muted-foreground",
             )}
           >
             {chip.label}

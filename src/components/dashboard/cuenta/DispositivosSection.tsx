@@ -1,8 +1,8 @@
 "use client";
 
-import { Laptop, Smartphone } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { SettingsBlock, SettingsRow, btnSecondary, chip } from "@/components/dashboard/cuenta/ui";
+import { Laptop, MonitorCheck, Smartphone } from "lucide-react";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
+import { SettingsBlock, SettingsRow, btnSecondary } from "@/components/dashboard/cuenta/ui";
 import { useDashboardStore } from "@/stores/dashboard-store";
 
 /** Sesiones activas en otros dispositivos. */
@@ -23,7 +23,7 @@ export const DispositivosSection = () => {
               label={`${session.browserName} en ${session.deviceName}`}
               action={
                 session.isCurrent ? (
-                  <span className={cn(chip, "border-border bg-muted text-foreground")}>Esta sesión</span>
+                  <HubStatusChip tone="info" icon={MonitorCheck} label="Esta sesión" />
                 ) : (
                   <button type="button" className={btnSecondary} onClick={() => revokeSession(session.id)}>
                     Cerrar sesión

@@ -5,6 +5,7 @@ import { Check, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toastMsg } from "@/components/ui/toast-message";
 import { dashboardOnboarding } from "@/lib/mock/dashboard";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 /**
  * Primeros pasos (onboarding) — banner del hub.
@@ -64,14 +65,14 @@ export const OnboardingBanner = () => {
           <button
             type="button"
             onClick={handleSkip}
-            className="rounded-sm px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className={hubButton.ghost}
           >
             Omitir
           </button>
           <button
             type="button"
             onClick={handleStartDemo}
-            className="flex items-center gap-1.5 rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70"
+            className={hubButton.secondary}
           >
             <Sparkles className="size-4" />
             Explorar demo
@@ -90,7 +91,7 @@ export const OnboardingBanner = () => {
         {steps.map((step) => (
           <span
             key={step.key}
-            className={cn("h-1.5 flex-1 rounded-full", step.done ? "bg-foreground" : "bg-muted")}
+            className={cn("h-1.5 flex-1 rounded-full", step.done ? "bg-hub-accent" : "bg-muted")}
           />
         ))}
       </div>
@@ -107,7 +108,7 @@ export const OnboardingBanner = () => {
             <span
               className={cn(
                 "flex size-8 shrink-0 items-center justify-center rounded-sm text-sm font-medium",
-                step.done ? "bg-foreground text-background" : "bg-muted text-muted-foreground",
+                step.done ? "bg-hub-accent text-hub-accent-foreground" : "bg-muted text-muted-foreground",
               )}
             >
               {step.done ? <Check className="size-4" /> : index + 1}

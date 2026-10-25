@@ -1,32 +1,18 @@
-import { cn } from "@/lib/utils";
 
 import type { SubscriptionStatus } from "@/types/dashboard";
+import { type HubTone } from "@/components/dashboard/shared/styles";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 
 export type { SubscriptionStatus } from "@/types/dashboard";
 
-const STYLES: Record<SubscriptionStatus, string> = {
-  TRIAL: "bg-primary/10 text-primary",
-  ACTIVE: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  PAST_DUE: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  CANCELED: "bg-muted text-muted-foreground",
-};
-
-const LABELS: Record<SubscriptionStatus, string> = {
-  TRIAL: "Trial",
-  ACTIVE: "Activa",
-  PAST_DUE: "Atrasada",
-  CANCELED: "Cancelada",
+const STATUS: Record<SubscriptionStatus, { label: string; tone: HubTone }> = {
+  TRIAL: { label: "Trial", tone: "info" },
+  ACTIVE: { label: "Activa", tone: "success" },
+  PAST_DUE: { label: "Atrasada", tone: "warning" },
+  CANCELED: { label: "Cancelada", tone: "neutral" },
 };
 
 export const StatusChip = ({ status }: { status: SubscriptionStatus }) => {
-  return (
-    <span
-      className={cn(
-        "flex items-center justify-center rounded-sm px-2.5 h-8 border border-border py-1 text-[13px] font-medium uppercase tracking-wide",
-        STYLES[status],
-      )}
-    >
-      {LABELS[status]}
-    </span>
-  );
+  const { label, tone } = STATUS[status];
+  return <HubStatusChip tone={tone} label={label} />;
 };

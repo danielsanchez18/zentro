@@ -13,6 +13,8 @@ import type {
   Subscription,
 } from "@/components/dashboard/suscripciones/types";
 import { cn } from "@/lib/utils";
+import { formatLongDate } from "@/components/dashboard/suscripciones/format";
+import { hubTabs } from "@/components/dashboard/shared/styles";
 
 // TODO(0.2): leer desde GET /users/me/subscriptions y /users/me/invoices
 const SUBSCRIPTIONS: Subscription[] = [
@@ -258,7 +260,7 @@ export const SubscriptionsPage = () => {
             </h2>
             <p className="text-sm text-muted-foreground">Comprobantes emitidos por Zentro a tus organizaciones.</p>
           </div>
-          <div role="tablist" aria-label="Filtrar facturas" className="flex w-fit gap-1 rounded-sm bg-muted p-1">
+          <div role="tablist" aria-label="Filtrar facturas" className={hubTabs.list}>
             {INVOICE_FILTERS.map((item) => (
               <button
                 key={item.key}
@@ -267,10 +269,10 @@ export const SubscriptionsPage = () => {
                 aria-selected={filter === item.key}
                 onClick={() => setFilter(item.key)}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm font-medium transition-colors",
+                  hubTabs.tab,
                   filter === item.key
-                    ? "bg-card text-foreground shadow-xs"
-                    : "text-muted-foreground hover:text-foreground",
+                    ? hubTabs.active
+                    : hubTabs.idle,
                 )}
               >
                 {item.label}
@@ -321,7 +323,7 @@ export const SubscriptionsPage = () => {
                       <td className="text-nowrap px-3 py-2">
                         <InvoiceStatusChip status={invoice.status} />
                       </td>
-                      <td className="text-nowrap px-3 py-2 text-muted-foreground">{invoice.dueDate}</td>
+                      <td className="text-nowrap px-3 py-2 text-muted-foreground">{formatLongDate(invoice.detail?.dueDateFull ?? invoice.dueDate)}</td>
                       <td className="text-nowrap px-3 py-2 text-right">
                         <DownloadInvoiceButton
                           invoiceNumber={invoice.number}

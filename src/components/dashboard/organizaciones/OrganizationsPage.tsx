@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { OrganizationCard } from "@/components/dashboard/organizaciones/OrganizationCard";
 import { NewOrganizationDialog } from "@/components/dashboard/organizaciones/NewOrganizationDialog";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { hubButton, hubTabs } from "@/components/dashboard/shared/styles";
 
 type Filter = "ALL" | "READY" | "DRAFT";
 
@@ -46,7 +47,7 @@ export const OrganizationsPage = () => {
         <button
           type="button"
           onClick={() => setDialogOpen(true)}
-          className="rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+          className={hubButton.primary}
         >
           Nueva <span className="hidden sm:inline">organización</span>
         </button>
@@ -55,7 +56,7 @@ export const OrganizationsPage = () => {
       <section aria-label="Listado de organizaciones" className="space-y-5 rounded-sm bg-card px-4 py-3">
         {organizations.length > 0 && (
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div role="tablist" aria-label="Filtrar organizaciones" className="flex gap-1 rounded-sm bg-muted p-1">
+            <div role="tablist" aria-label="Filtrar organizaciones" className={hubTabs.list}>
               {filters.map((item) => (
                 <button
                   key={item.key}
@@ -64,10 +65,10 @@ export const OrganizationsPage = () => {
                   aria-selected={filter === item.key}
                   onClick={() => setFilter(item.key)}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm font-medium transition-colors",
+                    hubTabs.tab,
                     filter === item.key
-                      ? "bg-card text-foreground shadow-xs"
-                      : "text-muted-foreground hover:text-foreground",
+                      ? hubTabs.active
+                      : hubTabs.idle,
                   )}
                 >
                   {item.label}
@@ -84,7 +85,7 @@ export const OrganizationsPage = () => {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Buscar por nombre o slug"
-                className="h-9 w-full rounded-sm border border-border bg-card pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/40"
+                className="h-9 w-full rounded-(--hub-radius-control) border border-border bg-card pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/40"
               />
             </label>
           </div>

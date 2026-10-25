@@ -1,101 +1,159 @@
-/* Sobrescrituras de estilos del popover de driver.js para que use
-   los tokens de tema de la aplicación (globals.css) y se vea como un
-   card de shadcn/ui: bg-popover, borde, rounded-xl y botones pill. */
+/* ==========================================================================
+   POPOVER DEL TOUR (driver.js) CON LA LÍNEA DEL HUB
+   Superficie bg-card, radio del Hub, botones de control (h-8, 8px) y acento
+   lima. Usa los tokens de hub.css, disponibles porque <body> tiene .hub-scope.
+   ========================================================================== */
 
 .zentro-driver-popover.driver-popover {
-  background-color: var(--popover);
-  color: var(--popover-foreground);
+  background-color: var(--card);
+  color: var(--card-foreground);
   border: 1px solid var(--border);
-  border-radius: calc(var(--radius) * 1.4);
+  border-radius: calc(var(--radius) * 0.8);
   box-shadow:
-    0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
+    0 24px 48px -12px rgb(0 0 0 / 0.25),
+    0 8px 16px -8px rgb(0 0 0 / 0.12);
   font-family: var(--font-sans);
   padding: 16px;
-  min-width: 260px;
-  max-width: 320px;
+  min-width: 280px;
+  max-width: 340px;
 }
 
 .zentro-driver-popover .driver-popover-arrow {
   display: none;
 }
 
+/* Barra de progreso segmentada (insertada en onPopoverRender) */
+.zentro-tour-progress {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding-right: 28px;
+}
+
+.zentro-tour-progress span {
+  flex: 1;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: var(--muted);
+}
+
+.zentro-tour-progress span[data-done="true"] {
+  background-color: var(--hub-accent, var(--foreground));
+}
+
 .zentro-driver-popover .driver-popover-title {
-  font-family: var(--font-heading);
-  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-sans);
+  font-size: 16px;
   font-weight: 500;
-  line-height: 1.4;
-  color: var(--popover-foreground);
+  line-height: 1.35;
+  color: var(--card-foreground);
+}
+
+.zentro-tour-eyebrow {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
 }
 
 .zentro-driver-popover .driver-popover-description {
+  margin-top: 6px;
   font-size: 14px;
-  font-weight: 400;
   line-height: 1.5;
   color: var(--muted-foreground);
 }
 
+.zentro-driver-popover .driver-popover-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  align-items: center;
+}
+
 .zentro-driver-popover .driver-popover-progress-text {
   color: var(--muted-foreground);
-  font-size: 13px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .zentro-driver-popover .driver-popover-close-btn {
-  color: var(--muted-foreground);
+  top: 10px;
+  right: 10px;
   width: 28px;
-  height: 24px;
-  font-size: 15px;
+  height: 28px;
+  border-radius: var(--hub-radius-inner, 6px);
+  color: var(--muted-foreground);
+  font-size: 16px;
 }
+
 .zentro-driver-popover .driver-popover-close-btn:hover,
-.zentro-driver-popover .driver-popover-close-btn:focus {
+.zentro-driver-popover .driver-popover-close-btn:focus-visible {
+  background-color: var(--muted);
   color: var(--foreground);
+}
+
+.zentro-driver-popover .driver-popover-navigation-btns {
+  gap: 6px;
 }
 
 .zentro-driver-popover .driver-popover-footer-btn {
   all: unset;
   box-sizing: border-box;
-  cursor: pointer;
-  border-radius: 9999px;
-  padding: 5px 14px;
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--hub-radius-control, 8px);
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.4;
-  border: 1px solid transparent;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Botón principal (Siguiente / Finalizar) */
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:last-child {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-}
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:last-child:hover,
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:last-child:focus {
-  background-color: color-mix(in oklab, var(--primary) 88%, black);
+.zentro-driver-popover .driver-popover-footer-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
-/* Botón secundario (Anterior) */
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:first-child {
-  background-color: transparent;
-  color: var(--foreground);
-  border-color: var(--border);
+/* Siguiente / Terminar: principal lima */
+.zentro-driver-popover .driver-popover-next-btn {
+  background-color: var(--hub-accent, var(--primary));
+  color: var(--hub-accent-foreground, var(--primary-foreground));
 }
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:first-child:hover,
-.zentro-driver-popover
-  .driver-popover-navigation-btns
-  .driver-popover-footer-btn:first-child:focus {
+
+.zentro-driver-popover .driver-popover-next-btn:hover {
+  background-color: color-mix(in srgb, var(--hub-accent, var(--primary)) 85%, transparent);
+}
+
+/* Atrás: secundario gris */
+.zentro-driver-popover .driver-popover-prev-btn {
   background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.zentro-driver-popover .driver-popover-prev-btn:hover {
+  background-color: color-mix(in srgb, var(--muted) 70%, var(--border));
+}
+
+.zentro-driver-popover .driver-popover-btn-disabled {
+  display: none !important;
+}
+
+/* Elemento resaltado: borde lima suave alrededor */
+.driver-active-element {
+  outline: 2px solid color-mix(in srgb, var(--hub-accent, #91e62f) 70%, transparent);
+  outline-offset: 4px;
+  border-radius: calc(var(--radius) * 0.6);
+}
+
+@media (max-width: 640px) {
+  .zentro-driver-popover.driver-popover {
+    min-width: 0;
+    max-width: calc(100vw - 32px);
+  }
 }

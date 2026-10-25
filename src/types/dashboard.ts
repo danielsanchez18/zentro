@@ -160,6 +160,25 @@ export interface OrganizationSetup {
   updatedAt: string;
 }
 
+/**
+ * Notificación personal del Hub. Es distinta de una invitación: una invitación
+ * es una acción pendiente (aceptar/rechazar); una notificación es un aviso que
+ * se lee. Una invitación nueva puede generar una notificación que enlaza a ella.
+ */
+export type NotificationType = "INVITATION" | "BILLING" | "SECURITY" | "ORGANIZATION" | "PRODUCT";
+
+export interface UserNotification {
+  id: EntityId;
+  userId: EntityId;
+  type: NotificationType;
+  title: string;
+  body: string;
+  /** Ruta interna a la que lleva la notificación (opcional). */
+  href: string | null;
+  createdAt: string;
+  readAt: string | null;
+}
+
 export interface DashboardOrganizationSummary {
   id: EntityId;
   name: string;

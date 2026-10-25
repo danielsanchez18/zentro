@@ -13,6 +13,7 @@ import type {
   UserIdentity,
   UserSession,
   NotificationPreference,
+ UserNotification,
 } from "@/types/dashboard";
 
 export const CURRENT_USER_ID = "usr_001";
@@ -203,6 +204,14 @@ export const dashboardSubscriptions: OrganizationSubscription[] = [
 
 export const dashboardInvitations: OrganizationInvitation[] = [
   { id: "invite_001", organizationId: "org_004", email: "admin@lasrocas.com", invitedByUserId: "usr_002", roleKey: "MEMBER", roleName: "Miembro", status: "PENDING", createdAt: "2026-09-07T15:00:00.000Z", expiresAt: "2026-09-14T15:00:00.000Z", respondedAt: null },
+];
+
+export const dashboardNotifications: UserNotification[] = [
+  { id: "ntf_001", userId: CURRENT_USER_ID, type: "INVITATION", title: "Nueva invitación", body: "Lucía Torres te invitó a La Fonda del Chef como Miembro.", href: "/dashboard/invitaciones", createdAt: "2026-10-24T14:30:00.000Z", readAt: null },
+  { id: "ntf_002", userId: CURRENT_USER_ID, type: "BILLING", title: "Factura pendiente", body: "Fonda La Abuela tiene la factura INV-0001 por S/ 49.00 por pagar.", href: "/dashboard/suscripciones", createdAt: "2026-10-23T16:00:00.000Z", readAt: null },
+  { id: "ntf_003", userId: CURRENT_USER_ID, type: "SECURITY", title: "Nuevo inicio de sesión", body: "Se inició sesión desde Chrome en Windows, Lima (aproximada).", href: "/dashboard/cuenta", createdAt: "2026-10-22T09:12:00.000Z", readAt: null },
+  { id: "ntf_004", userId: CURRENT_USER_ID, type: "ORGANIZATION", title: "Prueba por terminar", body: "La prueba gratuita de Las Rocas Restaurante termina en 5 días.", href: "/dashboard/suscripciones", createdAt: "2026-10-20T12:00:00.000Z", readAt: "2026-10-20T18:00:00.000Z" },
+  { id: "ntf_005", userId: CURRENT_USER_ID, type: "PRODUCT", title: "Novedad en Zentro", body: "Ya puedes publicar tu sitio web desde Presencia digital.", href: null, createdAt: "2026-10-15T10:00:00.000Z", readAt: "2026-10-16T08:00:00.000Z" },
 ];
 
 export const dashboardOnboarding: OnboardingProgress = {

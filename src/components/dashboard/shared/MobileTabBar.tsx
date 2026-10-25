@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { HUB_NAV_ITEMS, isNavItemActive } from "@/components/dashboard/shared/nav";
 import { useLogout, usePendingInvitations } from "@/components/dashboard/shared/Sidebar";
+import { hubMenuItem } from "@/components/dashboard/shared/styles";
 
 /** Las 4 secciones de uso frecuente van en la barra; el resto en "Más". */
 const PRIMARY_HREFS = [
@@ -25,7 +26,7 @@ const PRIMARY_HREFS = [
 
 const tabClass = (active: boolean) =>
   cn(
-    "relative flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[0.7rem] font-medium transition-colors",
+    "relative flex flex-1 flex-col items-center gap-1 rounded-(--hub-radius-control) py-1.5 text-[0.7rem] font-medium transition-colors",
     active ? "text-foreground" : "text-muted-foreground",
   );
 
@@ -42,6 +43,7 @@ export const MobileTabBar = () => {
 
   return (
     <nav
+      data-demo="navigation"
       aria-label="Navegación del hub"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
     >
@@ -51,10 +53,10 @@ export const MobileTabBar = () => {
           const count = item.badge === "invitations" ? pendingInvitations : 0;
           return (
             <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={tabClass(active)}>
-              <span className={cn("relative flex h-7 w-12 items-center justify-center rounded-full transition-colors", active && "bg-foreground text-background")}>
+              <span className={cn("relative flex h-7 w-12 items-center justify-center rounded-full transition-colors", active && "bg-hub-accent text-hub-accent-foreground")}>
                 <item.icon className="size-4.5" />
                 {count > 0 && (
-                  <span className="absolute -top-1 right-1 flex size-4 items-center justify-center rounded-full bg-(--hub-accent) text-[0.6rem] font-semibold text-(--hub-accent-foreground) ring-2 ring-card">
+                  <span className="absolute -top-1 right-1 flex size-4 items-center justify-center rounded-full bg-hub-accent text-[0.6rem] font-semibold text-hub-accent-foreground ring-2 ring-card">
                     {count}
                   </span>
                 )}
@@ -66,7 +68,7 @@ export const MobileTabBar = () => {
 
         <Drawer>
           <DrawerTrigger className={tabClass(moreActive)}>
-            <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", moreActive && "bg-foreground text-background")}>
+            <span className={cn("flex h-7 w-12 items-center justify-center rounded-full", moreActive && "bg-hub-accent text-hub-accent-foreground")}>
               <MoreHorizontal className="size-4.5" />
             </span>
             Más
@@ -79,9 +81,10 @@ export const MobileTabBar = () => {
               {secondary.map((item) => (
                 <DrawerClose
                   key={item.href}
+                  nativeButton={false}
                   render={<Link href={item.href} />}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-muted",
+                    hubMenuItem,
                     isNavItemActive(item.href, pathname) && "bg-muted",
                   )}
                 >
@@ -92,7 +95,7 @@ export const MobileTabBar = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-destructive hover:bg-muted"
+                className={cn(hubMenuItem, "text-destructive")}
               >
                 <LogOut className="size-5" />
                 Cerrar sesión

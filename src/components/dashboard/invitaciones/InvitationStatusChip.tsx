@@ -1,35 +1,16 @@
-import { cn } from "@/lib/utils";
+import { type HubTone } from "@/components/dashboard/shared/styles";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 import type { InvitationStatus } from "@/components/dashboard/invitaciones/types";
 
-const STYLES: Record<InvitationStatus, string> = {
-  PENDING: "bg-primary/10 text-primary",
-  ACCEPTED: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  DECLINED: "bg-muted text-muted-foreground",
-  EXPIRED: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  REVOKED: "bg-muted text-muted-foreground",
+const STATUS: Record<InvitationStatus, { label: string; tone: HubTone }> = {
+  PENDING: { label: "Pendiente", tone: "warning" },
+  ACCEPTED: { label: "Aceptada", tone: "success" },
+  DECLINED: { label: "Rechazada", tone: "neutral" },
+  EXPIRED: { label: "Expirada", tone: "warning" },
+  REVOKED: { label: "Revocada", tone: "neutral" },
 };
 
-const LABELS: Record<InvitationStatus, string> = {
-  PENDING: "Pendiente",
-  ACCEPTED: "Aceptada",
-  DECLINED: "Rechazada",
-  EXPIRED: "Expirada",
-  REVOKED: "Revocada",
-};
-
-export const InvitationStatusChip = ({
-  status,
-}: {
-  status: InvitationStatus;
-}) => {
-  return (
-    <span
-      className={cn(
-        "flex h-8 items-center justify-center rounded-sm border border-border px-2.5 py-1 text-[13px] font-medium uppercase tracking-wide",
-        STYLES[status],
-      )}
-    >
-      {LABELS[status]}
-    </span>
-  );
+export const InvitationStatusChip = ({ status }: { status: InvitationStatus }) => {
+  const { label, tone } = STATUS[status];
+  return <HubStatusChip tone={tone} label={label} />;
 };

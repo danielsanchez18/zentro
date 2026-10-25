@@ -37,7 +37,7 @@ export const StepProgress = ({ step, steps = STEPS }: StepProgressProps) => {
                 className={cn(
                   "flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-200",
                   isCompleted
-                    ? "bg-foreground border-foreground text-background"
+                    ? "bg-hub-accent border-hub-accent text-hub-accent-foreground"
                     : isActive
                       ? "border-foreground text-foreground"
                       : "border-border bg-background text-muted-foreground"
@@ -75,7 +75,7 @@ export const StepProgress = ({ step, steps = STEPS }: StepProgressProps) => {
                   <span
                     className={cn(
                       "block h-full bg-border",
-                      isCompleted && "bg-foreground transition-colors duration-300"
+                      isCompleted && "bg-hub-accent transition-colors duration-300"
                     )}
                   />
                 </span>

@@ -30,6 +30,8 @@ export interface Rubro {
   label: string;
   description: string;
   icon: LucideIcon;
+  /** Foto real del rubro (mismas imágenes que "Casos de uso" en la landing). */
+  image: string;
   suggested: ModuleKey[];
   physicalSetupHelpful: boolean;
 }
@@ -146,6 +148,7 @@ export const RUBROS: Rubro[] = [
     label: "Restaurante / Café / Bar",
     description: "Negocio de comidas y bebidas para servir en el local o para llevar.",
     icon: Utensils,
+    image: "/images/casos-de-uso/industrias/restaurantes.webp",
     suggested: ["ventas", "catalogo", "clientes"],
     physicalSetupHelpful: true,
   },
@@ -154,6 +157,7 @@ export const RUBROS: Rubro[] = [
     label: "Retail / Tienda",
     description: "Venta de productos físicos al por menor, con stock por controlar.",
     icon: ShoppingBag,
+    image: "/images/casos-de-uso/industrias/retail.webp",
     suggested: ["ventas", "catalogo", "clientes", "inventario"],
     physicalSetupHelpful: true,
   },
@@ -162,6 +166,7 @@ export const RUBROS: Rubro[] = [
     label: "Servicio profesional",
     description: "Consultorías, agencias o servicios por hora o por proyecto.",
     icon: Briefcase,
+    image: "/images/casos-de-uso/industrias/servicios.webp",
     suggested: ["clientes", "finanzas"],
     physicalSetupHelpful: false,
   },
@@ -170,6 +175,7 @@ export const RUBROS: Rubro[] = [
     label: "Salud y bienestar",
     description: "Clínicas, spas o centros deportivos que atienden por turnos.",
     icon: HeartPulse,
+    image: "/images/casos-de-uso/negocios/centro-estetica.webp",
     suggested: ["clientes", "ventas", "inventario"],
     physicalSetupHelpful: true,
   },
@@ -178,6 +184,7 @@ export const RUBROS: Rubro[] = [
     label: "Otro",
     description: "Un giro distinto. Adaptaremos los módulos a tu caso.",
     icon: Sparkles,
+    image: "/images/casos-de-uso/industrias/omnicanal.webp",
     suggested: ["catalogo", "clientes"],
     physicalSetupHelpful: false,
   },

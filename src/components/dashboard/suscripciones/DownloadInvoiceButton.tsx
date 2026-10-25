@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { toastMsg } from "@/components/ui/toast-message";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 interface DownloadInvoiceButtonProps {
   invoiceNumber: string;
   invoiceId: string;
   pdfUrl?: string;
+  /** "primary" en el detalle de factura; "secondary" en la tabla. */
+  tone?: "primary" | "secondary";
 }
 
 export const DownloadInvoiceButton = ({
   invoiceNumber,
   invoiceId,
   pdfUrl,
+  tone = "secondary",
 }: DownloadInvoiceButtonProps) => {
   const [downloading, setDownloading] = useState(false);
 
@@ -43,25 +46,23 @@ export const DownloadInvoiceButton = ({
   };
 
   return (
-    <Button
+    <button
       type="button"
-      variant="ghost"
-      size="sm"
-      className="h-fit rounded-sm bg-muted px-2.5 py-1.5 text-sm hover:bg-muted/70"
+      className={hubButton[tone]}
       onClick={handleDownload}
       disabled={downloading}
     >
       {downloading ? (
         <>
-          <Loader2 className="size-3.5 animate-spin" />
+          <Loader2 className="animate-spin" />
           Descargando
         </>
       ) : (
         <>
-          <Download className="size-3.5" />
+          <Download />
           Descargar
         </>
       )}
-    </Button>
+    </button>
   );
 };

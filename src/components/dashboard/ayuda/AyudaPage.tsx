@@ -8,6 +8,7 @@ import { ContactSection } from "@/components/dashboard/ayuda/ContactSection";
 import { FaqAccordion } from "@/components/dashboard/ayuda/FaqAccordion";
 import { TicketsList } from "@/components/dashboard/ayuda/TicketsList";
 import { SupportForm } from "@/components/dashboard/ayuda/SupportForm";
+import { hubButton, hubTabs } from "@/components/dashboard/shared/styles";
 
 const TABS = [
   { id: "faq", label: "Preguntas frecuentes" },
@@ -53,7 +54,7 @@ export const AyudaPage = () => {
               setActiveTab("faq");
             }}
             placeholder="Buscar en preguntas frecuentes…"
-            className="h-10 w-full rounded-sm border border-border bg-card pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/40"
+            className="h-9 w-full rounded-(--hub-radius-control) border border-border bg-card pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/40"
           />
         </label>
       </div>
@@ -74,14 +75,14 @@ export const AyudaPage = () => {
           <button
             type="button"
             onClick={handleReopenOnboarding}
-            className="rounded-sm px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className={hubButton.ghost}
           >
             Reabrir guía
           </button>
           <button
             type="button"
             onClick={handleStartDemo}
-            className="flex items-center gap-1.5 rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
+            className={hubButton.secondary}
           >
             <Sparkles className="size-4" />
             Explorar demo
@@ -93,7 +94,7 @@ export const AyudaPage = () => {
         <div
           role="tablist"
           aria-label="Secciones de ayuda"
-          className="-mx-1 flex gap-1 overflow-x-auto px-1 sm:mx-0 sm:w-fit sm:rounded-sm sm:bg-muted sm:p-1"
+          className={hubTabs.list}
         >
           {TABS.map((tab) => (
             <button
@@ -103,10 +104,10 @@ export const AyudaPage = () => {
               aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "shrink-0 rounded-sm px-2.5 py-1 text-sm font-medium whitespace-nowrap transition-colors",
+                hubTabs.tab,
                 activeTab === tab.id
-                  ? "bg-foreground text-background sm:bg-card sm:text-foreground sm:shadow-xs"
-                  : "bg-muted text-muted-foreground hover:text-foreground sm:bg-transparent",
+                  ? hubTabs.active
+                  : hubTabs.idle,
               )}
             >
               {tab.label}

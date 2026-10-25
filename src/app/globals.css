@@ -35,6 +35,10 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  /* Acento del Hub: el valor solo existe dentro de .hub-scope (app/dashboard/hub.css),
+     así que bg-hub-accent / text-hub-accent únicamente pintan en /dashboard. */
+  --color-hub-accent: var(--hub-accent);
+  --color-hub-accent-foreground: var(--hub-accent-foreground);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);

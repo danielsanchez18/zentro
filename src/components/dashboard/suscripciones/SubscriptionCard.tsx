@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import type { Subscription } from "@/components/dashboard/suscripciones/types";
+import { hubButton, hubChip } from "@/components/dashboard/shared/styles";
 
 const METRICS = [
   { key: "users", label: "Usuarios" },
@@ -50,7 +51,7 @@ export const SubscriptionCard = ({ subscription }: { subscription: Subscription 
               </div>
               <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
-                  className={cn("h-full rounded-full", percentage >= 100 ? "bg-amber-500" : "bg-foreground")}
+                  className={cn("h-full rounded-full", percentage >= 100 ? "bg-amber-500" : "bg-hub-accent")}
                   style={{ width: `${percentage}%` }}
                 />
               </div>
@@ -60,13 +61,13 @@ export const SubscriptionCard = ({ subscription }: { subscription: Subscription 
       </ul>
 
       <div className="mt-auto flex items-center gap-1.5">
-        <span className="mr-auto inline-flex h-8 items-center gap-1.5 rounded-sm bg-muted px-2.5 text-[13px] font-medium text-muted-foreground">
+        <span className={cn(hubChip, "mr-auto bg-muted text-muted-foreground")}>
           <CalendarClock className="size-3.5" />
           {subscription.nextCharge}
         </span>
         <Link
           href={`/app/${subscription.slug}/configuracion/facturacion`}
-          className="rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+          className={hubButton.primary}
         >
           Gestionar
         </Link>

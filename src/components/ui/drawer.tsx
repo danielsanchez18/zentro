@@ -22,29 +22,68 @@ function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
 }
 
+/** Distancia (px) que hay que arrastrar para cerrar/contraer o expandir. */
 const CLOSE_THRESHOLD = 80
+const EXPAND_THRESHOLD = 50
+/** Alto máximo al expandir, como fracción del alto de la ventana. */
+const EXPANDED_RATIO = 0.95
 
 function DrawerContent({
   className,
   children,
+  style,
   ...props
 }: DrawerPrimitive.Popup.Props) {
   const closeRef = React.useRef<HTMLButtonElement>(null)
-  const [dragY, setDragY] = React.useState(0)
+  const popupRef = React.useRef<HTMLDivElement>(null)
+  const [expanded, setExpanded] = React.useState(false)
+  // Arrastre activo: desplazamiento vertical (negativo = hacia arriba) y alto inicial.
+  const [drag, setDrag] = React.useState<{ dy: number; startHeight: number } | null>(null)
   const startY = React.useRef<number | null>(null)
+  // El último desplazamiento se guarda en una ref: al soltar no hay que
+  // depender de un render intermedio para leerlo.
+  const lastDy = React.useRef(0)
 
   const onPointerDown = (event: React.PointerEvent) => {
     startY.current = event.clientY
+    lastDy.current = 0
+    setDrag({ dy: 0, startHeight: popupRef.current?.offsetHeight ?? 0 })
     event.currentTarget.setPointerCapture(event.pointerId)
   }
   const onPointerMove = (event: React.PointerEvent) => {
     if (startY.current === null) return
-    setDragY(Math.max(0, event.clientY - startY.current))
+    const dy = event.clientY - startY.current
+    lastDy.current = dy
+    setDrag((current) => (current ? { ...current, dy } : current))
   }
   const onPointerUp = () => {
-    if (dragY > CLOSE_THRESHOLD) closeRef.current?.click()
+    if (startY.current === null) return
+    const dy = lastDy.current
+    if (dy < -EXPAND_THRESHOLD) {
+      setExpanded(true)
+    } else if (dy > CLOSE_THRESHOLD) {
+      if (expanded) setExpanded(false)
+      else closeRef.current?.click()
+    }
     startY.current = null
-    setDragY(0)
+    setDrag(null)
+  }
+
+  // Estilo según el estado: arrastrando hacia arriba crece en vivo;
+  // hacia abajo se desplaza; expandido ocupa casi toda la pantalla.
+  const maxHeight = `${EXPANDED_RATIO * 100}dvh`
+  let dynamicStyle: React.CSSProperties | undefined
+  if (drag && drag.dy < 0) {
+    const limit = typeof window === "undefined" ? drag.startHeight : window.innerHeight * EXPANDED_RATIO
+    dynamicStyle = { height: Math.min(drag.startHeight - drag.dy, limit), maxHeight, transition: "none" }
+  } else if (drag && drag.dy > 0) {
+    dynamicStyle = {
+      ...(expanded && { height: maxHeight, maxHeight }),
+      transform: `translateY(${drag.dy}px)`,
+      transition: "none",
+    }
+  } else if (expanded) {
+    dynamicStyle = { height: maxHeight, maxHeight }
   }
 
   return (
@@ -54,25 +93,28 @@ function DrawerContent({
         className="fixed inset-0 z-50 bg-black/30 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs"
       />
       <DrawerPrimitive.Popup
+        ref={popupRef}
         data-slot="drawer-content"
-        style={dragY ? { transform: `translateY(${dragY}px)`, transition: "none" } : undefined}
+        data-expanded={expanded || undefined}
+        style={{ ...(style as React.CSSProperties), ...dynamicStyle }}
         className={cn(
-          "fixed inset-x-0 bottom-0 z-50 flex max-h-[85dvh] flex-col rounded-t-3xl border-t border-border bg-card text-card-foreground shadow-2xl outline-none transition-transform duration-300 ease-out data-ending-style:translate-y-full data-starting-style:translate-y-full pb-[env(safe-area-inset-bottom)]",
+          "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-h-[70dvh] flex-col rounded-t-3xl border-t border-border bg-card text-card-foreground shadow-2xl outline-none transition-[transform,height,max-height] duration-300 ease-out data-ending-style:translate-y-full data-starting-style:translate-y-full pb-[env(safe-area-inset-bottom)]",
           className
         )}
         {...props}
       >
         <div
-          className="flex shrink-0 cursor-grab touch-none justify-center pt-3 pb-2 active:cursor-grabbing"
+          className="flex shrink-0 cursor-grab touch-none justify-center pt-3 pb-3 active:cursor-grabbing"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
           aria-hidden="true"
+          title={expanded ? "Arrastra hacia abajo para contraer" : "Arrastra hacia arriba para expandir"}
         >
           <div className="h-1.5 w-12 rounded-full bg-muted-foreground/30" />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</div>
         <DrawerPrimitive.Close ref={closeRef} className="sr-only">
           Cerrar
         </DrawerPrimitive.Close>

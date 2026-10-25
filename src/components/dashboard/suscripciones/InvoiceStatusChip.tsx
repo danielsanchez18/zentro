@@ -1,27 +1,14 @@
-import { cn } from "@/lib/utils";
+import { type HubTone } from "@/components/dashboard/shared/styles";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 import type { InvoiceStatus } from "@/components/dashboard/suscripciones/types";
 
-const STYLES: Record<InvoiceStatus, string> = {
-  PAID: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-  OPEN: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  VOID: "bg-muted text-muted-foreground",
-};
-
-const LABELS: Record<InvoiceStatus, string> = {
-  PAID: "Pagada",
-  OPEN: "Pendiente",
-  VOID: "Anulada",
+const STATUS: Record<InvoiceStatus, { label: string; tone: HubTone }> = {
+  PAID: { label: "Pagada", tone: "success" },
+  OPEN: { label: "Pendiente", tone: "warning" },
+  VOID: { label: "Anulada", tone: "neutral" },
 };
 
 export const InvoiceStatusChip = ({ status }: { status: InvoiceStatus }) => {
-  return (
-    <span
-      className={cn(
-        "inline-flex h-8 items-center justify-center rounded-sm border border-border px-2.5 py-1 text-[13px] font-medium uppercase tracking-wide",
-        STYLES[status],
-      )}
-    >
-      {LABELS[status]}
-    </span>
-  );
+  const { label, tone } = STATUS[status];
+  return <HubStatusChip tone={tone} label={label} />;
 };

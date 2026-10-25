@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, CreditCard, LogOut, UserRound } from "lucide-react";
+import { CreditCard, LogOut, UserRound } from "lucide-react";
 import { ThemeToggle } from "@/components/dashboard/shared/ThemeToggle";
 import {
   DropdownMenu,
@@ -21,13 +21,13 @@ import {
 } from "@/components/ui/drawer";
 import { useIsDesktop } from "@/hooks/use-media-query";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { NotificationsMenu } from "@/components/dashboard/shared/NotificationsMenu";
 import { HubLogo } from "@/components/dashboard/shared/HubLogo";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
 import { getActiveNavItem } from "@/components/dashboard/shared/nav";
-import {
-  useLogout,
-  usePendingInvitations,
-} from "@/components/dashboard/shared/Sidebar";
+import { useLogout } from "@/components/dashboard/shared/Sidebar";
+import { hubMenuItem } from "@/components/dashboard/shared/styles";
+import { cn } from "@/lib/utils";
 
 const ACCOUNT_LINKS = [
   { href: "/dashboard/cuenta", label: "Mi cuenta", icon: UserRound },
@@ -52,6 +52,7 @@ const AccountMenu = () => {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger
+          data-demo="account"
           aria-label="Menú de cuenta"
           className="cursor-pointer rounded-full"
         >
@@ -91,7 +92,8 @@ const AccountMenu = () => {
   return (
     <Drawer>
       <DrawerTrigger
-        aria-label="Menú de cuenta"
+        data-demo="account"
+          aria-label="Menú de cuenta"
         className="cursor-pointer rounded-full"
       >
         {trigger}
@@ -110,8 +112,9 @@ const AccountMenu = () => {
           {ACCOUNT_LINKS.map((link) => (
             <DrawerClose
               key={link.href}
+              nativeButton={false}
               render={<Link href={link.href} />}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-muted"
+              className={hubMenuItem}
             >
               <link.icon className="size-5 text-muted-foreground" />
               {link.label}
@@ -120,7 +123,7 @@ const AccountMenu = () => {
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-destructive hover:bg-muted"
+            className={cn(hubMenuItem, "text-destructive")}
           >
             <LogOut className="size-5" />
             Cerrar sesión
@@ -133,7 +136,6 @@ const AccountMenu = () => {
 
 export const Header = () => {
   const pathname = usePathname();
-  const pendingInvitations = usePendingInvitations();
   const current = getActiveNavItem(pathname);
 
   return (
@@ -147,22 +149,7 @@ export const Header = () => {
 
           <div className="ml-auto flex items-center gap-1.5">
             <ThemeToggle />
-            <Link
-              href="/dashboard/invitaciones"
-              aria-label={
-                pendingInvitations > 0
-                  ? "Notificaciones: tienes novedades sin leer"
-                  : "Notificaciones"
-              }
-              className="relative flex size-10 items-center justify-center rounded-sm bg-muted text-foreground transition-colors hover:bg-muted"
-            >
-              <Bell className="size-4.5" />
-              {/* Notificaciones: solo un punto de "sin leer"; el número vive en Invitaciones.
-                  TODO(0.2): usar el conteo real cuando exista la entidad de notificaciones. */}
-              {pendingInvitations > 0 && (
-                <span className="absolute top-2 right-2 size-2.5 rounded-full bg-(--hub-accent) ring-2 ring-muted" />
-              )}
-            </Link>
+            <NotificationsMenu />
             <AccountMenu />
           </div>
         </div>

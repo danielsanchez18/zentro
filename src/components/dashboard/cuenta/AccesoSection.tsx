@@ -2,10 +2,10 @@
 
 import { Apple, Globe, KeyRound, Users } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 import { toastMsg } from "@/components/ui/toast-message";
 import { DisconnectProviderDialog } from "@/components/dashboard/cuenta/DisconnectProviderDialog";
-import { SettingsBlock, SettingsRow, btnPrimary, btnSecondary, chip } from "@/components/dashboard/cuenta/ui";
+import { SettingsBlock, SettingsRow, btnPrimary, btnSecondary } from "@/components/dashboard/cuenta/ui";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import type { IdentityProvider, UserIdentity } from "@/types/dashboard";
 
@@ -47,16 +47,10 @@ export const AccesoSection = () => {
                 label={provider.name}
                 action={
                   <>
-                    <span
-                      className={cn(
-                        chip,
-                        connected
-                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                          : "border-border bg-muted text-muted-foreground",
-                      )}
-                    >
-                      {connected ? "Conectado" : "No conectado"}
-                    </span>
+                    <HubStatusChip
+                      tone={connected ? "success" : "neutral"}
+                      label={connected ? "Conectado" : "No conectado"}
+                    />
                     {identity.provider !== "PASSWORD" &&
                       (connected ? (
                         <button type="button" className={btnSecondary} onClick={() => setPendingIdentity(identity)}>

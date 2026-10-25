@@ -6,6 +6,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { StatusChip } from "@/components/dashboard/overview/StatusChip";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
 import { getSubscriptionSummaries } from "@/lib/mock/dashboard";
+import { hubButton, hubChip } from "@/components/dashboard/shared/styles";
+import { cn } from "@/lib/utils";
 
 /**
  * Resumen de suscripciones (solo lectura).
@@ -31,7 +33,7 @@ export const SubscriptionsSummary = () => {
         </div>
         <Link
           href="/dashboard/suscripciones"
-          className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70"
+          className={hubButton.secondary}
         >
           Ver todas
         </Link>
@@ -61,7 +63,7 @@ export const SubscriptionsSummary = () => {
                 </div>
                 <StatusChip status={subscription.status} />
               </div>
-              <span className="inline-flex h-8 w-fit items-center gap-1.5 rounded-sm bg-muted px-2.5 text-[13px] font-medium text-muted-foreground">
+              <span className={cn(hubChip, "bg-muted text-muted-foreground")}>
                 <CalendarClock className="size-3.5" />
                 Próximo cobro: {subscription.nextCharge}
               </span>

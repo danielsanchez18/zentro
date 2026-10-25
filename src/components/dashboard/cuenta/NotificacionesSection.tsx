@@ -31,7 +31,7 @@ const Switch = ({ checked, onChange, label, disabled = false }: SwitchProps) => 
       onClick={() => onChange(!checked)}
       className={cn(
         "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors",
-        checked ? "bg-foreground" : "bg-muted-foreground/30",
+        checked ? "bg-hub-accent" : "bg-muted-foreground/30",
         disabled && "cursor-not-allowed opacity-60",
       )}
     >

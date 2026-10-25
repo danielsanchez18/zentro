@@ -1,15 +1,12 @@
 import { cn } from "@/lib/utils";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 /** Piezas visuales compartidas por las secciones de Mi cuenta. */
 
-export const btnPrimary =
-  "inline-flex items-center gap-1.5 rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:pointer-events-none disabled:opacity-50";
+export const btnPrimary = hubButton.primary;
 
-export const btnSecondary =
-  "inline-flex items-center gap-1.5 rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70 disabled:pointer-events-none disabled:opacity-50";
+export const btnSecondary = hubButton.secondary;
 
-export const chip =
-  "inline-flex h-8 items-center gap-1.5 rounded-sm border px-2.5 text-[13px] font-medium uppercase tracking-wide";
 
 /** Bloque de una sección: título + descripción + contenido. */
 export const SettingsBlock = ({

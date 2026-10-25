@@ -6,6 +6,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { toastMsg } from "@/components/ui/toast-message";
 import { CompanyIcon } from "@/components/dashboard/shared/icons";
+import { hubButton, hubChip } from "@/components/dashboard/shared/styles";
+import { cn } from "@/lib/utils";
 
 /**
  * Invitaciones pendientes del usuario.
@@ -41,7 +43,7 @@ export const InvitationsList = () => {
         </div>
         <Link
           href="/dashboard/invitaciones"
-          className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70"
+          className={hubButton.secondary}
         >
           Ver historial
         </Link>
@@ -76,21 +78,21 @@ export const InvitationsList = () => {
               </div>
 
               <div className="flex w-full items-center gap-1.5 sm:w-auto">
-                <span className="mr-auto inline-flex h-8 items-center gap-1.5 rounded-sm bg-muted px-2.5 text-[13px] font-medium text-muted-foreground sm:mr-2">
+                <span className={cn(hubChip, "mr-auto bg-muted text-muted-foreground sm:mr-2")}>
                   <Clock3 className="size-3.5" />
                   Expira en {invitation.expiresIn}
                 </span>
                 <button
                   type="button"
                   onClick={() => respond(invitation.id, "DECLINED")}
-                  className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/70"
+                  className={hubButton.secondary}
                 >
                   Rechazar
                 </button>
                 <button
                   type="button"
                   onClick={() => respond(invitation.id, "ACCEPTED")}
-                  className="rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+                  className={hubButton.primary}
                 >
                   Aceptar
                 </button>

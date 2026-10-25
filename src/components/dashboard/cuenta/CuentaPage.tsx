@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Bell, LogOut, MonitorSmartphone, ShieldCheck, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/stores/auth-store";
+import { useLogout } from "@/components/dashboard/shared/HubOverlays";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
 import { PerfilSection } from "@/components/dashboard/cuenta/PerfilSection";
@@ -12,6 +11,7 @@ import { SeguridadSection } from "@/components/dashboard/cuenta/SeguridadSection
 import { DispositivosSection } from "@/components/dashboard/cuenta/DispositivosSection";
 import { NotificacionesSection } from "@/components/dashboard/cuenta/NotificacionesSection";
 import { btnSecondary } from "@/components/dashboard/cuenta/ui";
+import { hubTabs } from "@/components/dashboard/shared/styles";
 
 /**
  * Mi cuenta — ordenada de lo más consultado a lo menos:
@@ -33,13 +33,7 @@ type TabId = (typeof TABS)[number]["id"];
 export const CuentaPage = () => {
   const [activeTab, setActiveTab] = useState<TabId>("perfil");
   const user = useDashboardStore((state) => state.currentUser);
-  const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
-
-  const handleLogout = () => {
-    logout();
-    router.replace("/ingresar");
-  };
+  const handleLogout = useLogout();
 
   return (
     <div className="space-y-2">
@@ -59,7 +53,7 @@ export const CuentaPage = () => {
         <div
           role="tablist"
           aria-label="Secciones de tu cuenta"
-          className="-mx-1 flex gap-1 overflow-x-auto px-1 sm:mx-0 sm:w-fit sm:rounded-sm sm:bg-muted sm:p-1"
+          className={hubTabs.list}
         >
           {TABS.map((tab) => (
             <button
@@ -69,10 +63,10 @@ export const CuentaPage = () => {
               aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex shrink-0 items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm font-medium whitespace-nowrap transition-colors",
+                hubTabs.tab,
                 activeTab === tab.id
-                  ? "bg-foreground text-background sm:bg-card sm:text-foreground sm:shadow-xs"
-                  : "bg-muted text-muted-foreground hover:text-foreground sm:bg-transparent",
+                  ? hubTabs.active
+                  : hubTabs.idle,
               )}
             >
               <tab.icon className="size-4" />

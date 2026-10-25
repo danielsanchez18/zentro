@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { InvitationCard } from "@/components/dashboard/invitaciones/InvitationCard";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { toastMsg } from "@/components/ui/toast-message";
+import { hubTabs } from "@/components/dashboard/shared/styles";
 
 type Tab = "PENDING" | "HISTORY";
 
@@ -43,7 +44,7 @@ export const InvitationsPage = () => {
       </div>
 
       <section aria-label="Listado de invitaciones" className="space-y-5 rounded-sm bg-card px-4 py-3">
-        <div role="tablist" aria-label="Filtrar invitaciones" className="flex w-fit gap-1 rounded-sm bg-muted p-1">
+        <div role="tablist" aria-label="Filtrar invitaciones" className={hubTabs.list}>
           {tabs.map((item) => (
             <button
               key={item.key}
@@ -52,10 +53,10 @@ export const InvitationsPage = () => {
               aria-selected={tab === item.key}
               onClick={() => setTab(item.key)}
               className={cn(
-                "flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm font-medium transition-colors",
+                hubTabs.tab,
                 tab === item.key
-                  ? "bg-card text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground",
+                  ? hubTabs.active
+                  : hubTabs.idle,
               )}
             >
               {item.label}

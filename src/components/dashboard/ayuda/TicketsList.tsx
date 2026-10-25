@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { MessagesSquare } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
-import { cn } from "@/lib/utils";
 import {
   loadTickets,
   SEED_TICKETS,
@@ -12,19 +11,21 @@ import type {
   SupportTicket,
   TicketStatus,
 } from "@/components/dashboard/ayuda/types";
+import { type HubTone } from "@/components/dashboard/shared/styles";
+import { HubStatusChip } from "@/components/dashboard/shared/HubStatusChip";
 
-const STATUS_META: Record<TicketStatus, { label: string; className: string }> = {
+const STATUS_META: Record<TicketStatus, { label: string; tone: HubTone }> = {
   OPEN: {
     label: "Abierto",
-    className: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+    tone: "warning",
   },
   IN_PROGRESS: {
     label: "En progreso",
-    className: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
+    tone: "info",
   },
   RESOLVED: {
     label: "Resuelto",
-    className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+    tone: "success",
   },
 };
 
@@ -73,14 +74,7 @@ export const TicketsList = () => {
                     <span className="font-mono text-sm font-medium">
                       {ticket.reference}
                     </span>
-                    <span
-                      className={cn(
-                        "flex h-8 items-center rounded-sm border border-border px-2.5 py-1 text-[13px] font-medium uppercase tracking-wide",
-                        status.className,
-                      )}
-                    >
-                      {status.label}
-                    </span>
+                    <HubStatusChip tone={status.tone} label={status.label} />
                   </div>
                   <span className="text-sm text-muted-foreground">
                     {formatDate(ticket.createdAt)}

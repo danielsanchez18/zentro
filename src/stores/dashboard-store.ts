@@ -4,6 +4,7 @@ import {
   CURRENT_USER_ID,
   dashboardBranches,
   dashboardInvitations,
+  dashboardNotifications,
   dashboardMemberships,
   dashboardOrganizations,
   dashboardPlans,
@@ -29,6 +30,7 @@ import type {
   NotificationPreferenceKey,
   UserIdentity,
   UserSession,
+  UserNotification,
 } from "@/types/dashboard";
 
 interface DashboardState {
@@ -42,13 +44,17 @@ interface DashboardState {
   branches: OrganizationBranch[];
   organizationSetups: OrganizationSetup[];
   invitations: OrganizationInvitation[];
+  notifications: UserNotification[];
+  markNotificationRead: (notificationId: string) => void;
+  markAllNotificationsRead: () => void;
   createOrganizationDraft: (input: { name: string; slug: string }) => string;
   isSlugAvailable: (slug: string) => boolean;
   getOrganizationSummaries: () => DashboardOrganizationSummary[];
   saveOrganizationSetup: (organizationId: string, input: {
     industry: BusinessIndustry;
     capabilities: CapabilityKey[];
-    branch: { enabled: boolean; name: string; address: string; phone: string; openingHours: string };
+    /** Ubicaciones definidas en el onboarding; vacío = organización sin sucursales. */
+    branches: Array<{ name: string; address: string; phone: string; openingHours: string }>;
     complete: boolean;
   }) => void;
   skipOrganizationSetup: (organizationId: string) => void;
@@ -83,6 +89,21 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
     updatedAt: organization.updatedAt,
   })),
   invitations: dashboardInvitations,
+  notifications: dashboardNotifications,
+  markNotificationRead: (notificationId) =>
+    set((state) => ({
+      notifications: state.notifications.map((notification) =>
+        notification.id === notificationId && !notification.readAt
+          ? { ...notification, readAt: new Date().toISOString() }
+          : notification,
+      ),
+    })),
+  markAllNotificationsRead: () =>
+    set((state) => ({
+      notifications: state.notifications.map((notification) =>
+        notification.readAt ? notification : { ...notification, readAt: new Date().toISOString() },
+      ),
+    })),
   isSlugAvailable: (slug) =>
     !get().organizations.some((organization) => organization.slug === slug),
   createOrganizationDraft: ({ name, slug }) => {
@@ -150,28 +171,23 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
   saveOrganizationSetup: (organizationId, input) => {
     const now = new Date().toISOString();
     set((state) => {
-      const existingBranch = state.branches.find((branch) => branch.organizationId === organizationId);
-      let branches = state.branches;
-      if (input.branch.enabled && input.branch.name.trim()) {
-        branches = existingBranch
-          ? state.branches.map((branch) => branch.id === existingBranch.id ? {
-              ...branch,
-              name: input.branch.name.trim(),
-              address: input.branch.address.trim() || null,
-              phone: input.branch.phone.trim() || null,
-              openingHours: input.branch.openingHours.trim() || null,
-            } : branch)
-          : [...state.branches, {
-              id: `branch_local_${Date.now()}`,
-              organizationId,
-              name: input.branch.name.trim(),
-              status: "ACTIVE" as const,
-              isPrimary: true,
-              address: input.branch.address.trim() || null,
-              phone: input.branch.phone.trim() || null,
-              openingHours: input.branch.openingHours.trim() || null,
-            }];
-      }
+      // Las ubicaciones del onboarding reemplazan a las de la organización; la primera es la principal.
+      const stamp = Date.now();
+      const branches = [
+        ...state.branches.filter((branch) => branch.organizationId !== organizationId),
+        ...input.branches
+          .filter((branch) => branch.name.trim())
+          .map((branch, index) => ({
+            id: `branch_local_${stamp}_${index}`,
+            organizationId,
+            name: branch.name.trim(),
+            status: "ACTIVE" as const,
+            isPrimary: index === 0,
+            address: branch.address.trim() || null,
+            phone: branch.phone.trim() || null,
+            openingHours: branch.openingHours.trim() || null,
+          })),
+      ];
       return {
         branches,
         organizations: state.organizations.map((organization) =>

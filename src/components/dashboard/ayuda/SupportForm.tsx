@@ -16,6 +16,7 @@ import { toastMsg } from "@/components/ui/toast-message";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { saveTicket } from "@/components/dashboard/ayuda/tickets";
 import type { SupportTicket } from "@/components/dashboard/ayuda/types";
+import { hubButton } from "@/components/dashboard/shared/styles";
 
 const CATEGORIES = ["Duda", "Consulta", "Reclamo", "Soporte técnico"] as const;
 
@@ -95,7 +96,7 @@ export const SupportForm = () => {
           <button
             type="button"
             onClick={handleReset}
-            className="rounded-sm bg-muted px-2.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted/70"
+            className={hubButton.secondary}
           >
             Enviar otro mensaje
           </button>
@@ -216,7 +217,7 @@ export const SupportForm = () => {
           <Button
             type="submit"
             disabled={sending || !subject.trim() || !message.trim()}
-            className="h-fit rounded-sm bg-foreground px-2.5 py-1.5 text-sm font-medium text-background hover:bg-foreground/90"
+            className={hubButton.primary}
           >
             {sending && <Loader2 className="size-4 animate-spin" />}
             {sending ? "Enviando…" : "Enviar mensaje"}
