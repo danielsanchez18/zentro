@@ -109,13 +109,8 @@ export function ForgotPassword() {
 
     setResending(true);
     try {
-      const { devCode } = await forgotPasswordService(email);
-      showInfo(
-        "Código reenviado",
-        devCode
-          ? `En desarrollo el código es ${devCode}.`
-          : `Te enviamos un nuevo código a ${email}.`,
-      );
+      await forgotPasswordService(email);
+      showInfo("Código reenviado", `Te enviamos un nuevo código a ${email}.`);
       startCooldown();
     } catch (err: unknown) {
       const message =

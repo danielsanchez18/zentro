@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import { useAuthStore } from "@/stores/auth-store";
 import { NotificationsMenu } from "@/components/dashboard/shared/NotificationsMenu";
 import { HubLogo } from "@/components/dashboard/shared/HubLogo";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
@@ -28,11 +28,11 @@ const ACCOUNT_LINKS = [
 ];
 
 const AccountMenu = () => {
-  const user = useDashboardStore((state) => state.currentUser);
+  const user = useAuthStore((state) => state.user)!;
   const handleLogout = useLogout();
   const trigger = (
     <span className="flex size-10 items-center justify-center rounded-full">
-      <UserAvatar name={user.name} />
+      <UserAvatar name={user.name} src={user.avatarUrl} />
     </span>
   );
 

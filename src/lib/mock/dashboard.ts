@@ -11,10 +11,7 @@ import type {
   OrganizationBranch,
   OrganizationSubscription,
   PlanDefinition,
-  UserIdentity,
-  UserSession,
-  NotificationPreference,
- UserNotification,
+  UserNotification,
 } from "@/types/dashboard";
 
 export const CURRENT_USER_ID = "usr_001";
@@ -46,82 +43,6 @@ export const dashboardUsers: DashboardUser[] = [
     createdAt: "2026-07-01T14:00:00.000Z",
     updatedAt: "2026-07-01T15:00:00.000Z",
   },
-];
-
-export const userIdentities: UserIdentity[] = [
-  {
-    id: "identity_001",
-    userId: CURRENT_USER_ID,
-    provider: "PASSWORD",
-    providerAccountId: null,
-    status: "ACTIVE",
-    connectedAt: "2026-07-30T14:00:00.000Z",
-    lastUsedAt: "2026-09-08T20:00:00.000Z",
-  },
-  {
-    id: "identity_002",
-    userId: CURRENT_USER_ID,
-    provider: "GOOGLE",
-    providerAccountId: "google_001",
-    status: "ACTIVE",
-    connectedAt: "2026-08-02T14:00:00.000Z",
-    lastUsedAt: "2026-08-20T16:00:00.000Z",
-  },
-  {
-    id: "identity_003",
-    userId: CURRENT_USER_ID,
-    provider: "FACEBOOK",
-    providerAccountId: null,
-    status: "DISCONNECTED",
-    connectedAt: "2026-08-02T14:00:00.000Z",
-    lastUsedAt: null,
-  },
-  {
-    id: "identity_004",
-    userId: CURRENT_USER_ID,
-    provider: "APPLE",
-    providerAccountId: null,
-    status: "DISCONNECTED",
-    connectedAt: "2026-08-02T14:00:00.000Z",
-    lastUsedAt: null,
-  },
-];
-
-export const userSessions: UserSession[] = [
-  {
-    id: "session_001",
-    userId: CURRENT_USER_ID,
-    deviceType: "DESKTOP",
-    deviceName: "Windows",
-    browserName: "Chrome",
-    approximateLocation: "Lima, Perú",
-    ipAddress: "192.0.2.10",
-    isCurrent: true,
-    createdAt: "2026-10-22T09:12:00.000Z",
-    lastActiveAt: "2026-10-24T13:00:00.000Z",
-    revokedAt: null,
-  },
-  {
-    id: "session_002",
-    userId: CURRENT_USER_ID,
-    deviceType: "MOBILE",
-    deviceName: "iPhone",
-    browserName: "Safari",
-    approximateLocation: "Lima, Perú",
-    ipAddress: "192.0.2.20",
-    isCurrent: false,
-    createdAt: "2026-10-01T14:00:00.000Z",
-    lastActiveAt: "2026-10-20T18:00:00.000Z",
-    revokedAt: null,
-  },
-];
-
-export const notificationPreferences: NotificationPreference[] = [
-  { userId: CURRENT_USER_ID, key: "INVITATIONS", emailEnabled: true, inAppEnabled: true, required: false },
-  { userId: CURRENT_USER_ID, key: "BILLING", emailEnabled: true, inAppEnabled: true, required: false },
-  { userId: CURRENT_USER_ID, key: "RECOVERY", emailEnabled: true, inAppEnabled: true, required: true },
-  { userId: CURRENT_USER_ID, key: "SECURITY", emailEnabled: true, inAppEnabled: true, required: true },
-  { userId: CURRENT_USER_ID, key: "PRODUCT_UPDATES", emailEnabled: false, inAppEnabled: false, required: false },
 ];
 
 export const dashboardOrganizations: DashboardOrganization[] = [

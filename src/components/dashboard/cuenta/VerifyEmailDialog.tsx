@@ -16,7 +16,10 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { MOCK_EMAIL_VERIFICATION_CODE } from "@/lib/mock/data";
+import { toastMsg } from "@/components/ui/toast-message";
+import { errorMessage } from "@/components/dashboard/cuenta/ui";
+import { sendEmailVerification } from "@/lib/services/account.service";
+import { useAccountStore } from "@/stores/account-store";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
@@ -24,21 +27,18 @@ interface VerifyEmailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   email: string;
-  onVerified: () => void;
 }
 
-export const VerifyEmailDialog = ({
-  open,
-  onOpenChange,
-  email,
-  onVerified,
-}: VerifyEmailDialogProps) => {
+/** Al abrirse envía el código (POST /users/me/email-verification) y lo confirma. */
+export const VerifyEmailDialog = ({ open, onOpenChange, email }: VerifyEmailDialogProps) => {
+  const confirmEmail = useAccountStore((state) => state.confirmEmail);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sentRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -46,16 +46,8 @@ export const VerifyEmailDialog = ({
     };
   }, []);
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    if (!nextOpen) {
-      setCode("");
-      setError("");
-      setVerifying(false);
-    }
-    onOpenChange(nextOpen);
-  };
-
   const startCooldown = () => {
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
     setCooldown(RESEND_COOLDOWN_SECONDS);
     cooldownRef.current = setInterval(() => {
       setCooldown((c) => {
@@ -69,33 +61,58 @@ export const VerifyEmailDialog = ({
     }, 1000);
   };
 
-  // TODO(0.2): POST /users/me/verify-email/confirm y /users/me/verify-email (reenvío)
-  const handleVerify = () => {
+  const sendCode = async () => {
+    setResending(true);
+    setError("");
+    try {
+      await sendEmailVerification();
+      startCooldown();
+    } catch (err) {
+      setError(errorMessage(err, "No pudimos enviar el código."));
+    } finally {
+      setResending(false);
+    }
+  };
+
+  // Primer envío al abrir; los reenvíos respetan el cooldown.
+  useEffect(() => {
+    if (open && !sentRef.current) {
+      sentRef.current = true;
+      void sendCode();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setCode("");
+      setError("");
+      setVerifying(false);
+    }
+    onOpenChange(nextOpen);
+  };
+
+  const handleVerify = async () => {
     setError("");
     if (code.length !== 6) {
       setError("Ingresa el código completo de 6 dígitos.");
       return;
     }
-    if (code !== MOCK_EMAIL_VERIFICATION_CODE) {
-      setError("El código no es correcto. Revisa tu correo.");
-      return;
-    }
     setVerifying(true);
-    setTimeout(() => {
-      setVerifying(false);
-      onVerified();
+    try {
+      await confirmEmail(code);
+      toastMsg.success("Correo verificado", `${email} quedó verificado.`);
       handleOpenChange(false);
-    }, 600);
+    } catch (err) {
+      setError(errorMessage(err, "El código no es correcto."));
+    } finally {
+      setVerifying(false);
+    }
   };
 
   const handleResend = () => {
     if (resending || cooldown > 0) return;
-    setResending(true);
-    setError("");
-    setTimeout(() => {
-      setResending(false);
-      startCooldown();
-    }, 600);
+    void sendCode();
   };
 
   return (
@@ -162,7 +179,7 @@ export const VerifyEmailDialog = ({
             Cancelar
           </Button>
           <Button
-            onClick={handleVerify}
+            onClick={() => void handleVerify()}
             disabled={verifying}
             className="h-fit rounded-full px-3 py-1.5 text-sm"
           >

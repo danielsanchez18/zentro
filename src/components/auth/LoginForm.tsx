@@ -83,8 +83,10 @@ export function LoginForm() {
     if (!emailParam || !password) return;
 
     try {
-      await login(emailParam, password);
-      router.push("/dashboard");
+      const { challenge } = await login(emailParam, password);
+      router.push(
+        challenge ? `/ingresar/verificacion?challenge=${encodeURIComponent(challenge)}` : "/dashboard",
+      );
     } catch (err: unknown) {
       const message =
         err && typeof err === "object" && "message" in err

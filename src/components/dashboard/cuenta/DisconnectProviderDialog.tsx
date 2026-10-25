@@ -40,7 +40,7 @@ export const DisconnectProviderDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex items-start gap-2 rounded-lg bg-amber-500/10 px-3 py-2 my-1 text-sm text-amber-700 dark:text-amber-400">
+        <div className="flex items-start gap-2 rounded-sm bg-amber-500/10 px-3 py-2 my-1 text-sm text-amber-700 dark:text-amber-400">
           <TriangleAlert className="mt-0.5 size-4 shrink-0" />
           <span>Esta acción no elimina tu cuenta, solo quita el acceso con {providerName}.</span>
         </div>

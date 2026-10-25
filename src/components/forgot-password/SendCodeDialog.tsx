@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2, Lock } from "lucide-react";
 import { forgotPasswordService } from "@/lib/services/auth.service";
-import { showError, showInfo, showSuccess } from "@/components/ui/toast-message";
+import { showError, showSuccess } from "@/components/ui/toast-message";
 
 interface SendCodeDialogProps {
   email: string;
@@ -28,17 +28,10 @@ export function SendCodeDialog({ email }: SendCodeDialogProps) {
 
     setSending(true);
     try {
-      const { devCode } = await forgotPasswordService(email);
+      await forgotPasswordService(email);
 
       setOpen(false);
-      showSuccess("Código enviado", `Te enviamos un código a ${email}.`);
-      if (devCode) {
-        showInfo(
-          "Código de prueba",
-          `En desarrollo el código es ${devCode}. Míralo también en la consola del backend.`,
-          6000,
-        );
-      }
+      showSuccess("Código enviado", `Te enviamos un código a ${email}. Revisa tu bandeja y la carpeta de spam.`);
       router.push(`/forgot-password?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       const message =

@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRequireAuth } from '@/hooks/use-require-auth';
+import { useAuthStore } from '@/stores/auth-store';
+import { useDashboardStore } from '@/stores/dashboard-store';
 import { Header } from '@/components/dashboard/shared/Header';
 import { Sidebar } from '@/components/dashboard/shared/Sidebar';
 import { MobileTabBar } from '@/components/dashboard/shared/MobileTabBar';
@@ -17,6 +19,21 @@ import './hub.css';
  */
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { checking } = useRequireAuth();
+  const authUser = useAuthStore((state) => state.user);
+
+  // El Hub muestra el usuario real de la sesión. Los datos de organizaciones,
+  // suscripciones, etc. siguen siendo de ejemplo hasta conectar sus endpoints.
+  useEffect(() => {
+    if (!authUser) return;
+    useDashboardStore.setState((state) => ({
+      currentUser: {
+        ...state.currentUser,
+        name: authUser.name,
+        email: authUser.email,
+        emailVerifiedAt: authUser.emailVerifiedAt,
+      },
+    }));
+  }, [authUser]);
 
   // Diálogos, drawers y menús se renderizan en un portal dentro de <body>,
   // fuera de este árbol. Marcamos <body> mientras el Hub está montado para

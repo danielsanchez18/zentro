@@ -1,6 +1,66 @@
-import { Button } from "@/components/ui/button";
+"use client";
 
+import { GoogleIcon } from "@/components/auth/GoogleIcon";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { showError } from "@/components/ui/toast-message";
+import { API_URL, apiRequest } from "@/lib/api/client";
+
+// APPLE (pausado): Sign in with Apple aún no se implementa; descomentar para activarlo.
+type Provider = "google"; // | "apple"
+
+/** Mensajes para los errores que devuelve el callback de OAuth (`?oauthError=`). */
+const OAUTH_ERRORS: Record<string, [string, string]> = {
+  cancelled: ["Inicio de sesión cancelado", "No se completó el acceso con el proveedor."],
+  email_missing: [
+    "Falta tu correo",
+    "El proveedor no compartió tu correo. Autoriza el permiso de correo o usa otro método.",
+  ],
+  email_unverified: [
+    "Correo sin verificar",
+    "Verifica tu correo en el proveedor o inicia sesión con tu contraseña.",
+  ],
+  failed: ["No pudimos iniciar sesión", "Inténtalo de nuevo en unos segundos."],
+};
+
+// APPLE (pausado)
+// const AppleIcon = () => (
+//   <svg className="size-4.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+//     <path d="M16.37 12.6c-.02-2.27 1.86-3.36 1.94-3.41-1.06-1.55-2.7-1.76-3.28-1.78-1.4-.14-2.73.82-3.44.82-.71 0-1.8-.8-2.96-.78-1.52.02-2.93.89-3.71 2.25-1.58 2.74-.4 6.8 1.14 9.02.75 1.09 1.65 2.31 2.82 2.27 1.13-.05 1.56-.73 2.93-.73 1.37 0 1.75.73 2.95.71 1.22-.02 1.99-1.11 2.73-2.2.86-1.26 1.22-2.49 1.24-2.55-.03-.01-2.37-.91-2.4-3.62zM14.12 5.94c.62-.76 1.04-1.81.93-2.86-.9.04-1.99.6-2.63 1.35-.58.67-1.08 1.74-.95 2.77 1 .08 2.03-.51 2.65-1.26z" />
+//   </svg>
+// );
+
+const PROVIDERS: { key: Provider; label: string; Icon: React.ComponentType<{ className?: string }> }[] = [
+  { key: "google", label: "Google", Icon: GoogleIcon },
+  // { key: "apple", label: "Apple", Icon: AppleIcon }, // APPLE (pausado)
+];
+
+/**
+ * Inicio de sesión con Google (OAuth en la API). Apple está pausado.
+ * El botón lleva a la API, que redirige al proveedor y vuelve a /dashboard con
+ * la sesión abierta. Si un proveedor no está configurado, su botón se desactiva.
+ */
 export function SocialLogin() {
+  const searchParams = useSearchParams();
+  const [enabled, setEnabled] = useState<Record<Provider, boolean> | null>(null);
+  const [redirecting, setRedirecting] = useState<Provider | null>(null);
+
+  useEffect(() => {
+    apiRequest<Record<Provider, boolean>>("/auth/oauth/providers")
+      .then(setEnabled)
+      .catch(() => setEnabled({ google: false }));
+  }, []);
+
+  // Error devuelto por el callback de OAuth.
+  const oauthError = searchParams.get("oauthError");
+  useEffect(() => {
+    if (!oauthError) return;
+    const [title, description] = OAUTH_ERRORS[oauthError] ?? OAUTH_ERRORS.failed;
+    showError(title, description);
+  }, [oauthError]);
+
   return (
     <div className="w-full max-w-sm px-5 space-y-4">
       <div className="flex items-center gap-x-3">
@@ -9,53 +69,27 @@ export function SocialLogin() {
         <div className="flex-1 h-px bg-border" />
       </div>
 
-      <div className="grid grid-cols-2 gap-x-2">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full gap-x-3 h-fit rounded-full py-2"
-        >
-          <svg
-            className="size-4.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-              fill="#4285F4"
-            />
-            <path
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              fill="#34A853"
-            />
-            <path
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              fill="#FBBC05"
-            />
-            <path
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              fill="#EA4335"
-            />
-          </svg>
-          Google
-        </Button>
-
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full gap-x-3 h-fit rounded-full py-2"
-        >
-          <svg
-            className="size-4.5"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-          </svg>
-          Facebook
-        </Button>
+      <div className="grid grid-cols-1 gap-x-2">
+        {PROVIDERS.map(({ key, label, Icon }) => {
+          const available = enabled?.[key] ?? false;
+          return (
+            <Button
+              key={key}
+              type="button"
+              variant="outline"
+              className="w-full gap-x-3 h-fit rounded-full py-2"
+              disabled={!available || redirecting !== null}
+              title={enabled && !available ? `El inicio de sesión con ${label} aún no está configurado` : undefined}
+              onClick={() => {
+                setRedirecting(key);
+                window.location.href = `${API_URL}/api/v1/auth/oauth/${key}`;
+              }}
+            >
+              {redirecting === key ? <Loader2 className="size-4.5 animate-spin" /> : <Icon />}
+              {label}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );

@@ -21,7 +21,7 @@
 | **UI / Componentes globales** | — | `src/components/ui/*`, `src/app/layout.tsx` |
 | **Arquitectura general** | `docs/02-ARCHITECTURE.md`, Notion 06 | — |
 
-> **Etapa de prototipado:** el frontend trabaja únicamente con datos locales en `src/lib/mock/`.
+> **Auth conectado a la API (24/10/2026):** login, registro, recuperación y sesión usan `zentro-api` (`src/lib/api/client.ts`, ADR 011). El resto (Hub y workspace) sigue con datos locales en `src/lib/mock/` hasta conectar cada módulo; ver `../docs/mock-mode.md`.
 > No existe alternancia de modo ni conexión automática con el backend. La integración API se planificará después de cerrar y auditar los flujos del frontend.
 
 ## 🚫 Reglas
@@ -61,8 +61,9 @@ src/
 │       └── shared/             # StatusBadge, Search, Paginator, Breadcrumb, etc.
 ├── lib/
 │   ├── api/                    # API client + auth endpoints
-│   ├── services/               # auth.service.ts (mock/API) + reset-code.ts
-│   └── mock/                   # Datos de prueba (team.ts, data.ts)
+│   ├── api/                    # client.ts: fetch + access token en memoria + refresh automático
+│   ├── services/               # auth.service.ts (API real) + contact.service.ts
+│   └── mock/                   # Datos de ejemplo del Hub y workspace (dashboard.ts, team.ts…)
 ├── stores/                     # Zustand (auth-store, app-store)
 ├── types/                      # TypeScript
 └── hooks/                      # use-require-auth, use-guest-guard, use-validate-email-param

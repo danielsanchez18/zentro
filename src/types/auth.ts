@@ -11,21 +11,25 @@ export interface RegisterInput {
   name: string;
 }
 
+/** Respuesta de login/registro/refresh. El refresh token va en una cookie httpOnly. */
 export interface AuthResponse {
   user: User;
-  token: string;
+  accessToken: string;
 }
 
+/** Login con 2FA activa: no hay sesión todavía, falta el código de la app. */
+export interface TwoFactorRequired {
+  twoFactorRequired: true;
+  challenge: string;
+}
+
+/** Usuario tal como lo devuelve la API (`/auth/me`, login, registro). */
 export interface User {
   id: string;
   email: string;
   name: string;
-  status: "ACTIVE" | "DISABLED" | "PENDING_VERIFICATION";
   emailVerifiedAt: string | null;
-  phone: string | null;
-  avatarUrl: string | null;
-  locale: string;
-  timezone: string;
+  avatarUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }

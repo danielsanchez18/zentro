@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { create } from "zustand";
@@ -54,9 +54,14 @@ const LogoutDialog = () => {
   const logout = useAuthStore((state) => state.logout);
   const router = useRouter();
 
-  const confirm = () => {
+  const [closing, setClosing] = useState(false);
+
+  const confirm = async () => {
+    setClosing(true);
+    // Revoca la sesión en la API (y su cookie) antes de salir.
+    await logout();
+    setClosing(false);
     setOpen(false);
-    logout();
     router.replace("/ingresar");
   };
 
@@ -77,8 +82,8 @@ const LogoutDialog = () => {
             <button type="button" className={hubButton.secondary} onClick={() => setOpen(false)}>
               Cancelar
             </button>
-            <button type="button" className={hubButton.danger} onClick={confirm}>
-              Cerrar sesión
+            <button type="button" className={hubButton.danger} onClick={confirm} disabled={closing}>
+              {closing ? "Cerrando…" : "Cerrar sesión"}
             </button>
           </div>
         </div>

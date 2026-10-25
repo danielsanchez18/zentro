@@ -12,9 +12,6 @@ import {
   dashboardSubscriptions,
   dashboardUsers,
   getCurrentDashboardUser,
-  notificationPreferences,
-  userIdentities,
-  userSessions,
 } from "@/lib/mock/dashboard";
 import type {
   DashboardUser,
@@ -27,10 +24,6 @@ import type {
   DashboardInvitationSummary,
   BusinessIndustry,
   CapabilityKey,
-  NotificationPreference,
-  NotificationPreferenceKey,
-  UserIdentity,
-  UserSession,
   UserNotification,
   OrganizationInvoice,
   DashboardSubscriptionSummary,
@@ -39,10 +32,6 @@ import { daysUntil, formatLongDate, formatRelative } from "@/lib/format/dates";
 
 interface DashboardState {
   currentUser: DashboardUser;
-  identities: UserIdentity[];
-  sessions: UserSession[];
-  notificationPreferences: NotificationPreference[];
-  localPassword: string;
   organizations: DashboardOrganization[];
   memberships: Membership[];
   branches: OrganizationBranch[];
@@ -73,22 +62,10 @@ interface DashboardState {
   skipOrganizationSetup: (organizationId: string) => void;
   getInvitationSummaries: () => DashboardInvitationSummary[];
   respondToInvitation: (invitationId: string, response: "ACCEPTED" | "DECLINED") => void;
-  updateProfile: (input: Pick<DashboardUser, "phone" | "avatarUrl">) => void;
-  verifyEmail: () => void;
-  disconnectIdentity: (identityId: string) => { ok: boolean; reason?: string };
-  revokeSession: (sessionId: string) => void;
-  toggleEmailPreference: (key: NotificationPreferenceKey) => void;
-  changePassword: (currentPassword: string, newPassword: string) => { ok: boolean };
 }
 
 export const useDashboardStore = create<DashboardState>()(persist((set, get) => ({
   currentUser: getCurrentDashboardUser(),
-  identities: userIdentities.filter((identity) => identity.userId === CURRENT_USER_ID),
-  sessions: userSessions.filter((session) => session.userId === CURRENT_USER_ID),
-  notificationPreferences: notificationPreferences.filter(
-    (preference) => preference.userId === CURRENT_USER_ID,
-  ),
-  localPassword: "123456",
   organizations: dashboardOrganizations,
   memberships: dashboardMemberships,
   branches: dashboardBranches,
@@ -321,53 +298,10 @@ export const useDashboardStore = create<DashboardState>()(persist((set, get) => 
       };
     });
   },
-  updateProfile: (input) =>
-    set((state) => ({ currentUser: { ...state.currentUser, ...input, updatedAt: new Date().toISOString() } })),
-  verifyEmail: () =>
-    set((state) => ({
-      currentUser: {
-        ...state.currentUser,
-        emailVerifiedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    })),
-  disconnectIdentity: (identityId) => {
-    const active = get().identities.filter((identity) => identity.status === "ACTIVE");
-    if (active.length <= 1) {
-      return { ok: false, reason: "Debes conservar al menos un método de acceso." };
-    }
-    set((state) => ({
-      identities: state.identities.map((identity) =>
-        identity.id === identityId ? { ...identity, status: "DISCONNECTED" } : identity,
-      ),
-    }));
-    return { ok: true };
-  },
-  revokeSession: (sessionId) =>
-    set((state) => ({
-      sessions: state.sessions.map((session) =>
-        session.id === sessionId && !session.isCurrent
-          ? { ...session, revokedAt: new Date().toISOString() }
-          : session,
-      ),
-    })),
-  toggleEmailPreference: (key) =>
-    set((state) => ({
-      notificationPreferences: state.notificationPreferences.map((preference) =>
-        preference.key === key && !preference.required
-          ? { ...preference, emailEnabled: !preference.emailEnabled }
-          : preference,
-      ),
-    })),
-  changePassword: (currentPassword, newPassword) => {
-    if (get().localPassword !== currentPassword) return { ok: false };
-    set({ localPassword: newPassword });
-    return { ok: true };
-  },
 }), {
   name: "zentro-dashboard-mock",
-  // v2: datos de prueba con fechas coherentes (oct 2026), facturas y guía persistida.
+  // v3: sin datos de cuenta (vienen de la API). v2: datos de prueba con fechas coherentes (oct 2026), facturas y guía persistida.
   // Al cambiar la versión se descarta el estado guardado y se usa la semilla nueva.
-  version: 2,
+  version: 3,
   migrate: () => ({}) as DashboardState,
 }));

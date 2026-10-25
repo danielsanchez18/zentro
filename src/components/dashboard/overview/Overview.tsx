@@ -4,6 +4,7 @@ import { OrganizationsGrid } from "@/components/dashboard/overview/Organizations
 import { InvitationsList } from "@/components/dashboard/overview/InvitationsList";
 import { SubscriptionsSummary } from "@/components/dashboard/overview/SubscriptionsSummary";
 import { DemoTour } from "@/components/dashboard/overview/DemoTour";
+import { NoPasswordBanner } from "@/components/dashboard/shared/NoPasswordBanner";
 
 /**
  * Overview del hub (/dashboard)
@@ -21,6 +22,7 @@ export const Overview = () => {
   return (
     <div className="space-y-2">
       <Greeting />
+      <NoPasswordBanner />
       <OrganizationsGrid />
       <OnboardingBanner />
       <InvitationsList />

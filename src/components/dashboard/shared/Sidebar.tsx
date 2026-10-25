@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useAuthStore } from "@/stores/auth-store";
 import { HubLogo } from "@/components/dashboard/shared/HubLogo";
 import { UserAvatar } from "@/components/dashboard/shared/UserAvatar";
 import { HUB_NAV, isNavItemActive } from "@/components/dashboard/shared/nav";
@@ -28,7 +29,7 @@ export { useLogout } from "@/components/dashboard/shared/HubOverlays";
 export const Sidebar = () => {
   const pathname = usePathname();
   const pendingInvitations = usePendingInvitations();
-  const user = useDashboardStore((state) => state.currentUser);
+  const user = useAuthStore((state) => state.user)!;
 
   return (
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 p-2 pr-0 lg:block">
@@ -88,7 +89,7 @@ export const Sidebar = () => {
               href="/dashboard/cuenta"
               className="flex min-w-0 flex-1 items-center gap-2 p-2 font-heading rounded-sm hover:bg-muted"
             >
-              <UserAvatar name={user.name} />
+              <UserAvatar name={user.name} src={user.avatarUrl} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{user.name}</p>
                 <p className="truncate text-xs text-muted-foreground">

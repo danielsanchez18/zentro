@@ -1,55 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
-import { validateSessionService } from '@/lib/services/auth.service';
 
 /**
- * Guard local para las rutas protegidas de dashboard y app.
- * Durante el prototipado valida la sesión persistida y restaura el usuario de prueba.
+ * Guard de las rutas protegidas (Hub).
+ * Si no hay sesión en memoria intenta recuperarla con la cookie httpOnly
+ * (`/auth/refresh`); si no se puede, redirige a /ingresar.
+ * TODO: protección también del lado del servidor (middleware) cuando el
+ * frontend y la API compartan dominio.
  */
 export function useRequireAuth(): { checking: boolean } {
   const router = useRouter();
-  const { isAuthenticated, token, user, setUser, logout } = useAuthStore();
-  const [checking, setChecking] = useState(true);
+  const status = useAuthStore((state) => state.status);
+  const restoreSession = useAuthStore((state) => state.restoreSession);
 
   useEffect(() => {
-    let cancelled = false;
+    if (status === 'unknown') {
+      void restoreSession();
+    } else if (status === 'anonymous') {
+      router.replace('/ingresar');
+    }
+  }, [status, restoreSession, router]);
 
-    const run = async () => {
-      if (!isAuthenticated || !token) {
-        if (!cancelled) {
-          router.replace('/ingresar');
-          // No bajamos checking: mantenemos el spinner hasta completar el
-          // redirect para que el contenido del dashboard no parpadee.
-        }
-        return;
-      }
-
-      try {
-        const { user: freshUser } = await validateSessionService(token);
-        if (cancelled) return;
-
-        // Mantiene sincronizado el usuario persistido con el escenario local.
-        if (freshUser && (!user || user.email !== freshUser.email)) {
-          setUser(freshUser);
-        }
-        setChecking(false);
-      } catch {
-        if (!cancelled) {
-          logout();
-          router.replace('/ingresar');
-        }
-      }
-    };
-
-    run();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isAuthenticated, token, router, user, setUser, logout]);
-
-  return { checking };
+  // Mientras no haya sesión confirmada se mantiene el loader (también
+  // durante el redirect, para que el contenido no parpadee).
+  return { checking: status !== 'authenticated' };
 }
